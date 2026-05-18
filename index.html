@@ -10,21 +10,24 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg0:#030303;--bg1:#090909;--bg2:#101010;--bg3:#181818;--bg4:#202020;
-  --gold:#c9a84c;--gold2:#e8c96d;--gold3:#a07830;--gold4:#f5e6b8;
-  --goldg:linear-gradient(135deg,#c9a84c,#e8c96d,#a07830);
-  --goldgs:linear-gradient(90deg,#c9a84c,#e8c96d);
-  --ok:#4caf7d;--danger:#c0392b;--warn:#e6a817;
-  --txt0:#f5f0e8;--txt1:#8a7d6a;--txt2:#4a4035;
-  --border:#1e1a14;--border2:#2a2318;
+  --bg0:#080810;--bg1:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;--bg4:#26263d;
+  --gold:#d4a843;--gold2:#f0c96a;--gold3:#a07828;--gold4:#fff0c0;
+  --goldg:linear-gradient(135deg,#d4a843 0%,#f0c96a 50%,#a07828 100%);
+  --goldgs:linear-gradient(90deg,#d4a843,#f0c96a);
+  --goldgv:linear-gradient(180deg,#d4a843,#a07828);
+  --acc:#7c6dfa;--acc2:#5b8af7;--acc3:#fa8c5b;
+  --ok:#3ecf8e;--danger:#f05252;--warn:#f0a832;
+  --txt0:#f2f0ff;--txt1:#8888aa;--txt2:#44445a;
+  --border:#1e1e35;--border2:#2a2a45;--border3:#35355a;
+  --card-glow:0 0 0 1px rgba(212,168,67,.08),0 4px 24px rgba(0,0,0,.4);
   --font:'Inter',sans-serif;--display:'Cormorant Garamond',serif;--mono:'JetBrains Mono',monospace;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bot:env(safe-area-inset-bottom,0px);
-  --tab-h:60px;
-  --top-h:56px;
+  --tab-h:64px;
+  --top-h:60px;
 }
 html,body{height:100%;overflow:hidden}
-body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-behavior:none}
+body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-behavior:none;background-image:radial-gradient(ellipse at 20% 50%,rgba(124,109,250,.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(212,168,67,.04) 0%,transparent 40%)}
 ::-webkit-scrollbar{width:2px;height:2px}
 ::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:4px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -45,18 +48,20 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
 /* ── TOPBAR ── */
 #topbar{
   height:var(--top-h);flex-shrink:0;
-  background:var(--bg1);border-bottom:1px solid var(--border2);
-  display:flex;align-items:center;padding:0 16px;gap:10px;
+  background:rgba(15,15,26,.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border3);
+  display:flex;align-items:center;padding:0 18px;gap:12px;
   position:relative;z-index:30;
 }
-#topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)50,transparent)}
-.tb-brand{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:3px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:shimmer 4s linear infinite}
-.tb-month{display:flex;align-items:center;gap:4px;margin-left:auto}
-.tb-month button{background:var(--bg3);border:1px solid var(--border2);color:var(--txt1);border-radius:6px;width:28px;height:28px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.tb-month button:active{background:var(--gold)22;border-color:var(--gold)}
-.tb-mlabel{font-size:11px;font-weight:600;font-family:var(--mono);color:var(--gold);min-width:90px;text-align:center;letter-spacing:.5px}
-.tb-icon{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0}
-.tb-icon:active{background:var(--gold)22;border-color:var(--gold)}
+#topbar::before{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)60,transparent);opacity:.6}
+.tb-brand{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:4px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:300%;animation:shimmer 5s linear infinite}
+.tb-month{display:flex;align-items:center;gap:6px;margin-left:auto;background:var(--bg3);border:1px solid var(--border3);border-radius:10px;padding:4px 6px}
+.tb-month button{background:none;border:none;color:var(--txt1);border-radius:6px;width:26px;height:26px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .15s}
+.tb-month button:active,.tb-month button:hover{color:var(--gold)}
+.tb-mlabel{font-size:12px;font-weight:600;font-family:var(--mono);color:var(--gold2);min-width:96px;text-align:center;letter-spacing:.8px}
+.tb-icon{width:38px;height:38px;background:var(--bg3);border:1px solid var(--border3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;transition:all .15s}
+.tb-icon:active,.tb-icon:hover{background:var(--gold)18;border-color:var(--gold)66}
 
 /* ── CONTENT AREA ── */
 #content-area{
@@ -69,28 +74,31 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
 /* ── BOTTOM TABS ── */
 #tabs{
   height:var(--tab-h);flex-shrink:0;
-  background:var(--bg1);border-top:1px solid var(--border2);
+  background:rgba(15,15,26,.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border3);
   display:flex;align-items:stretch;
   position:relative;z-index:30;
 }
-#tabs::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)50,transparent)}
+#tabs::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)50,transparent);opacity:.7}
 .tab-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;border:none;background:none;cursor:pointer;
-  font-size:9px;color:var(--txt2);font-family:var(--font);font-weight:500;
-  letter-spacing:.3px;transition:color .15s;padding:6px 2px;
+  gap:3px;border:none;background:none;cursor:pointer;
+  font-size:10px;color:var(--txt2);font-family:var(--font);font-weight:500;
+  letter-spacing:.3px;transition:all .2s;padding:6px 2px;border-radius:0;
 }
-.tab-btn .ti{font-size:20px;line-height:1}
-.tab-btn.active{color:var(--gold)}
-.tab-btn.active .ti{filter:drop-shadow(0 0 4px var(--gold)44)}
+.tab-btn .ti{font-size:22px;line-height:1;transition:transform .2s}
+.tab-btn.active{color:var(--gold2)}
+.tab-btn.active .ti{transform:translateY(-1px)}
+.tab-btn:hover{color:var(--txt0)}
 
 /* ── CARDS ── */
 .card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:14px;position:relative;overflow:hidden;margin-bottom:10px}
 .card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)30,transparent)}
 .csm{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px}
-.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.stat-card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;position:relative;overflow:hidden}
-.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)40,transparent)}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-card{background:var(--bg1);border:1px solid var(--border3);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden;box-shadow:var(--card-glow)}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)50,transparent);opacity:.6}
 .slabel{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;font-weight:600}
 .sval{font-size:18px;font-weight:700;font-family:var(--mono)}
 .ssub{font-size:10px;color:var(--txt2);margin-top:2px}
@@ -102,8 +110,9 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
 .pfill{height:100%;border-radius:99px;transition:width .5s}
 
 /* ── EMP CARDS ── */
-.emp-card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden}
-.emp-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)20,transparent)}
+.emp-card{background:var(--bg1);border:1px solid var(--border3);border-radius:16px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;box-shadow:var(--card-glow);transition:border-color .2s,box-shadow .2s}
+.emp-card:hover{border-color:var(--border3);box-shadow:0 0 0 1px rgba(212,168,67,.1),0 8px 32px rgba(0,0,0,.5)}
+.emp-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)30,transparent);opacity:.5}
 .emp-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
 .emp-actions{display:flex;gap:6px;margin-top:10px}
 .ea-btn{flex:1;height:32px;border-radius:7px;border:1px solid var(--border2);background:var(--bg2);color:var(--txt1);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:var(--font);font-weight:500}
@@ -127,16 +136,17 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
 /* ── FORMS ── */
 .fg{margin-bottom:12px}
 .fl{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;display:block;font-weight:600}
-.fi{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--txt0);padding:10px 12px;font-size:15px;outline:none;font-family:var(--font);-webkit-appearance:none;appearance:none}
-.fi:focus{border-color:var(--gold3)}
+.fi{width:100%;background:var(--bg2);border:1px solid var(--border3);border-radius:10px;color:var(--txt0);padding:11px 14px;font-size:15px;outline:none;font-family:var(--font);-webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s}
+.fi:focus{border-color:var(--gold)88;box-shadow:0 0 0 3px rgba(212,168,67,.12)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .fhint{font-size:11px;color:var(--txt1);margin-top:5px;padding:8px 12px;background:var(--bg2);border-radius:6px;border-left:2px solid var(--gold3);font-family:var(--mono);line-height:1.6}
 
 /* ── BUTTONS ── */
-.btn-gold{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--gold3);font-family:var(--font);background:var(--goldgs);color:#000;letter-spacing:.3px;width:100%}
-.btn-gold:active{opacity:.85;transform:scale(.98)}
-.btn-sec{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border2);font-family:var(--font);background:var(--bg2);color:var(--txt1);width:100%}
-.btn-sec:active{border-color:var(--gold3);color:var(--gold)}
+.btn-gold{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);background:var(--goldgs);color:#000;letter-spacing:.3px;width:100%;box-shadow:0 4px 16px rgba(212,168,67,.3);transition:all .2s}
+.btn-gold:active{opacity:.88;transform:scale(.98);box-shadow:0 2px 8px rgba(212,168,67,.2)}
+.btn-gold:hover{box-shadow:0 6px 20px rgba(212,168,67,.4)}
+.btn-sec{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border3);font-family:var(--font);background:var(--bg2);color:var(--txt1);width:100%;transition:all .15s}
+.btn-sec:active,.btn-sec:hover{border-color:var(--gold)55;color:var(--gold2)}
 .btn-sm{padding:8px 14px;font-size:12px;border-radius:8px;width:auto}
 .btn-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--txt2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;flex-shrink:0}
 .btn-icon:active{border-color:var(--gold3);color:var(--gold)}
@@ -180,17 +190,21 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
 .nclose{background:none;border:none;color:var(--txt2);cursor:pointer;font-size:16px;padding:0;flex-shrink:0}
 
 /* ── CONN ── */
-#conn-badge{position:fixed;bottom:calc(var(--tab-h) + var(--safe-bot) + 8px);right:8px;z-index:50;display:none;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border2);border-radius:99px;padding:4px 10px;font-size:10px;font-family:var(--mono)}
+#conn-badge{position:fixed;bottom:calc(var(--tab-h) + var(--safe-bot) + 10px);right:10px;z-index:50;display:none;align-items:center;gap:6px;background:rgba(15,15,26,.9);backdrop-filter:blur(10px);border:1px solid var(--border3);border-radius:99px;padding:5px 12px;font-size:11px;font-family:var(--mono);box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .conn-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .conn-dot.online{background:var(--ok);animation:pulse 2s infinite}
 .conn-dot.offline{background:var(--danger)}
 .conn-dot.syncing{background:var(--gold);animation:pulse .8s infinite}
 
 /* ── SETUP SCREEN ── */
-#setup-screen{position:fixed;inset:0;background:var(--bg0);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-.setup-box{width:100%;max-width:420px}
-.setup-title{font-family:var(--display);font-size:42px;font-weight:700;letter-spacing:5px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:shimmer 4s linear infinite;text-align:center;margin-bottom:4px}
-.setup-sub{font-size:9px;color:var(--gold3);letter-spacing:6px;text-transform:uppercase;text-align:center;margin-bottom:32px}
+#setup-screen{
+  position:fixed;inset:0;z-index:999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,168,67,.08) 0%,transparent 60%),var(--bg0);
+}
+.setup-box{width:100%;max-width:400px;background:var(--bg1);border:1px solid var(--border3);border-radius:24px;padding:36px 32px;box-shadow:0 0 0 1px rgba(212,168,67,.06),0 24px 64px rgba(0,0,0,.6)}
+.setup-title{font-family:var(--display);font-size:44px;font-weight:700;letter-spacing:6px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:300%;animation:shimmer 5s linear infinite;text-align:center;margin-bottom:4px}
+.setup-sub{font-size:9px;color:var(--gold3);letter-spacing:8px;text-transform:uppercase;text-align:center;margin-bottom:36px;opacity:.7}
 .setup-hint{font-size:11px;color:var(--txt2);line-height:1.7;margin-top:6px;padding:10px 12px;background:var(--bg2);border-radius:8px;border-left:2px solid var(--gold3)}
 
 /* ── STITLE ── */
@@ -207,25 +221,84 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
 /* ── WA PREVIEW ── */
 .wa-preview{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:14px;font-family:var(--mono);font-size:12px;color:var(--txt1);line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:10px;max-height:280px;overflow-y:auto}
 
-@media(min-width:768px){
-  /* PC: sidebar lateral + contenido */
+
+/* ══ KIOSKO EMPLEADO ══ */
+#kiosk-screen{
+  position:fixed;inset:0;z-index:150;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,168,67,.10) 0%,transparent 60%),var(--bg0);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;
+}
+.kiosk-brand{font-family:var(--display);font-size:32px;font-weight:700;letter-spacing:5px;
+  background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;background-size:300%;animation:shimmer 5s linear infinite;
+  text-align:center;margin-bottom:4px}
+.kiosk-sub{font-size:9px;color:var(--gold3);letter-spacing:6px;text-transform:uppercase;text-align:center;margin-bottom:28px;opacity:.7}
+.kiosk-box{width:100%;max-width:340px;background:var(--bg1);border:1px solid var(--border3);border-radius:22px;padding:28px 24px;box-shadow:0 0 0 1px rgba(212,168,67,.06),0 24px 64px rgba(0,0,0,.6)}
+.kiosk-clock{font-family:var(--mono);font-size:48px;font-weight:700;color:var(--gold2);text-align:center;letter-spacing:2px;margin-bottom:4px;line-height:1}
+.kiosk-date{font-size:13px;color:var(--txt2);text-align:center;margin-bottom:24px;letter-spacing:.5px}
+.kiosk-who{font-size:14px;font-weight:600;color:var(--txt0);text-align:center;margin-bottom:6px}
+.kiosk-sel{font-size:11px;color:var(--txt2);text-align:center;margin-bottom:16px}
+.kiosk-emp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;max-height:220px;overflow-y:auto}
+.kiosk-emp-btn{
+  background:var(--bg2);border:1px solid var(--border3);border-radius:12px;
+  padding:12px 8px;cursor:pointer;text-align:center;transition:all .15s;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.kiosk-emp-btn:active,.kiosk-emp-btn.selected{border-color:var(--gold)66;background:var(--gold)12}
+.kiosk-emp-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.kiosk-emp-name{font-size:11px;font-weight:600;color:var(--txt0);line-height:1.2}
+/* PIN PAD */
+.pin-display{display:flex;gap:10px;justify-content:center;margin-bottom:20px;min-height:20px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border3);transition:all .2s}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(212,168,67,.4)}
+.pin-dot.error{background:var(--danger);border-color:var(--danger)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pin-key{
+  height:58px;border-radius:14px;border:1px solid var(--border3);
+  background:var(--bg2);color:var(--txt0);font-size:22px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);transition:all .15s;
+}
+.pin-key:active{background:var(--gold)22;border-color:var(--gold)66;transform:scale(.93)}
+.pin-key.del{font-size:18px;color:var(--txt2)}
+.pin-key.del:active{background:var(--danger)18;border-color:var(--danger)44;color:var(--danger)}
+.pin-err{font-size:12px;color:var(--danger);text-align:center;margin-top:8px;min-height:16px}
+/* FICHAJE RESULT */
+.kiosk-result{text-align:center;padding:24px 0}
+.kiosk-result-icon{font-size:56px;margin-bottom:12px;line-height:1}
+.kiosk-result-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.kiosk-result-sub{font-size:13px;color:var(--txt2);margin-bottom:20px}
+.kiosk-result-cobro{background:var(--bg2);border:1px solid var(--border3);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left}
+.kiosk-notif-list{max-height:200px;overflow-y:auto;text-align:left}
+.kiosk-notif-item{padding:10px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--txt1);line-height:1.5}
+.kiosk-notif-item:last-child{border-bottom:none}
+.kiosk-notif-item strong{color:var(--txt0)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .3s ease}
+
+@media(min-width:768px){@media(min-width:768px){
   #app{flex-direction:row;align-items:stretch}
   #tabs{
-    flex-direction:column;width:72px;height:auto;
-    border-top:none;border-right:1px solid var(--border2);
+    flex-direction:column;width:80px;height:auto;
+    border-top:none;border-right:1px solid var(--border3);
     order:-1;flex-shrink:0;
+    background:rgba(10,10,20,.98);
+    backdrop-filter:blur(20px);
   }
   #tabs::before{display:none}
-  .tab-btn{flex-direction:column;gap:4px;padding:14px 4px;font-size:9px;border-right:none;border-left:3px solid transparent}
-  .tab-btn.active{border-left-color:var(--gold);border-bottom:none;background:var(--gold)12}
-  .tab-btn .ti{font-size:22px}
-  #topbar{padding:12px 20px}
+  #tabs::after{content:'';position:absolute;top:0;right:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold)40,transparent)}
+  .tab-btn{flex-direction:column;gap:5px;padding:16px 4px;font-size:9px;border-right:none;border-left:3px solid transparent;border-bottom:none;transition:all .2s}
+  .tab-btn.active{border-left-color:var(--gold);background:linear-gradient(90deg,var(--gold)10,transparent)}
+  .tab-btn.active .ti{transform:none}
+  .tab-btn .ti{font-size:24px}
+  #topbar{padding:12px 22px}
   #content-area{flex:1;min-width:0}
-  #conn-badge{left:82px}
+  #conn-badge{left:90px}
 }
 @media(min-width:1024px){
-  #tabs{width:90px}
-  .tab-btn{font-size:10px;padding:16px 4px}
+  #tabs{width:96px}
+  .tab-btn{font-size:10px;padding:18px 4px}
 }
 </style>
 </head>
@@ -300,7 +373,7 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
     <button class="tab-btn active" data-tab="dashboard" onclick="setTab('dashboard')"><div class="ti">📊</div><div>Inicio</div></button>
     <button class="tab-btn" data-tab="calendario" onclick="setTab('calendario')"><div class="ti">📅</div><div>Pagos</div></button>
     <button class="tab-btn" data-tab="empleados" onclick="setTab('empleados')"><div class="ti">👥</div><div>Equipo</div></button>
-    <button class="tab-btn" data-tab="horas" onclick="setTab('horas')"><div class="ti">⏱️</div><div>Extras</div></button>
+    <button class="tab-btn" data-tab="asistencia" onclick="setTab('asistencia')"><div class="ti">🕐</div><div>Asist.</div></button>
     <button class="tab-btn" data-tab="calc" onclick="setTab('calc')"><div class="ti">🧮</div><div>Calc</div></button>
     <button class="tab-btn" data-tab="mas" onclick="setTab('mas')"><div class="ti">☰</div><div>Más</div></button>
   </div>
@@ -312,6 +385,19 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
     <div class="bsheet-handle"></div>
     <div id="bsheet-content"></div>
   </div>
+</div>
+
+<!-- KIOSK SCREEN -->
+<div id="kiosk-screen">
+  <div class="kiosk-brand">NOMINA AD</div>
+  <div class="kiosk-sub">Portal Empleado</div>
+  <div class="kiosk-box" id="kiosk-box">
+    <!-- steps: select-emp | enter-pin | result -->
+    <div id="kiosk-clock" class="kiosk-clock">00:00:00</div>
+    <div id="kiosk-date" class="kiosk-date"></div>
+    <div id="kiosk-step-content"></div>
+  </div>
+  <button onclick="closeKiosk()" style="margin-top:20px;background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;font-family:var(--font)">← Volver al admin</button>
 </div>
 
 <script type="module">
@@ -350,20 +436,39 @@ function diasDesdeIngreso(fechaIngreso){
 function calc(emp){
   const base=parseFloat(emp.salary)||0;
   const hm=parseInt(emp.horasMes)||160;
-  const dias=Math.min(parseInt(emp.diasTrab)||30,30);
   const vac=parseInt(emp.vacDias)||0;
   const diario=base/30;
   const valorHora=base/hm;
-  const diasEfect=dias-vac;
+
+  // Auto-calcular días proporcionales si el empleado ingresó este mes
+  let diasBase=Math.min(parseInt(emp.diasTrab)||30,30);
+  let diasDesdeAlta=null; // días que le corresponden por ingreso este mes
+  if(emp.fechaIngreso){
+    const fi=new Date(emp.fechaIngreso+"T00:00:00");
+    if(fi.getFullYear()===S.viewY&&fi.getMonth()===S.viewM){
+      // Ingresó en el mes que estamos viendo
+      const lastDay=new Date(S.viewY,S.viewM+1,0).getDate();
+      diasDesdeAlta=lastDay-fi.getDate()+1; // días desde su ingreso hasta fin de mes
+      diasBase=Math.min(diasDesdeAlta,30);
+    }
+  }
+
+  const dias=diasBase;
+  const diasEfect=Math.max(0,dias-vac);
   const proporcional=diario*diasEfect;
   const totalExtras=(emp.extras||[]).reduce((s,ex)=>s+valorHora*(parseFloat(ex.horas)||0),0);
-  // Adelantos y descuentos que afectan a la próxima quincena
   const adelantos=(emp.adelantos||[]).filter(a=>!a.cobrado).reduce((s,a)=>s+(parseFloat(a.monto)||0),0);
   const descuentos=(emp.descuentos||[]).filter(d=>!d.cobrado).reduce((s,d)=>s+(parseFloat(d.monto)||0),0);
   const totalBruto=proporcional+totalExtras;
   const quincenaBase=totalBruto/2;
   const quincenaFinal=Math.max(0,quincenaBase-adelantos-descuentos);
-  return{base,diario,valorHora,dias,diasEfect,vac,proporcional,totalExtras,totalBruto,quincenaBase,quincenaFinal,adelantos,descuentos};
+
+  // Qué le correspondía si hubiera trabajado el mes completo
+  const quincenaCompleta=base/2;
+  const esNuevo=diasDesdeAlta!==null;
+
+  return{base,diario,valorHora,dias,diasEfect,vac,proporcional,totalExtras,totalBruto,
+    quincenaBase,quincenaFinal,adelantos,descuentos,esNuevo,diasDesdeAlta,quincenaCompleta};
 }
 
 // ── FIREBASE CONFIG ──
@@ -480,7 +585,10 @@ window.conectar=()=>{};
 
 function setConn(st,lbl){
   const dot=document.getElementById("conn-dot"),label=document.getElementById("conn-label");
-  dot.className="conn-dot "+st;label.textContent=lbl;
+  dot.className="conn-dot "+st;
+  // Show user name instead of room key
+  const displayName=currentUser?.displayName||currentUser?.email?.split("@")[0]||lbl;
+  label.textContent=st==="online"?"● "+displayName:st==="offline"?"Sin conexión":"Conectando...";
   label.style.color=st==="online"?"var(--ok)":st==="offline"?"var(--danger)":"var(--txt1)";
 }
 
@@ -508,14 +616,14 @@ function iniciarSync(){
       document.getElementById("setup-screen").style.display="none";
       document.getElementById("app").style.display="flex";
     }
-    setConn("online","● "+ROOM);
+    setConn("online","");
     render();
   },(err)=>{setConn("offline","Sin conexión");});
 }
 
 async function fbSet(path,val){
   if(currentRole!=="admin"){toast("⚠ Solo los administradores pueden modificar datos");return;}
-  setConn("syncing","Guardando...");await set(ref(db,`nomina/${ROOM}/${path}`),val);setConn("online","● "+ROOM);
+  setConn("syncing","Guardando...");await set(ref(db,`nomina/${ROOM}/${path}`),val);setConn("online","");
 }
 
 // ── STATE ──
@@ -730,12 +838,17 @@ function vEmpleados(){
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
-          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Base</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:${emp.color}">${$(emp.salary)}</div></div>
+          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Sueldo base</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:${emp.color}">${$(emp.salary)}</div></div>
           <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Quincena neta</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--gold)">${$(c.quincenaFinal)}</div></div>
-          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Diario</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--txt1)">${$(c.diario)}</div></div>
+          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Diario (÷30)</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--txt1)">${$(c.diario)}</div></div>
         </div>
-        ${c.adelantos>0?`<div style="margin-top:6px;font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ Adelantos: −${$(c.adelantos)}</div>`:""}
-        ${c.descuentos>0?`<div style="font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ Descuentos: −${$(c.descuentos)}</div>`:""}
+        ${c.esNuevo?`<div style="margin-top:8px;padding:8px 12px;background:var(--acc)11;border:1px solid var(--acc)33;border-radius:8px;font-size:11px;color:var(--acc2)">
+          📅 <strong>Ingresó este mes</strong> — Le corresponden ${c.diasDesdeAlta} días · Quincena proporcional: ${$(c.quincenaFinal)} (completa sería ${$(c.quincenaCompleta)})
+        </div>`:""}
+        ${c.adelantos>0||c.descuentos>0?`<div style="margin-top:6px;padding:6px 10px;background:var(--danger)11;border-radius:8px">
+          ${c.adelantos>0?`<div style="font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ Adelantos pendientes: −${$(c.adelantos)}</div>`:""}
+          ${c.descuentos>0?`<div style="font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ Descuentos pendientes: −${$(c.descuentos)}</div>`:""}
+        </div>`:""}
         <div class="emp-actions">
           <button class="ea-btn" onclick="openEditEmp(${emp.id})">✏️ Editar</button>
           <button class="ea-btn" onclick="openAdelantos(${emp.id})">💵 Adelanto</button>
@@ -923,9 +1036,11 @@ function vMas(){
     <div class="card" style="margin-bottom:10px">
       <div class="stitle">Opciones</div>
       <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn-sec" onclick="openKiosk()" style="color:var(--gold);border-color:var(--gold)44;background:var(--gold)08">🕐 Modo Empleado (fichaje PIN)</button>
         <button class="btn-sec" onclick="shareLink()">🔗 Compartir link de acceso</button>
         <button class="btn-sec" onclick="exportCSV()">📊 Exportar CSV / Excel</button>
         <button class="btn-sec" onclick="window.print()">🖨️ Imprimir / PDF</button>
+        <button class="btn-sec" onclick="setTab('asistencia')">🕐 Asistencia</button>
         <button class="btn-sec" onclick="setTab('anual')">📈 Resumen Anual</button>
         <button class="btn-sec" onclick="setTab('empresas')">🏢 Empresas</button>
         ${currentRole==='admin'?'<button class="btn-sec" onclick="openCrearCuenta()">👤 Crear usuario nuevo</button>':''}
@@ -1041,6 +1156,18 @@ const empFormHtml=(v,p)=>`
     <div class="fg"><label class="fl">Días trabajados</label><input class="fi" id="${p}dt" type="number" value="${v.diasTrab||30}" min="1" max="30" oninput="liveCalc('${p}sal','${p}hm','${p}dt','${p}vd','${p}prev')"></div>
     <div class="fg"><label class="fl">Días vac. no pagas</label><input class="fi" id="${p}vd" type="number" value="${v.vacDias||0}" min="0" oninput="liveCalc('${p}sal','${p}hm','${p}dt','${p}vd','${p}prev')"></div>
   </div>
+  <div class="frow">
+    <div class="fg"><label class="fl">PIN empleado (4 dígitos)</label>
+      <input class="fi" id="${p}pin" type="number" value="${v.pin||""}" placeholder="Ej: 1234" style="font-family:var(--mono);letter-spacing:6px;font-size:22px">
+      <div style="font-size:11px;color:var(--txt2);margin-top:4px">El empleado usa este PIN para fichar desde el modo empleado.</div>
+    </div>
+    <div class="fg" style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding-top:20px">
+      <div style="font-size:10px;color:var(--txt2);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Vista previa</div>
+      <div style="display:flex;gap:6px">
+        ${[0,1,2,3].map((_,i)=>`<div style="width:12px;height:12px;border-radius:50%;border:2px solid var(--border3);background:${i<(v.pin||"").length?"var(--gold)":"transparent"}"></div>`).join("")}
+      </div>
+    </div>
+  </div>
   <div class="fhint" id="${p}prev">Ingresá el sueldo para ver el cálculo</div>`;
 
 function openAddEmp(){
@@ -1070,7 +1197,8 @@ async function saveNewEmp(){
     horasMes:parseInt(document.getElementById("na_hm")?.value)||160,
     diasTrab:parseInt(document.getElementById("na_dt")?.value)||30,
     vacDias:parseInt(document.getElementById("na_vd")?.value)||0,
-    hidden:false,extras:[],adelantos:[],descuentos:[]};
+    hidden:false,extras:[],adelantos:[],descuentos:[],
+    pin:document.getElementById("na_pin")?.value?.slice(0,4)||""};
   await fbSet("employees",[...(S.employees||[]),newEmp]);
   closeBS();toast(`✓ ${name} agregado`);
 }
@@ -1102,6 +1230,7 @@ async function saveEditEmp(id){
     diasTrab:parseInt(document.getElementById("ed_dt")?.value)||e.diasTrab,
     vacDias:parseInt(document.getElementById("ed_vd")?.value)||0,
     color:_clr,
+    pin:document.getElementById("ed_pin")?.value?.slice(0,4)||e.pin||"",
   }:e);
   await fbSet("employees",updated);closeBS();toast("✓ Cambios guardados");
 }
@@ -1495,12 +1624,526 @@ function toast(msg){
   t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);
 }
 
+
+// ══════════════════════════════════════════
+// MÓDULO ASISTENCIA
+// ══════════════════════════════════════════
+
+// Helpers de tiempo
+function todayStr(){const n=new Date();return`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;}
+function nowStr(){const n=new Date();return`${pad(n.getHours())}:${pad(n.getMinutes())}`;}
+function parseTime(t){if(!t)return null;const[h,m]=t.split(":").map(Number);return h*60+m;}
+function diffHours(entrada,salida){const e=parseTime(entrada),s=parseTime(salida);if(!e||!s)return 0;const diff=s-e;return diff>0?diff/60:0;}
+function fmtHours(h){const hrs=Math.floor(h),mins=Math.round((h-hrs)*60);return`${hrs}h${mins>0?" "+mins+"m":""}`;}
+
+// Calcular días trabajados y horas extra de un empleado en el mes actual
+function calcAsistencia(emp){
+  const registros=(emp.asistencia||[]).filter(r=>{
+    const d=new Date(r.fecha+"T00:00:00");
+    return d.getFullYear()===S.viewY&&d.getMonth()===S.viewM;
+  });
+  const horasPactadasDia=(parseInt(emp.horasMes)||160)/30;
+  let diasPresente=0,totalHoras=0,totalExtras=0;
+  registros.forEach(r=>{
+    if(r.entrada&&r.salida){
+      diasPresente++;
+      const hTrab=diffHours(r.entrada,r.salida)-((parseFloat(r.descanso)||0)/60);
+      totalHoras+=Math.max(0,hTrab);
+      const extra=Math.max(0,hTrab-horasPactadasDia);
+      totalExtras+=extra;
+    }
+  });
+  return{registros,diasPresente,totalHoras,totalExtras,horasPactadasDia};
+}
+
+// Fichar entrada o salida
+async function fichar(empId){
+  const emp=(S.employees||[]).find(e=>e.id===empId);if(!emp)return;
+  const hoy=todayStr();
+  const asist=[...(emp.asistencia||[])];
+  const idx=asist.findIndex(r=>r.fecha===hoy);
+  if(idx===-1){
+    // Nueva entrada
+    asist.push({fecha:hoy,entrada:nowStr(),salida:null,descanso:30,nota:""});
+    toast("✅ Entrada registrada — "+nowStr());
+  } else if(!asist[idx].salida){
+    // Registrar salida
+    asist[idx]={...asist[idx],salida:nowStr()};
+    const h=diffHours(asist[idx].entrada,asist[idx].salida)-((asist[idx].descanso||30)/60);
+    toast(`✅ Salida registrada — ${nowStr()} · ${fmtHours(Math.max(0,h))} trabajadas`);
+  } else {
+    toast("⚠ Ya registraste entrada y salida hoy");
+    return;
+  }
+  const updated=(S.employees||[]).map(e=>e.id===empId?{...e,asistencia:asist}:e);
+  await fbSet("employees",updated);
+}
+window.fichar=fichar;
+
+async function editarRegistro(empId,fecha){
+  const emp=(S.employees||[]).find(e=>e.id===empId);if(!emp)return;
+  const reg=(emp.asistencia||[]).find(r=>r.fecha===fecha)||{fecha,entrada:"08:00",salida:"17:00",descanso:30,nota:""};
+  openBS(`
+    <div class="bsheet-hdr"><h3>Editar registro — ${fecha}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
+    <div class="bsheet-body">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">${emp.name}</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Entrada</label><input class="fi" id="ar-entrada" type="time" value="${reg.entrada||"08:00"}"></div>
+        <div class="fg"><label class="fl">Salida</label><input class="fi" id="ar-salida" type="time" value="${reg.salida||"17:00"}"></div>
+      </div>
+      <div class="fg"><label class="fl">Descanso (minutos)</label><input class="fi" id="ar-desc" type="number" value="${reg.descanso||30}" min="0" max="120"></div>
+      <div class="fg"><label class="fl">Nota</label><input class="fi" id="ar-nota" placeholder="Ej: Llegó tarde, salió antes..." value="${reg.nota||""}"></div>
+      <div id="ar-preview" style="margin-top:4px;padding:8px 12px;background:var(--bg2);border-radius:8px;font-size:12px;font-family:var(--mono);color:var(--txt1)"></div>
+    </div>
+    <div class="bsheet-foot">
+      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
+      <button class="btn-gold" style="flex:2" onclick="guardarRegistro(${empId},'${fecha}')">Guardar</button>
+    </div>
+  `);
+  // live preview
+  setTimeout(()=>{
+    const upd=()=>{
+      const e=document.getElementById("ar-entrada")?.value,s=document.getElementById("ar-salida")?.value,d=parseFloat(document.getElementById("ar-desc")?.value)||0;
+      if(e&&s){const h=diffHours(e,s)-d/60;const el=document.getElementById("ar-preview");if(el)el.textContent=`Horas trabajadas: ${fmtHours(Math.max(0,h))}`;}
+    };
+    ["ar-entrada","ar-salida","ar-desc"].forEach(id=>document.getElementById(id)?.addEventListener("input",upd));
+    upd();
+  },50);
+}
+window.editarRegistro=editarRegistro;
+
+async function guardarRegistro(empId,fecha){
+  const entrada=document.getElementById("ar-entrada")?.value;
+  const salida=document.getElementById("ar-salida")?.value;
+  const descanso=parseFloat(document.getElementById("ar-desc")?.value)||30;
+  const nota=document.getElementById("ar-nota")?.value||"";
+  const emp=(S.employees||[]).find(e=>e.id===empId);if(!emp)return;
+  const asist=[...(emp.asistencia||[])];
+  const idx=asist.findIndex(r=>r.fecha===fecha);
+  if(idx===-1) asist.push({fecha,entrada,salida,descanso,nota});
+  else asist[idx]={...asist[idx],fecha,entrada,salida,descanso,nota};
+  const updated=(S.employees||[]).map(e=>e.id===empId?{...e,asistencia:asist}:e);
+  await fbSet("employees",updated);
+  closeBS();toast("✓ Registro guardado");
+}
+window.guardarRegistro=guardarRegistro;
+
+async function eliminarRegistro(empId,fecha){
+  if(!confirm("¿Eliminar registro del "+fecha+"?"))return;
+  const updated=(S.employees||[]).map(e=>e.id===empId?{...e,asistencia:(e.asistencia||[]).filter(r=>r.fecha!==fecha)}:e);
+  await fbSet("employees",updated);
+  toast("✓ Registro eliminado");
+}
+window.eliminarRegistro=eliminarRegistro;
+
+// Aplicar días y horas extra calculados al sueldo del mes
+async function aplicarAsistencia(empId){
+  const emp=(S.employees||[]).find(e=>e.id===empId);if(!emp)return;
+  const a=calcAsistencia(emp);
+  const valorHora=(parseFloat(emp.salary)||0)/(parseInt(emp.horasMes)||160);
+  const extrasVal=Math.round(a.totalExtras*valorHora);
+
+  // Actualizar diasTrab y agregar horas extra automáticamente
+  let extras=[...(emp.extras||[]).filter(ex=>ex.auto!==true)]; // quitar auto-extras previos
+  if(a.totalExtras>0.1) extras.push({horas:Math.round(a.totalExtras*10)/10,desc:`Extras por asistencia ${MONTHS[S.viewM]} ${S.viewY}`,auto:true});
+
+  const updated=(S.employees||[]).map(e=>e.id===empId?{...e,diasTrab:Math.min(30,a.diasPresente),extras}:e);
+  await fbSet("employees",updated);
+  toast(`✓ Aplicado: ${a.diasPresente} días · ${fmtHours(a.totalExtras)} extras`);
+}
+window.aplicarAsistencia=aplicarAsistencia;
+
+function vAsistencia(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  const hoy=todayStr();
+
+  return`<div class="page fade-up">
+    <div class="card" style="margin-bottom:10px;border-color:var(--gold3)33">
+      <div style="font-size:12px;color:var(--gold2);line-height:1.6">
+        🕐 <strong>Fichaje rápido</strong> — tocá "Fichar" para registrar entrada o salida con la hora actual.
+        Al final del mes aplicá la asistencia al sueldo automáticamente.
+      </div>
+    </div>
+
+    ${emps.map(emp=>{
+      const a=calcAsistencia(emp);
+      const regHoy=(emp.asistencia||[]).find(r=>r.fecha===hoy);
+      const enTrabajo=regHoy&&regHoy.entrada&&!regHoy.salida;
+      const yaFicho=regHoy&&regHoy.entrada&&regHoy.salida;
+      const horasHoy=yaFicho?diffHours(regHoy.entrada,regHoy.salida)-((regHoy.descanso||30)/60):0;
+      const horasPactDia=a.horasPactadasDia;
+
+      return`<div class="card" style="border-color:${emp.color}22;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="emp-av" style="background:${emp.color}22;color:${emp.color};border:1px solid ${emp.color}44;width:42px;height:42px;font-size:16px;flex-shrink:0">${emp.name.charAt(0)}</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700">${emp.name}</div>
+            <div style="font-size:11px;color:var(--txt2)">${emp.position||""} · ${horasPactDia.toFixed(1)}h/día pactadas</div>
+          </div>
+          <!-- Estado hoy -->
+          <div style="text-align:right">
+            ${enTrabajo
+              ?`<div style="font-size:11px;font-weight:700;color:var(--ok)">● En trabajo</div><div style="font-size:10px;color:var(--txt2)">Entró ${regHoy.entrada}</div>`
+              :yaFicho
+              ?`<div style="font-size:11px;font-weight:700;color:var(--gold)">✓ Completado</div><div style="font-size:10px;color:var(--txt2)">${fmtHours(Math.max(0,horasHoy))} hoy</div>`
+              :`<div style="font-size:11px;color:var(--txt2)">Sin fichar hoy</div>`}
+          </div>
+        </div>
+
+        <!-- Stats del mes -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px">
+          <div class="csm" style="text-align:center">
+            <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Días</div>
+            <div style="font-size:16px;font-weight:700;font-family:var(--mono);color:var(--gold)">${a.diasPresente}</div>
+          </div>
+          <div class="csm" style="text-align:center">
+            <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Horas</div>
+            <div style="font-size:14px;font-weight:700;font-family:var(--mono);color:var(--txt0)">${fmtHours(a.totalHoras)}</div>
+          </div>
+          <div class="csm" style="text-align:center">
+            <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Extras</div>
+            <div style="font-size:14px;font-weight:700;font-family:var(--mono);color:${a.totalExtras>0?"var(--acc3)":"var(--txt2)"}">${fmtHours(a.totalExtras)}</div>
+          </div>
+          <div class="csm" style="text-align:center">
+            <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Promedio</div>
+            <div style="font-size:14px;font-weight:700;font-family:var(--mono);color:var(--txt1)">${a.diasPresente>0?fmtHours(a.totalHoras/a.diasPresente):"—"}</div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="emp-actions" style="margin-bottom:10px">
+          ${currentRole==="admin"||currentUser?.uid
+            ?`<button class="ea-btn" onclick="fichar(${emp.id})" style="background:${enTrabajo?"var(--ok)22":"var(--gold)11"};border-color:${enTrabajo?"var(--ok)":"var(--gold3)33"};color:${enTrabajo?"var(--ok)":"var(--gold)"}">
+                ${enTrabajo?"🏁 Salida":"🟢 Entrada"}
+              </button>`:""}
+          <button class="ea-btn" onclick="editarRegistro(${emp.id},'${hoy}')">✏️ Editar hoy</button>
+          <button class="ea-btn" onclick="verHistorial(${emp.id})">📋 Historial</button>
+          ${currentRole==="admin"?`<button class="ea-btn" onclick="aplicarAsistencia(${emp.id})" style="background:var(--acc2)11;border-color:var(--acc2)33;color:var(--acc2)">⚡ Aplicar al sueldo</button>`:""}
+        </div>
+
+        <!-- Registros recientes del mes (últimos 5) -->
+        ${a.registros.length>0?`
+          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Últimos registros — ${MONTHS[S.viewM]}</div>
+          ${[...a.registros].reverse().slice(0,5).map(r=>{
+            const h=r.entrada&&r.salida?diffHours(r.entrada,r.salida)-((r.descanso||30)/60):null;
+            const extraH=h!==null?Math.max(0,h-horasPactDia):0;
+            return`<div class="disc-item">
+              <div style="font-size:11px;font-family:var(--mono);color:var(--gold);width:80px;flex-shrink:0">${r.fecha.slice(5)}</div>
+              <div style="flex:1;font-size:12px">
+                ${r.entrada?`<span style="color:var(--ok)">↑${r.entrada}</span>`:"<span style='color:var(--txt2)'>—</span>"}
+                ${r.salida?`<span style="color:var(--danger)"> ↓${r.salida}</span>`:"<span style='color:var(--warn)'> ⏳</span>"}
+                ${r.nota?`<span style="color:var(--txt2);font-size:10px"> · ${r.nota}</span>`:""}
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                ${h!==null?`<div style="font-size:11px;font-family:var(--mono);font-weight:600;color:var(--txt0)">${fmtHours(Math.max(0,h))}</div>`:""}
+                ${extraH>0.1?`<div style="font-size:10px;color:var(--acc3)">+${fmtHours(extraH)} extra</div>`:""}
+              </div>
+              <button class="btn-icon" onclick="editarRegistro(${emp.id},'${r.fecha}')" style="font-size:12px;width:28px;height:28px;margin-left:4px">✏️</button>
+            </div>`;
+          }).join("")}
+        `:`<div style="font-size:12px;color:var(--txt2)">Sin registros este mes.</div>`}
+      </div>`;
+    }).join("")}
+  </div>`;
+}
+
+function verHistorial(empId){
+  const emp=(S.employees||[]).find(e=>e.id===empId);if(!emp)return;
+  const a=calcAsistencia(emp);
+  const valorHora=(parseFloat(emp.salary)||0)/(parseInt(emp.horasMes)||160);
+  openBS(`
+    <div class="bsheet-hdr"><h3>Asistencia — ${emp.name}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
+    <div class="bsheet-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Días presentes</div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--gold)">${a.diasPresente}/30</div></div>
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Total horas</div><div style="font-size:16px;font-weight:700;font-family:var(--mono)">${fmtHours(a.totalHoras)}</div></div>
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Horas extra</div><div style="font-size:16px;font-weight:700;font-family:var(--mono);color:var(--acc3)">${fmtHours(a.totalExtras)}</div></div>
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Valor extras</div><div style="font-size:16px;font-weight:700;font-family:var(--mono);color:var(--gold)">${$(Math.round(a.totalExtras*valorHora))}</div></div>
+      </div>
+      <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">${MONTHS[S.viewM]} ${S.viewY} — todos los registros</div>
+      ${a.registros.length===0?`<div style="color:var(--txt2);font-size:13px">Sin registros este mes.</div>`
+        :[...a.registros].reverse().map(r=>{
+          const h=r.entrada&&r.salida?diffHours(r.entrada,r.salida)-((r.descanso||30)/60):null;
+          const extraH=h!==null?Math.max(0,h-a.horasPactadasDia):0;
+          return`<div class="disc-item">
+            <div style="font-size:12px;font-family:var(--mono);color:var(--gold);width:85px;flex-shrink:0">${r.fecha.slice(5)}</div>
+            <div style="flex:1">
+              <div style="font-size:12px">${r.entrada||"—"} → ${r.salida||"⏳"}</div>
+              ${r.nota?`<div style="font-size:10px;color:var(--txt2)">${r.nota}</div>`:""}
+            </div>
+            <div style="text-align:right">
+              ${h!==null?`<div style="font-size:12px;font-weight:600;font-family:var(--mono)">${fmtHours(Math.max(0,h))}</div>`:"<div style='font-size:11px;color:var(--txt2)'>Incompleto</div>"}
+              ${extraH>0.1?`<div style="font-size:10px;color:var(--acc3)">+${fmtHours(extraH)}</div>`:""}
+            </div>
+            <button class="btn-icon btn-danger" onclick="eliminarRegistro(${emp.id},'${r.fecha}')" style="font-size:11px;width:26px;height:26px;margin-left:4px">×</button>
+          </div>`;
+        }).join("")}
+    </div>
+  `);
+}
+window.verHistorial=verHistorial;
+
+
+// ══════════════════════════════════════════
+// KIOSCO EMPLEADO — PIN
+// ══════════════════════════════════════════
+
+const DAYS_LONG=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+
+let _kioskEmp=null;      // empleado seleccionado
+let _kioskPin="";        // pin ingresado
+let _kioskStep="select"; // select | pin | result
+let _kioskClockInt=null;
+
+function openKiosk(){
+  document.getElementById("kiosk-screen").style.display="flex";
+  _kioskStep="select";_kioskEmp=null;_kioskPin="";
+  startKioskClock();
+  renderKiosk();
+}
+window.openKiosk=openKiosk;
+
+function closeKiosk(){
+  document.getElementById("kiosk-screen").style.display="none";
+  clearInterval(_kioskClockInt);
+}
+window.closeKiosk=closeKiosk;
+
+function startKioskClock(){
+  clearInterval(_kioskClockInt);
+  const tick=()=>{
+    const n=new Date();
+    const h=pad(n.getHours()),m=pad(n.getMinutes()),s=pad(n.getSeconds());
+    document.getElementById("kiosk-clock").textContent=`${h}:${m}:${s}`;
+    const days=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+    document.getElementById("kiosk-date").textContent=`${days[n.getDay()]} ${n.getDate()} de ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+  };
+  tick();_kioskClockInt=setInterval(tick,1000);
+}
+
+function renderKiosk(){
+  const box=document.getElementById("kiosk-step-content");if(!box)return;
+  if(_kioskStep==="select") box.innerHTML=kioskStepSelect();
+  else if(_kioskStep==="pin") box.innerHTML=kioskStepPin();
+  else if(_kioskStep==="result") box.innerHTML=kioskStepResult();
+}
+
+// ── STEP 1: Elegir empleado ──
+function kioskStepSelect(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden&&e.pin);
+  const all=(S.employees||[]).filter(e=>!e.hidden);
+  return`
+    <div class="kiosk-who">¿Quién sos?</div>
+    <div class="kiosk-sel">Tocá tu nombre</div>
+    <div class="kiosk-emp-grid">
+      ${all.map(emp=>`
+        <div class="kiosk-emp-btn ${_kioskEmp?.id===emp.id?"selected":""}" onclick="kioskSelectEmp(${emp.id})">
+          <div class="kiosk-emp-av" style="background:${emp.color}22;color:${emp.color};border:1px solid ${emp.color}44">${emp.name.charAt(0)}</div>
+          <div class="kiosk-emp-name">${emp.name.split(" ")[0]}</div>
+        </div>`).join("")}
+    </div>
+    ${_kioskEmp?`<button class="btn-gold" onclick="kioskGoPin()">Continuar →</button>`
+    :`<div style="text-align:center;font-size:12px;color:var(--txt2);padding-top:4px">Seleccioná tu nombre para continuar</div>`}
+  `;
+}
+
+function kioskSelectEmp(id){
+  _kioskEmp=(S.employees||[]).find(e=>e.id===id)||null;
+  renderKiosk();
+}
+window.kioskSelectEmp=kioskSelectEmp;
+
+function kioskGoPin(){
+  if(!_kioskEmp){toast("Elegí tu nombre primero");return;}
+  if(!_kioskEmp.pin){
+    // No pin set → go straight, no security (admin mode)
+    _kioskStep="result";_kioskPin="ok";
+    renderKiosk();return;
+  }
+  _kioskStep="pin";_kioskPin="";
+  renderKiosk();
+}
+window.kioskGoPin=kioskGoPin;
+
+// ── STEP 2: PIN ──
+function kioskStepPin(){
+  return`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div class="kiosk-emp-av" style="background:${_kioskEmp.color}22;color:${_kioskEmp.color};border:1px solid ${_kioskEmp.color}44;width:36px;height:36px;flex-shrink:0">${_kioskEmp.name.charAt(0)}</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--txt0)">${_kioskEmp.name}</div>
+        <div style="font-size:11px;color:var(--txt2)">Ingresá tu PIN de 4 dígitos</div>
+      </div>
+    </div>
+    <div class="pin-display" id="pin-display">
+      ${[0,1,2,3].map(i=>`<div class="pin-dot ${i<_kioskPin.length?"filled":""}" id="pdot-${i}"></div>`).join("")}
+    </div>
+    <div class="pin-pad">
+      ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map(k=>`
+        <button class="pin-key ${k==="⌫"?"del":k===""?"disabled":""}" 
+          ${k===""?"disabled":""} 
+          onclick="${k==="⌫"?"kioskPinDel()":k!==""?`kioskPinPress('${k}')`:""}">
+          ${k}
+        </button>`).join("")}
+    </div>
+    <div class="pin-err" id="pin-err"></div>
+    <button class="btn-sec" onclick="_kioskStep='select';_kioskEmp=null;renderKiosk()" style="margin-top:12px;font-size:12px;padding:8px">← Volver</button>
+  `;
+}
+
+function kioskPinPress(d){
+  if(_kioskPin.length>=4)return;
+  _kioskPin+=d;
+  // Update dots
+  [0,1,2,3].forEach(i=>{
+    const dot=document.getElementById("pdot-"+i);
+    if(dot)dot.className="pin-dot"+(_kioskPin.length>i?" filled":"");
+  });
+  if(_kioskPin.length===4) setTimeout(kioskCheckPin,200);
+}
+window.kioskPinPress=kioskPinPress;
+
+function kioskPinDel(){
+  _kioskPin=_kioskPin.slice(0,-1);
+  [0,1,2,3].forEach(i=>{
+    const dot=document.getElementById("pdot-"+i);
+    if(dot)dot.className="pin-dot"+(_kioskPin.length>i?" filled":"");
+  });
+}
+window.kioskPinDel=kioskPinDel;
+
+async function kioskCheckPin(){
+  if(!_kioskEmp)return;
+  if(String(_kioskPin)===String(_kioskEmp.pin)){
+    _kioskStep="result";
+    renderKiosk();
+    await kioskFichar();
+  }else{
+    // Wrong PIN
+    _kioskPin="";
+    const display=document.getElementById("pin-display");
+    if(display){
+      display.querySelectorAll(".pin-dot").forEach(d=>{d.className="pin-dot error";});
+      display.classList.add("shake");
+      setTimeout(()=>{
+        display.classList.remove("shake");
+        display.querySelectorAll(".pin-dot").forEach(d=>{d.className="pin-dot";});
+      },600);
+    }
+    const err=document.getElementById("pin-err");
+    if(err){err.textContent="PIN incorrecto. Intentá de nuevo.";setTimeout(()=>{if(err)err.textContent="";},2000);}
+  }
+}
+
+// ── STEP 3: FICHAR + RESULTADO ──
+async function kioskFichar(){
+  if(!_kioskEmp)return;
+  const emp=_kioskEmp;
+  const hoy=todayStr();
+  const now=nowStr();
+  const asist=[...(emp.asistencia||[])];
+  const idx=asist.findIndex(r=>r.fecha===hoy);
+  let accion="",icon="",color="";
+
+  if(idx===-1){
+    asist.push({fecha:hoy,entrada:now,salida:null,descanso:30,nota:"",ficherado:true});
+    accion="ENTRADA";icon="🟢";color="var(--ok)";
+  }else if(!asist[idx].salida){
+    asist[idx]={...asist[idx],salida:now};
+    accion="SALIDA";icon="🔴";color="var(--danger)";
+  }else{
+    accion="YA FICHADO";icon="✅";color="var(--gold)";
+  }
+
+  // Save to Firebase
+  const updated=(S.employees||[]).map(e=>String(e.id)===String(emp.id)?{...e,asistencia:asist}:e);
+  await fbSet("employees",updated);
+  // Update local
+  S.employees=updated;
+  _kioskEmp={...emp,asistencia:asist};
+
+  // Render result
+  const box=document.getElementById("kiosk-step-content");if(!box)return;
+  const regHoy=asist.find(r=>r.fecha===hoy);
+
+  // Próximo cobro
+  const c=calcKiosk(emp);
+  const p2=getPayDate(S.viewY,S.viewM,2);
+  const d2=dUntil(p2);
+
+  // Notificaciones
+  const notifsSnap=await new Promise(resolve=>{
+    const {ref:fbref,get:fbget}=window._fbFns||{};
+    try{
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({ref:r,get:g})=>{
+        g(r(db,`nomina/${ROOM}/notificaciones`)).then(s=>{
+          const data=s.val()||{};
+          const list=Object.values(data).sort((a,b)=>b.ts-a.ts).slice(0,3);
+          resolve(list);
+        }).catch(()=>resolve([]));
+      });
+    }catch(e){resolve([]);}
+  });
+
+  box.innerHTML=`
+    <div class="kiosk-result">
+      <div class="kiosk-result-icon">${icon}</div>
+      <div class="kiosk-result-title" style="color:${color}">${accion} REGISTRADA</div>
+      <div class="kiosk-result-sub">
+        ${accion==="ENTRADA"?`Bienvenido, ${emp.name.split(" ")[0]}! Entrada: <strong>${now}</strong>`
+          :accion==="SALIDA"?`Hasta luego, ${emp.name.split(" ")[0]}! Salida: <strong>${now}</strong>${regHoy?.entrada?` · Entrada fue: ${regHoy.entrada}`:""}`
+          :`Ya registraste tu jornada de hoy`}
+      </div>
+      ${accion!=="YA FICHADO"?`
+        <div style="font-size:12px;color:var(--txt2);margin-bottom:14px;padding:8px 12px;background:var(--bg2);border-radius:8px;border-left:2px solid var(--gold3)">
+          📋 El admin del equipo revisará si corresponde hora extra según tus tareas.
+        </div>`:""}
+      <!-- Próximo cobro -->
+      <div class="kiosk-result-cobro">
+        <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Tu próximo cobro</div>
+        <div style="font-size:24px;font-weight:700;font-family:var(--mono);background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px">${$(c.quincenaFinal)}</div>
+        <div style="font-size:11px;color:var(--txt2)">${fmtD(p2)}${d2!==null&&d2>=0&&d2<=7?` · en ${d2} día${d2!==1?"s":""}`:""}  </div>
+      </div>
+      <!-- Notificaciones -->
+      ${notifsSnap.length>0?`
+        <div style="text-align:left;margin-bottom:8px">
+          <div style="font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">🔔 Últimos avisos</div>
+          <div class="kiosk-notif-list">
+            ${notifsSnap.map(n=>`<div class="kiosk-notif-item"><strong>${n.de||"Admin"}:</strong> ${n.texto} <span style="color:var(--txt2);font-size:10px">· ${n.fecha}</span></div>`).join("")}
+          </div>
+        </div>`:""}
+      <button class="btn-gold" onclick="kioskVolver()" style="margin-top:4px">✓ Listo</button>
+    </div>
+  `;
+  // Auto-volver después de 12 segundos
+  setTimeout(()=>{if(_kioskStep==="result")kioskVolver();},12000);
+}
+
+function kioskVolver(){_kioskStep="select";_kioskEmp=null;_kioskPin="";renderKiosk();}
+window.kioskVolver=kioskVolver;
+
+function calcKiosk(emp){
+  const base=parseFloat(emp.salary)||0;
+  const hm=parseInt(emp.horasMes)||160;
+  const vac=parseInt(emp.vacDias)||0;
+  const diario=base/30;
+  const diasBase=Math.min(parseInt(emp.diasTrab)||30,30);
+  const diasEfect=Math.max(0,diasBase-vac);
+  const proporcional=diario*diasEfect;
+  const adelantos=(emp.adelantos||[]).filter(a=>!a.cobrado).reduce((s,a)=>s+(parseFloat(a.monto)||0),0);
+  const descuentos=(emp.descuentos||[]).filter(d=>!d.cobrado).reduce((s,d)=>s+(parseFloat(d.monto)||0),0);
+  const totalBruto=proporcional;
+  const quincenaBase=totalBruto/2;
+  const quincenaFinal=Math.max(0,quincenaBase-adelantos-descuentos);
+  return{quincenaFinal,quincenaBase};
+}
+
 // ── RENDER ──
 function render(){
   renderNotifs();
   const views={
     dashboard:vDashboard,calendario:vCalendario,empleados:vEmpleados,
-    horas:vHoras,calc:vCalc,mas:vMas,anual:vAnual,empresas:vEmpresas,
+    horas:vHoras,asistencia:vAsistencia,calc:vCalc,mas:vMas,anual:vAnual,empresas:vEmpresas,
   };
   const fn=views[S.tab];
   document.getElementById("content-area").innerHTML=fn?fn():"";
