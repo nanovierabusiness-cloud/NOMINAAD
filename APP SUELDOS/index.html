@@ -5,1507 +5,1750 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#080810">
 <title>NOMINA AD</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg0:#030303;--bg1:#090909;--bg2:#101010;--bg3:#181818;--bg4:#202020;
-  --gold:#c9a84c;--gold2:#e8c96d;--gold3:#a07830;--gold4:#f5e6b8;
-  --goldg:linear-gradient(135deg,#c9a84c,#e8c96d,#a07830);
-  --goldgs:linear-gradient(90deg,#c9a84c,#e8c96d);
-  --ok:#4caf7d;--danger:#c0392b;--warn:#e6a817;
-  --txt0:#f5f0e8;--txt1:#8a7d6a;--txt2:#4a4035;
-  --border:#1e1a14;--border2:#2a2318;
+  --bg0:#080810;--bg1:#0f0f1a;--bg2:#16162a;--bg3:#1e1e35;--bg4:#26263d;
+  --gold:#d4a843;--gold2:#f0c96a;--gold3:#a07828;
+  --goldg:linear-gradient(135deg,#d4a843 0%,#f0c96a 50%,#a07828 100%);
+  --goldgs:linear-gradient(90deg,#d4a843,#f0c96a);
+  --ok:#3ecf8e;--danger:#f05252;--warn:#f0a832;--acc:#7c6dfa;--acc2:#5b8af7;
+  --txt0:#f2f0ff;--txt1:#8888aa;--txt2:#44445a;
+  --border:#1e1e35;--border2:#2a2a45;--border3:#35355a;
+  --glow:0 0 0 1px rgba(212,168,67,.08),0 4px 24px rgba(0,0,0,.4);
   --font:'Inter',sans-serif;--display:'Cormorant Garamond',serif;--mono:'JetBrains Mono',monospace;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bot:env(safe-area-inset-bottom,0px);
-  --tab-h:60px;
-  --top-h:56px;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --th:62px;--bh:64px;
 }
 html,body{height:100%;overflow:hidden}
-body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-behavior:none}
-::-webkit-scrollbar{width:2px;height:2px}
-::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:4px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
+body{font-family:var(--font);color:var(--txt0);background:var(--bg0);overscroll-behavior:none}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes ripple{0%{transform:scale(0);opacity:.5}100%{transform:scale(4);opacity:0}}
 .fade-up{animation:fadeUp .25s ease}
 
-/* ══ LAYOUT MOBILE ══ */
-#app{
-  position:fixed;inset:0;
-  display:flex;flex-direction:column;
-  padding-top:var(--safe-top);
-  padding-bottom:var(--safe-bot);
-}
+/* ── SCREEN LAYER ── */
+.screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,168,67,.07) 0%,transparent 55%),var(--bg0)}
+.screen.active{display:flex}
 
-/* ── TOPBAR ── */
-#topbar{
-  height:var(--top-h);flex-shrink:0;
-  background:var(--bg1);border-bottom:1px solid var(--border2);
-  display:flex;align-items:center;padding:0 16px;gap:10px;
-  position:relative;z-index:30;
-}
-#topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)50,transparent)}
-.tb-brand{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:3px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:shimmer 4s linear infinite}
-.tb-month{display:flex;align-items:center;gap:4px;margin-left:auto}
-.tb-month button{background:var(--bg3);border:1px solid var(--border2);color:var(--txt1);border-radius:6px;width:28px;height:28px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.tb-month button:active{background:var(--gold)22;border-color:var(--gold)}
-.tb-mlabel{font-size:11px;font-weight:600;font-family:var(--mono);color:var(--gold);min-width:90px;text-align:center;letter-spacing:.5px}
-.tb-icon{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0}
-.tb-icon:active{background:var(--gold)22;border-color:var(--gold)}
+/* ── LANDING ── */
+#s-landing .brand{font-family:var(--display);font-size:52px;font-weight:700;letter-spacing:6px;
+  background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;background-size:300%;animation:shimmer 5s linear infinite;
+  text-align:center;line-height:1}
+#s-landing .sub{font-size:10px;color:var(--gold3);letter-spacing:8px;text-transform:uppercase;text-align:center;margin-top:6px;margin-bottom:40px;opacity:.8}
+.land-btn{display:flex;align-items:center;gap:16px;padding:18px 22px;width:100%;max-width:360px;
+  background:var(--bg1);border:1px solid var(--border3);border-radius:18px;
+  cursor:pointer;font-family:var(--font);transition:all .2s;margin-bottom:12px}
+.land-btn:hover,.land-btn:active{transform:translateY(-2px)}
+.land-btn.admin{border-color:rgba(212,168,67,.3)}
+.land-btn.admin:hover{border-color:rgba(212,168,67,.6);box-shadow:0 0 20px rgba(212,168,67,.15)}
+.land-btn.emp{border-color:rgba(62,207,142,.3)}
+.land-btn.emp:hover{border-color:rgba(62,207,142,.6);box-shadow:0 0 20px rgba(62,207,142,.15)}
+.land-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.land-icon.admin{background:rgba(212,168,67,.12);border:1px solid rgba(212,168,67,.3)}
+.land-icon.emp{background:rgba(62,207,142,.12);border:1px solid rgba(62,207,142,.3)}
+.land-lbl{font-size:16px;font-weight:700;text-align:left}
+.land-lbl span{display:block;font-size:11px;font-weight:400;color:var(--txt2);margin-top:3px}
 
-/* ── CONTENT AREA ── */
-#content-area{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  padding-bottom:8px;
-}
-.page{padding:12px;animation:fadeUp .2s ease}
+/* ── LOGIN BOX ── */
+.login-box{width:100%;max-width:380px;background:var(--bg1);border:1px solid var(--border3);border-radius:22px;padding:32px 28px;box-shadow:0 0 0 1px rgba(212,168,67,.05),0 24px 64px rgba(0,0,0,.6)}
+.login-title{font-size:13px;font-weight:700;color:var(--gold2);margin-bottom:20px;letter-spacing:.5px}
+.back-btn{background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;padding:0;font-family:var(--font);margin-bottom:18px;display:flex;align-items:center;gap:4px}
 
-/* ── BOTTOM TABS ── */
-#tabs{
-  height:var(--tab-h);flex-shrink:0;
-  background:var(--bg1);border-top:1px solid var(--border2);
-  display:flex;align-items:stretch;
-  position:relative;z-index:30;
-}
-#tabs::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)50,transparent)}
-.tab-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;border:none;background:none;cursor:pointer;
-  font-size:9px;color:var(--txt2);font-family:var(--font);font-weight:500;
-  letter-spacing:.3px;transition:color .15s;padding:6px 2px;
-}
-.tab-btn .ti{font-size:20px;line-height:1}
-.tab-btn.active{color:var(--gold)}
-.tab-btn.active .ti{filter:drop-shadow(0 0 4px var(--gold)44)}
+/* ── KIOSK ── */
+#s-kiosk{background:radial-gradient(ellipse at 50% -20%,rgba(212,168,67,.1) 0%,transparent 60%),var(--bg0)}
+.kiosk-box{width:100%;max-width:360px;background:var(--bg1);border:1px solid var(--border3);border-radius:24px;padding:28px 24px;box-shadow:0 0 0 1px rgba(212,168,67,.06),0 24px 64px rgba(0,0,0,.6)}
+.kiosk-clock{font-family:var(--mono);font-size:52px;font-weight:700;color:var(--gold2);text-align:center;letter-spacing:3px;line-height:1;margin-bottom:4px}
+.kiosk-date{font-size:13px;color:var(--txt2);text-align:center;margin-bottom:22px}
+/* emp grid */
+.emp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:200px;overflow-y:auto;margin-bottom:14px}
+.emp-tile{background:var(--bg2);border:1px solid var(--border3);border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:5px}
+.emp-tile:active,.emp-tile.sel{border-color:var(--gold)66;background:rgba(212,168,67,.1)}
+.emp-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.emp-nm{font-size:11px;font-weight:600;color:var(--txt0);line-height:1.2}
+/* pin pad */
+.pin-dots{display:flex;gap:12px;justify-content:center;margin:14px 0}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border3);transition:all .15s}
+.pin-dot.on{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(212,168,67,.4)}
+.pin-dot.err{background:var(--danger);border-color:var(--danger)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pin-key{height:60px;border-radius:14px;border:1px solid var(--border3);background:var(--bg2);color:var(--txt0);font-size:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--mono);transition:all .12s;-webkit-user-select:none;user-select:none}
+.pin-key:active{background:rgba(212,168,67,.18);border-color:rgba(212,168,67,.5);transform:scale(.91)}
+.pin-key.del{font-size:18px;color:var(--txt2)}
+.pin-key.del:active{background:rgba(240,82,82,.15);border-color:rgba(240,82,82,.4);color:var(--danger)}
+.pin-key.empty{opacity:0;pointer-events:none}
+.pin-err{font-size:12px;color:var(--danger);text-align:center;min-height:18px;margin-top:6px}
+/* result */
+.kiosk-result{text-align:center;padding:8px 0}
+.res-icon{font-size:60px;line-height:1;margin-bottom:10px}
+.res-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.res-sub{font-size:13px;color:var(--txt2);margin-bottom:16px;line-height:1.5}
+.cobro-mini{background:var(--bg2);border:1px solid rgba(212,168,67,.3);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left}
+.notif-mini{max-height:150px;overflow-y:auto}
+.notif-mini-item{padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--txt1);line-height:1.5}
+.notif-mini-item:last-child{border-bottom:none}
+.notif-mini-item strong{color:var(--txt0)}
+
+/* ── APP ── */
+#s-app{padding:0;justify-content:flex-start;align-items:stretch;z-index:5}
+#s-app.active{display:flex}
+/* topbar */
+#topbar{height:var(--th);flex-shrink:0;background:rgba(10,10,22,.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border3);display:flex;align-items:center;padding:0 16px;gap:10px;
+  position:relative;z-index:20;padding-top:var(--sat)}
+#topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)50,transparent);opacity:.5}
+.tb-brand{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:4px;
+  background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;background-size:300%;animation:shimmer 6s linear infinite}
+.tb-mid{flex:1;display:flex;align-items:center;justify-content:center;gap:6px}
+.tb-month-btn{background:none;border:none;color:var(--txt1);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px}
+.tb-month-btn:active{color:var(--gold)}
+.tb-mlabel{font-size:12px;font-weight:600;font-family:var(--mono);color:var(--gold2);min-width:100px;text-align:center;letter-spacing:.8px}
+.tb-btn{width:38px;height:38px;background:var(--bg3);border:1px solid var(--border3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;transition:all .15s}
+.tb-btn:active{background:rgba(212,168,67,.15);border-color:rgba(212,168,67,.5)}
+/* content */
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page{padding:14px;animation:fadeUp .25s ease}
+/* bottom tabs */
+#tabs{height:var(--bh);flex-shrink:0;background:rgba(8,8,16,.98);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border3);display:flex;align-items:stretch;
+  position:relative;z-index:20;padding-bottom:var(--sab)}
+#tabs::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)50,transparent);opacity:.6}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  border:none;background:none;cursor:pointer;font-size:10px;color:var(--txt2);font-family:var(--font);font-weight:500;transition:color .15s;padding:6px 0}
+.tab .ti{font-size:22px;transition:transform .15s}
+.tab.on{color:var(--gold2)}
+.tab.on .ti{transform:translateY(-1px)}
 
 /* ── CARDS ── */
-.card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:14px;position:relative;overflow:hidden;margin-bottom:10px}
-.card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)30,transparent)}
-.csm{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px}
-.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.stat-card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;position:relative;overflow:hidden}
-.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)40,transparent)}
-.slabel{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;font-weight:600}
-.sval{font-size:18px;font-weight:700;font-family:var(--mono)}
-.ssub{font-size:10px;color:var(--txt2);margin-top:2px}
+.card{background:var(--bg1);border:1px solid var(--border3);border-radius:16px;padding:16px;position:relative;overflow:hidden;margin-bottom:12px;box-shadow:var(--glow)}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)40,transparent);opacity:.5}
+.csm{background:var(--bg2);border:1px solid var(--border3);border-radius:12px;padding:12px 14px}
+.stitle{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 
-/* ── PAY CARDS ── */
-.pay-card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
-.pay-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)50,transparent)}
-.pbar{background:var(--bg4);border-radius:99px;height:3px;margin-top:8px}
+/* stat card */
+.stat{background:var(--bg1);border:1px solid var(--border3);border-radius:14px;padding:14px;position:relative;overflow:hidden;box-shadow:var(--glow)}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)40,transparent);opacity:.5}
+.stat-lbl{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:600}
+.stat-val{font-size:20px;font-weight:700;font-family:var(--mono)}
+
+/* pay card */
+.pay-card{background:var(--bg1);border:1px solid var(--border3);border-radius:16px;padding:18px;position:relative;overflow:hidden;box-shadow:var(--glow);transition:all .2s}
+.pay-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)50,transparent)}
+.pay-card:hover{transform:translateY(-2px)}
+.pbar{background:var(--bg4);border-radius:99px;height:4px;overflow:hidden}
 .pfill{height:100%;border-radius:99px;transition:width .5s}
 
-/* ── EMP CARDS ── */
-.emp-card{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden}
-.emp-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold3)20,transparent)}
-.emp-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
-.emp-actions{display:flex;gap:6px;margin-top:10px}
-.ea-btn{flex:1;height:32px;border-radius:7px;border:1px solid var(--border2);background:var(--bg2);color:var(--txt1);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:var(--font);font-weight:500}
-.ea-btn:active{border-color:var(--gold);color:var(--gold)}
+/* emp card */
+.ecard{background:var(--bg1);border:1px solid var(--border3);border-radius:16px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;box-shadow:var(--glow)}
+.ecard::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)30,transparent);opacity:.5}
 
-/* ── CHECK BUTTON ── */
-.cbtn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold);font-weight:700;transition:all .15s;flex-shrink:0}
-.cbtn.paid{background:var(--ok)22;border-color:var(--ok);color:var(--ok)}
-.cbtn:active{transform:scale(.92)}
+/* table */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border3);font-weight:600}
+.tbl td{padding:10px 10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover td{background:var(--bg2)}
 
-/* ── MODAL BOTTOM SHEET ── */
-.bsheet-overlay{position:fixed;inset:0;background:#000000aa;z-index:200;display:flex;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(4px)}
-.bsheet{background:var(--bg1);border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative;padding-bottom:calc(20px + var(--safe-bot))}
-.bsheet::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--goldgs);border-radius:20px 20px 0 0}
-.bsheet-handle{width:36px;height:4px;background:var(--border2);border-radius:99px;margin:12px auto 4px}
-.bsheet-hdr{padding:8px 18px 0;display:flex;align-items:center;justify-content:space-between}
-.bsheet-hdr h3{font-size:15px;font-weight:700;letter-spacing:.3px}
-.bsheet-body{padding:14px 18px}
-.bsheet-foot{padding:0 18px;display:flex;gap:8px;margin-top:4px}
+/* chips */
+.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.4px}
+.cok{background:rgba(62,207,142,.12);color:var(--ok);border:1px solid rgba(62,207,142,.25)}
+.cdn{background:rgba(240,82,82,.12);color:var(--danger);border:1px solid rgba(240,82,82,.25)}
+.cwn{background:rgba(240,168,50,.12);color:var(--warn);border:1px solid rgba(240,168,50,.25)}
+.cinf{background:rgba(91,138,247,.12);color:var(--acc2);border:1px solid rgba(91,138,247,.25)}
+.cne{background:var(--bg3);color:var(--txt2);border:1px solid var(--border3)}
+.cgold{background:rgba(212,168,67,.12);color:var(--gold2);border:1px solid rgba(212,168,67,.25)}
 
-/* ── FORMS ── */
+/* pay button */
+.pay-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border3);background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--gold);transition:all .15s}
+.pay-btn.paid{background:rgba(62,207,142,.12);border-color:rgba(62,207,142,.4);color:var(--ok)}
+
+/* ea buttons */
+.ea-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border3);background:var(--bg2);color:var(--txt1);font-family:var(--font);transition:all .15s}
+.ea-btn:active,.ea-btn:hover{border-color:rgba(212,168,67,.4);color:var(--gold2)}
+.ea-btn.on{background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.4);color:var(--gold2)}
+.ea-btn.danger{color:var(--danger);border-color:rgba(240,82,82,.3)}
+.ea-btn.danger:hover{background:rgba(240,82,82,.08)}
+
+/* forms */
 .fg{margin-bottom:12px}
 .fl{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;display:block;font-weight:600}
-.fi{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--txt0);padding:10px 12px;font-size:15px;outline:none;font-family:var(--font);-webkit-appearance:none;appearance:none}
-.fi:focus{border-color:var(--gold3)}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fhint{font-size:11px;color:var(--txt1);margin-top:5px;padding:8px 12px;background:var(--bg2);border-radius:6px;border-left:2px solid var(--gold3);font-family:var(--mono);line-height:1.6}
+.fi{width:100%;background:var(--bg2);border:1px solid var(--border3);border-radius:10px;color:var(--txt0);padding:11px 14px;font-size:15px;outline:none;font-family:var(--font);-webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s}
+.fi:focus{border-color:rgba(212,168,67,.5);box-shadow:0 0 0 3px rgba(212,168,67,.1)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fhint{font-size:11px;color:var(--txt1);margin-top:6px;padding:8px 12px;background:var(--bg2);border-radius:8px;border-left:2px solid var(--gold3);font-family:var(--mono)}
 
-/* ── BUTTONS ── */
-.btn-gold{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--gold3);font-family:var(--font);background:var(--goldgs);color:#000;letter-spacing:.3px;width:100%}
+/* buttons */
+.btn-gold{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);background:var(--goldgs);color:#000;width:100%;box-shadow:0 4px 16px rgba(212,168,67,.25);transition:all .2s}
 .btn-gold:active{opacity:.85;transform:scale(.98)}
-.btn-sec{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border2);font-family:var(--font);background:var(--bg2);color:var(--txt1);width:100%}
-.btn-sec:active{border-color:var(--gold3);color:var(--gold)}
-.btn-sm{padding:8px 14px;font-size:12px;border-radius:8px;width:auto}
-.btn-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:var(--bg2);color:var(--txt2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;flex-shrink:0}
-.btn-icon:active{border-color:var(--gold3);color:var(--gold)}
-.btn-danger{border-color:var(--danger)44!important;color:var(--danger)!important}
+.btn-sec{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid var(--border3);font-family:var(--font);background:var(--bg2);color:var(--txt1);width:100%;transition:all .15s}
+.btn-sec:active,.btn-sec:hover{border-color:rgba(212,168,67,.4);color:var(--gold2)}
+.btn-icon{width:34px;height:34px;border-radius:9px;border:1px solid var(--border3);background:var(--bg2);color:var(--txt2);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all .15s}
+.btn-icon:hover{border-color:rgba(212,168,67,.4);color:var(--gold)}
 
-/* ── CHIPS ── */
-.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.4px}
-.cok{background:var(--ok)18;color:var(--ok);border:1px solid var(--ok)33}
-.cwn{background:var(--warn)18;color:var(--warn);border:1px solid var(--warn)33}
-.cdn{background:var(--danger)18;color:var(--danger);border:1px solid var(--danger)33}
-.cinf{background:var(--gold3)18;color:var(--gold2);border:1px solid var(--gold3)33}
-.cne{background:var(--bg3);color:var(--txt2);border:1px solid var(--border2)}
-.cfem{background:var(--gold)15;color:var(--gold2);border:1px solid var(--gold3)33}
+/* bsheet */
+#bsheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(4px)}
+#bsheet-overlay.open{display:flex}
+.bsheet{background:var(--bg1);border-radius:22px 22px 0 0;max-height:88vh;overflow-y:auto;position:relative;padding-bottom:calc(20px + var(--sab))}
+.bsheet::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--goldgs);border-radius:22px 22px 0 0}
+.bsh{width:36px;height:4px;background:var(--border3);border-radius:99px;margin:12px auto 0}
+.bsheet-hdr{padding:10px 18px 0;display:flex;align-items:center;justify-content:space-between}
+.bsheet-hdr h3{font-size:15px;font-weight:700}
+.bsheet-body{padding:14px 18px}
+.bsheet-foot{padding:0 18px;display:flex;gap:8px;margin-top:6px}
 
-/* ── MINI CAL ── */
-.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.chd{text-align:center;font-size:9px;color:var(--txt2);font-weight:700;padding:2px;letter-spacing:1px}
-.cc{text-align:center;padding:5px 2px;border-radius:5px;font-size:11px}
-.cc.pay{background:var(--goldgs);color:#000;font-weight:700}
-.cc.tod{background:var(--bg3);color:var(--gold2);font-weight:700;border:1px solid var(--gold3)44}
-.cc.hol{color:var(--danger)}
-.cc.wkd{color:var(--txt2)}
-.cc.wkk{color:var(--txt1)}
+/* connection badge */
+#conn{position:fixed;bottom:calc(var(--bh) + 8px);right:10px;z-index:50;display:flex;align-items:center;gap:6px;background:rgba(14,14,26,.9);backdrop-filter:blur(10px);border:1px solid var(--border3);border-radius:99px;padding:5px 12px;font-size:11px;font-family:var(--mono);display:none}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+.conn-dot.off{background:var(--danger)}
+.conn-dot.sync{background:var(--warn);animation:spin 1s linear infinite}
 
-/* ── CALCULATOR ── */
-.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
-.calc-btn{height:52px;border-radius:10px;border:1px solid var(--border2);background:var(--bg2);color:var(--txt0);font-size:17px;font-weight:600;cursor:pointer;font-family:var(--mono);display:flex;align-items:center;justify-content:center}
-.calc-btn:active{background:var(--bg3);transform:scale(.95)}
-.calc-btn.op{background:var(--gold)18;color:var(--gold);border-color:var(--gold3)44}
-.calc-btn.op:active{background:var(--gold)30}
-.calc-btn.eq{background:var(--goldgs);color:#000;border-color:var(--gold)}
-.calc-btn.eq:active{opacity:.85}
-.calc-btn.clr{background:var(--danger)18;color:var(--danger);border-color:var(--danger)44}
-.calc-display{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:14px;font-family:var(--mono);margin-bottom:6px}
-.calc-expr{font-size:12px;color:var(--txt2);min-height:16px;word-break:break-all}
-.calc-result{font-size:26px;font-weight:700;color:var(--gold);text-align:right;word-break:break-all}
+/* toast */
+.toast{position:fixed;bottom:calc(var(--bh) + 14px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid rgba(212,168,67,.4);border-radius:20px;padding:10px 20px;font-size:12px;font-family:var(--font);color:var(--gold);box-shadow:0 4px 20px rgba(0,0,0,.5);font-weight:600;white-space:nowrap;max-width:90vw;text-align:center;animation:fadeUp .2s ease;z-index:200}
 
-/* ── NOTIF ── */
-#nwrap{position:fixed;top:calc(var(--top-h) + var(--safe-top) + 8px);left:8px;right:8px;z-index:100;display:flex;flex-direction:column;gap:6px}
-.notif{background:var(--bg2);border:1px solid var(--gold3)55;border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;animation:slideIn .3s ease;box-shadow:0 4px 20px #000a}
-.nclose{background:none;border:none;color:var(--txt2);cursor:pointer;font-size:16px;padding:0;flex-shrink:0}
+/* loader */
+.loader{width:28px;height:28px;border:3px solid var(--border3);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:40px auto}
 
-/* ── CONN ── */
-#conn-badge{position:fixed;bottom:calc(var(--tab-h) + var(--safe-bot) + 8px);right:8px;z-index:50;display:none;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border2);border-radius:99px;padding:4px 10px;font-size:10px;font-family:var(--mono)}
-.conn-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.conn-dot.online{background:var(--ok);animation:pulse 2s infinite}
-.conn-dot.offline{background:var(--danger)}
-.conn-dot.syncing{background:var(--gold);animation:pulse .8s infinite}
+/* calendar */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.cal-dh{text-align:center;font-size:9px;color:var(--txt2);font-weight:700;padding:2px;letter-spacing:.5px}
+.cal-d{text-align:center;padding:5px 2px;border-radius:5px;font-size:11px}
+.cal-d.pay{background:var(--goldgs);color:#000;font-weight:700}
+.cal-d.today{background:var(--bg3);color:var(--gold2);font-weight:700;border:1px solid rgba(212,168,67,.3)}
+.cal-d.hol{color:var(--danger)}
+.cal-d.wkd{color:var(--txt2)}
+.cal-d.wkk{color:var(--txt1)}
 
-/* ── SETUP SCREEN ── */
-#setup-screen{position:fixed;inset:0;background:var(--bg0);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-.setup-box{width:100%;max-width:420px}
-.setup-title{font-family:var(--display);font-size:42px;font-weight:700;letter-spacing:5px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:shimmer 4s linear infinite;text-align:center;margin-bottom:4px}
-.setup-sub{font-size:9px;color:var(--gold3);letter-spacing:6px;text-transform:uppercase;text-align:center;margin-bottom:32px}
-.setup-hint{font-size:11px;color:var(--txt2);line-height:1.7;margin-top:6px;padding:10px 12px;background:var(--bg2);border-radius:8px;border-left:2px solid var(--gold3)}
+/* cronograma */
+.crono-cell{padding:3px;text-align:center}
+.turno-chip{background:rgba(212,168,67,.12);border:1px solid rgba(212,168,67,.3);border-radius:5px;padding:2px 3px;font-size:9px;color:var(--gold2);cursor:pointer;line-height:1.3}
 
-/* ── STITLE ── */
-.stitle{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:10px}
-.empty{text-align:center;padding:40px 20px;color:var(--txt2);font-size:13px}
-
-/* ── DIVIDER ── */
-.gdiv{height:1px;background:linear-gradient(90deg,transparent,var(--gold3)50,transparent);margin:12px 0}
-
-/* ── DESCUENTO / ADELANTO ITEMS ── */
-.disc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
-.disc-item:last-child{border-bottom:none}
-
-/* ── WA PREVIEW ── */
-.wa-preview{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:14px;font-family:var(--mono);font-size:12px;color:var(--txt1);line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:10px;max-height:280px;overflow-y:auto}
-
+/* desktop sidebar */
 @media(min-width:768px){
-  /* PC: sidebar lateral + contenido */
-  #app{flex-direction:row;align-items:stretch}
-  #tabs{
-    flex-direction:column;width:72px;height:auto;
-    border-top:none;border-right:1px solid var(--border2);
-    order:-1;flex-shrink:0;
-  }
+  #s-app{flex-direction:row}
+  #tabs{flex-direction:column;width:84px;height:auto;border-top:none;border-right:1px solid var(--border3);order:-1;flex-shrink:0;overflow-y:auto;padding-bottom:0}
   #tabs::before{display:none}
-  .tab-btn{flex-direction:column;gap:4px;padding:14px 4px;font-size:9px;border-right:none;border-left:3px solid transparent}
-  .tab-btn.active{border-left-color:var(--gold);border-bottom:none;background:var(--gold)12}
-  .tab-btn .ti{font-size:22px}
-  #topbar{padding:12px 20px}
-  #content-area{flex:1;min-width:0}
-  #conn-badge{left:82px}
+  #tabs::after{content:'';position:absolute;top:0;right:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold)40,transparent)}
+  .tab{flex-direction:column;gap:4px;padding:15px 4px;font-size:9px;border-left:3px solid transparent;border-bottom:none;min-height:74px}
+  .tab.on{border-left-color:var(--gold);background:linear-gradient(90deg,rgba(212,168,67,.08),transparent)}
+  .tab.on .ti{transform:none}
+  .tab .ti{font-size:23px}
+  #content{overflow-x:hidden}
+  #topbar{padding-top:0}
+  #conn{left:94px;bottom:12px}
 }
 @media(min-width:1024px){
-  #tabs{width:90px}
-  .tab-btn{font-size:10px;padding:16px 4px}
+  #tabs{width:100px}
+  .tab{font-size:10px;padding:16px 6px}
+}
+@media(min-width:1280px){
+  #tabs{width:116px}
+  .tab{font-size:11px;padding:18px 8px}
+  .tab .ti{font-size:26px}
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="setup-screen">
-  <div class="setup-box">
-    <div class="setup-title">NOMINA AD</div>
-    <div class="setup-sub">Gestión de Sueldos</div>
-    <div id="login-form">
-      <div class="fg"><label class="fl">Email</label><input class="fi" id="auth-email" type="email" placeholder="tumail@email.com" autocomplete="email" style="font-size:15px"></div>
+<!-- ════════════════ LANDING ════════════════ -->
+<div id="s-landing" class="screen active">
+  <div class="brand">NOMINA AD</div>
+  <div class="sub">Gestión de Sueldos</div>
+  <button class="land-btn admin" onclick="showScreen('s-login')">
+    <div class="land-icon admin">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:#d4a843">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        <path d="M19 8l1.5 1.5M19 11h2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="land-lbl" style="color:var(--gold2)">Administrador
+        <span>Gestión completa de sueldos y equipo</span>
+      </div>
+    </div>
+  </button>
+  <button class="land-btn emp" onclick="abrirKiosk()">
+    <div class="land-icon emp">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:#3ecf8e">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        <circle cx="18" cy="16" r="4" fill="rgba(62,207,142,.2)"/>
+        <path d="M16.5 16l1 1 2-2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="land-lbl" style="color:var(--ok)">Empleado — Fichar
+        <span>Registrar entrada y salida con PIN</span>
+      </div>
+    </div>
+  </button>
+</div>
+
+<!-- ════════════════ LOGIN ════════════════ -->
+<div id="s-login" class="screen">
+  <div class="login-box">
+    <button class="back-btn" onclick="showScreen('s-landing')">← Volver</button>
+    <div class="login-title">👑 Acceso Administrador</div>
+    <div id="lf-main">
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="l-email" type="email" placeholder="tumail@email.com" autocomplete="email"></div>
       <div class="fg"><label class="fl">Contraseña</label>
         <div style="position:relative">
-          <input class="fi" id="auth-pass" type="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" style="font-size:15px;padding-right:44px">
-          <button onclick="togglePassVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--txt2);cursor:pointer;font-size:18px" id="pass-eye">👁</button>
+          <input class="fi" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" style="padding-right:44px">
+          <button onclick="togglePass()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--txt2);cursor:pointer;font-size:18px" id="pass-eye">👁</button>
         </div>
       </div>
-      <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:18px">
         <button class="btn-gold" onclick="doLogin()">Entrar →</button>
-        <button class="btn-sec" onclick="showRegister()">Crear cuenta nueva</button>
-        <button onclick="doResetPass()" style="background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;padding:4px;font-family:var(--font)">¿Olvidaste tu contraseña?</button>
+        <button class="btn-sec" onclick="toggleLF('reg')">Crear cuenta nueva</button>
+        <button onclick="doReset()" style="background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;padding:4px;font-family:var(--font);margin-top:2px">¿Olvidaste tu contraseña?</button>
       </div>
-      <div id="setup-err" style="display:none;margin-top:10px;padding:10px;background:var(--danger)15;border:1px solid var(--danger)44;border-radius:8px;font-size:12px;color:var(--danger)"></div>
+      <div id="l-err" style="display:none;margin-top:10px;padding:10px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.3);border-radius:10px;font-size:12px;color:var(--danger)"></div>
     </div>
-    <div id="register-form" style="display:none">
-      <div style="font-size:12px;color:var(--txt2);margin-bottom:14px;line-height:1.6;padding:10px;background:var(--bg2);border-radius:8px;border-left:2px solid var(--gold3)">Solo los administradores pueden crear cuentas nuevas.</div>
-      <div class="fg"><label class="fl">Nombre</label><input class="fi" id="reg-name" placeholder="Juan Pérez" style="font-size:15px"></div>
-      <div class="fg"><label class="fl">Email</label><input class="fi" id="reg-email" type="email" placeholder="empleado@email.com" style="font-size:15px"></div>
-      <div class="fg"><label class="fl">Contraseña</label><input class="fi" id="reg-pass" type="password" placeholder="Mínimo 6 caracteres" style="font-size:15px"></div>
+    <div id="lf-reg" style="display:none">
+      <div class="fg"><label class="fl">Nombre</label><input class="fi" id="r-name" placeholder="Juan Pérez"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="r-email" type="email" placeholder="email@email.com"></div>
+      <div class="fg"><label class="fl">Contraseña</label><input class="fi" id="r-pass" type="password" placeholder="Mín. 6 caracteres"></div>
       <div class="fg"><label class="fl">Rol</label>
-        <select class="fi" id="reg-role" style="appearance:none;font-size:14px">
-          <option value="admin">👑 Administrador — edita todo</option>
+        <select class="fi" id="r-role" style="appearance:none">
+          <option value="admin">👑 Administrador</option>
           <option value="viewer">👁 Solo lectura</option>
         </select>
       </div>
-      <div style="margin-top:14px;display:flex;gap:8px">
-        <button class="btn-sec" style="flex:1" onclick="showLogin()">← Volver</button>
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn-sec" style="flex:1" onclick="toggleLF('main')">← Volver</button>
         <button class="btn-gold" style="flex:2" onclick="doRegister()">Crear cuenta</button>
       </div>
-      <div id="reg-err" style="display:none;margin-top:8px;padding:8px;background:var(--danger)15;border:1px solid var(--danger)44;border-radius:8px;font-size:12px;color:var(--danger)"></div>
-      <div id="reg-ok" style="display:none;margin-top:8px;padding:8px;background:var(--ok)15;border:1px solid var(--ok)44;border-radius:8px;font-size:12px;color:var(--ok)"></div>
+      <div id="r-err" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.3);border-radius:10px;font-size:12px;color:var(--danger)"></div>
+      <div id="r-ok" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.3);border-radius:10px;font-size:12px;color:var(--ok)"></div>
     </div>
-    <input type="hidden" id="fb-url">
-    <input type="hidden" id="fb-room">
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none">
-  <div id="nwrap"></div>
-  <div id="conn-badge"><div class="conn-dot syncing" id="conn-dot"></div><span id="conn-label" style="color:var(--txt1)">Conectando...</span></div>
+<!-- ════════════════ KIOSK ════════════════ -->
+<div id="s-kiosk" class="screen">
+  <div id="kiosk-clock" class="kiosk-clock">00:00:00</div>
+  <div id="kiosk-date" class="kiosk-date"></div>
+  <div class="kiosk-box">
+    <div id="kiosk-content"><div class="loader"></div></div>
+  </div>
+  <button onclick="cerrarKiosk()" style="margin-top:18px;background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;font-family:var(--font)">← Volver al inicio</button>
+</div>
 
-  <!-- TOPBAR -->
+<!-- ════════════════ APP ════════════════ -->
+<div id="s-app" class="screen">
   <div id="topbar">
     <div class="tb-brand">NAD</div>
-    <div class="tb-month">
-      <button onclick="prevMonth()">‹</button>
+    <div class="tb-mid">
+      <button class="tb-month-btn" onclick="prevMonth()">‹</button>
       <div class="tb-mlabel" id="mlabel"></div>
-      <button onclick="nextMonth()">›</button>
+      <button class="tb-month-btn" onclick="nextMonth()">›</button>
     </div>
-    <div class="tb-icon" onclick="openSearch()">🔍</div>
-    <div class="tb-icon" onclick="openAddEmp()" id="btn-add-emp">+</div>
-    <div class="tb-icon" onclick="doLogout()" title="Cerrar sesión" style="font-size:14px">🚪</div>
+    <div class="tb-btn" onclick="openSearch()" title="Buscar">🔍</div>
+    <div class="tb-btn" onclick="openAddEmp()" title="Nuevo empleado" id="btn-add">+</div>
+    <div class="tb-btn" onclick="doLogout()" title="Salir">🚪</div>
   </div>
-
-  <!-- CONTENT -->
-  <div id="content-area"></div>
-
-  <!-- BOTTOM TABS -->
+  <div id="content"></div>
   <div id="tabs">
-    <button class="tab-btn active" data-tab="dashboard" onclick="setTab('dashboard')"><div class="ti">📊</div><div>Inicio</div></button>
-    <button class="tab-btn" data-tab="calendario" onclick="setTab('calendario')"><div class="ti">📅</div><div>Pagos</div></button>
-    <button class="tab-btn" data-tab="empleados" onclick="setTab('empleados')"><div class="ti">👥</div><div>Equipo</div></button>
-    <button class="tab-btn" data-tab="horas" onclick="setTab('horas')"><div class="ti">⏱️</div><div>Extras</div></button>
-    <button class="tab-btn" data-tab="calc" onclick="setTab('calc')"><div class="ti">🧮</div><div>Calc</div></button>
-    <button class="tab-btn" data-tab="mas" onclick="setTab('mas')"><div class="ti">☰</div><div>Más</div></button>
+    <button class="tab on" data-tab="dashboard" onclick="setTab('dashboard')"><div class="ti">📊</div><div>Inicio</div></button>
+    <button class="tab" data-tab="calendario" onclick="setTab('calendario')"><div class="ti">📅</div><div>Pagos</div></button>
+    <button class="tab" data-tab="equipo" onclick="setTab('equipo')"><div class="ti">👥</div><div>Equipo</div></button>
+    <button class="tab" data-tab="cronograma" onclick="setTab('cronograma')"><div class="ti">📋</div><div>Turnos</div></button>
+    <button class="tab" data-tab="asistencia" onclick="setTab('asistencia')"><div class="ti">🕐</div><div>Asist.</div></button>
+    <button class="tab" data-tab="mas" onclick="setTab('mas')"><div class="ti">☰</div><div>Más</div></button>
   </div>
 </div>
 
-<!-- BOTTOM SHEET -->
-<div id="bsheet-overlay" style="display:none" onclick="closeBSOutside(event)">
+<!-- BSHEET -->
+<div id="bsheet-overlay" onclick="bsClickOut(event)">
   <div class="bsheet" id="bsheet-box" onclick="event.stopPropagation()">
-    <div class="bsheet-handle"></div>
+    <div class="bsh"></div>
     <div id="bsheet-content"></div>
   </div>
 </div>
 
+<!-- CONN BADGE -->
+<div id="conn"><div class="conn-dot" id="conn-dot"></div><span id="conn-lbl">●</span></div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// ── CONSTANTES ──
-const HOLIDAYS=new Set(["2025-01-01","2025-03-03","2025-03-04","2025-04-02","2025-04-18","2025-05-01","2025-05-25","2025-06-16","2025-06-20","2025-07-09","2025-08-17","2025-10-12","2025-11-20","2025-12-08","2025-12-25","2026-01-01","2026-02-16","2026-02-17","2026-04-02","2026-04-03","2026-05-01","2026-05-25","2026-06-15","2026-06-20","2026-07-09","2026-08-17","2026-10-12","2026-11-20","2026-12-08","2026-12-25"]);
+// ══════════════════ CONFIG ══════════════════
+const FB_URL = "https://app-sueldos-1799b-default-rtdb.firebaseio.com";
+const ROOM   = "sueldos2025";
+const FB_CFG = {
+  apiKey:"AIzaSyB75ycZYRmwrlMg0bTtUc5dGlA7XA5d7OU",
+  authDomain:"app-sueldos-1799b.firebaseapp.com",
+  databaseURL:FB_URL,
+  projectId:"app-sueldos-1799b",
+  storageBucket:"app-sueldos-1799b.firebasestorage.app",
+  messagingSenderId:"584807278158",
+  appId:"1:584807278158:web:7b2bfbf798e80dae1e851f"
+};
+
+// ══════════════════ CONSTANTS ══════════════════
 const MONTHS=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const DSHORT=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
-const COLORS=["#c9a84c","#e8c96d","#a07830","#d4a853","#b8963e","#f0d060","#967028","#deb84a","#c09038","#e0c058"];
-const pad=n=>String(n).padStart(2,"0");
-const toKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const isHol=d=>HOLIDAYS.has(toKey(d));
-const isWork=d=>d.getDay()!==0&&d.getDay()!==6&&!isHol(d);
-const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const DLONG=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const COLORS=["#d4a843","#3ecf8e","#7c6dfa","#f05252","#f0a832","#5b8af7","#fa8c5b","#a07828","#4ecdc4","#ff6b9d"];
+const HOLIDAYS=new Set(["2025-01-01","2025-03-03","2025-03-04","2025-04-02","2025-04-18","2025-05-01","2025-05-25","2025-06-16","2025-06-20","2025-07-09","2025-08-17","2025-10-12","2025-11-20","2025-12-08","2025-12-25","2026-01-01","2026-02-16","2026-02-17","2026-04-02","2026-04-03","2026-05-01","2026-05-25","2026-06-15","2026-06-20","2026-07-09","2026-08-17","2026-10-12","2026-11-20","2026-12-08","2026-12-25"]);
+
+// ══════════════════ HELPERS ══════════════════
+const pad = n => String(n).padStart(2,"0");
+const toKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const isHol = d => HOLIDAYS.has(toKey(d));
+const isWork = d => d.getDay()!==0 && d.getDay()!==6 && !isHol(d);
+const todayStr = () => { const n=new Date(); return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`; };
+const nowStr = () => { const n=new Date(); return `${pad(n.getHours())}:${pad(n.getMinutes())}`; };
+const parseMin = t => { if(!t) return null; const[h,m]=t.split(":").map(Number); return h*60+m; };
+const diffH = (e,s) => { const ev=parseMin(e),sv=parseMin(s); if(!ev||!sv||sv<=ev) return 0; return (sv-ev)/60; };
+const fmtH = h => { const hrs=Math.floor(h),mins=Math.round((h-hrs)*60); return `${hrs}h${mins>0?" "+mins+"m":""}`; };
+const fmtM = n => (n===null||n===undefined||isNaN(n))?"—":"$"+Math.round(n).toLocaleString("es-AR");
+const fmtD = d => d?`${DSHORT[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)}`:"—";
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const dUntil = d => d ? Math.round((d-TODAY)/86400000) : null;
 
 function getPayDate(y,m,q){
-  const s=q===1?1:16,e=q===1?15:new Date(y,m+1,0).getDate();
+  const s=q===1?1:16, e=q===1?15:new Date(y,m+1,0).getDate();
   let n=0;
   for(let d=s;d<=e;d++){const dt=new Date(y,m,d);if(isWork(dt)){n++;if(n===4)return dt;}}
   return null;
 }
-const fmtD=d=>d?`${DSHORT[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)}`:"—";
-const dUntil=d=>d?Math.round((d-TODAY)/86400000):null;
-const $=n=>(n===null||n===undefined||isNaN(n))?"—":"$"+Math.round(n).toLocaleString("es-AR");
 
-// Días desde ingreso
-function diasDesdeIngreso(fechaIngreso){
-  if(!fechaIngreso)return null;
-  const fi=new Date(fechaIngreso);
-  return Math.floor((TODAY-fi)/86400000);
-}
-
-function calc(emp){
-  const base=parseFloat(emp.salary)||0;
-  const hm=parseInt(emp.horasMes)||160;
-  const dias=Math.min(parseInt(emp.diasTrab)||30,30);
-  const vac=parseInt(emp.vacDias)||0;
-  const diario=base/30;
-  const valorHora=base/hm;
-  const diasEfect=dias-vac;
-  const proporcional=diario*diasEfect;
-  const totalExtras=(emp.extras||[]).reduce((s,ex)=>s+valorHora*(parseFloat(ex.horas)||0),0);
-  // Adelantos y descuentos que afectan a la próxima quincena
-  const adelantos=(emp.adelantos||[]).filter(a=>!a.cobrado).reduce((s,a)=>s+(parseFloat(a.monto)||0),0);
-  const descuentos=(emp.descuentos||[]).filter(d=>!d.cobrado).reduce((s,d)=>s+(parseFloat(d.monto)||0),0);
-  const totalBruto=proporcional+totalExtras;
-  const quincenaBase=totalBruto/2;
-  const quincenaFinal=Math.max(0,quincenaBase-adelantos-descuentos);
-  return{base,diario,valorHora,dias,diasEfect,vac,proporcional,totalExtras,totalBruto,quincenaBase,quincenaFinal,adelantos,descuentos};
-}
-
-// ── FIREBASE CONFIG ──
-const FIREBASE_URL="https://app-sueldos-1799b-default-rtdb.firebaseio.com";
-const FIREBASE_ROOM="sueldos2025";
-const FIREBASE_CONFIG={
-  apiKey:"AIzaSyB75ycZYRmwrlMg0bTtUc5dGlA7XA5d7OU",
-  authDomain:"app-sueldos-1799b.firebaseapp.com",
-  databaseURL:FIREBASE_URL,
-  projectId:"app-sueldos-1799b",
-  storageBucket:"app-sueldos-1799b.firebasestorage.app",
-  messagingSenderId:"584807278158",
-  appId:"1:584807278158:web:7b2bfbf798e80dae1e851f",
-  measurementId:"G-RXCBG7VD4R"
+// ══════════════════ STATE ══════════════════
+let db=null, auth=null;
+let currentUser=null, currentRole="viewer", _ready=false;
+let S = {
+  tab:"dashboard", viewY:TODAY.getFullYear(), viewM:TODAY.getMonth(),
+  search:"",
+  employees:[], paid:{}, historial:[], companies:[], cronograma:[], notificaciones:[]
 };
 
-let db=null,auth=null,roomRef=null,ROOM=FIREBASE_ROOM;
-let currentUser=null,currentRole="viewer";
-let S={
-  tab:"dashboard",viewY:TODAY.getFullYear(),viewM:TODAY.getMonth(),
-  search:"",dismissedN:new Set(),
-  employees:[],paid:{},historial:[],companies:[],
-};
-let _loaded=false;
-
-// ── AUTH UI ──
-function showLogin(){document.getElementById("login-form").style.display="block";document.getElementById("register-form").style.display="none";}
-function showRegister(){document.getElementById("login-form").style.display="none";document.getElementById("register-form").style.display="block";}
-function togglePassVis(){const i=document.getElementById("auth-pass"),e=document.getElementById("pass-eye");if(i.type==="password"){i.type="text";e.textContent="🙈";}else{i.type="password";e.textContent="👁";}}
-window.showLogin=showLogin;window.showRegister=showRegister;window.togglePassVis=togglePassVis;
-
-async function doLogin(){
-  const email=document.getElementById("auth-email").value.trim();
-  const pass=document.getElementById("auth-pass").value;
-  const errEl=document.getElementById("setup-err");errEl.style.display="none";
-  if(!email||!pass){errEl.textContent="Completá email y contraseña";errEl.style.display="block";return;}
-  try{await signInWithEmailAndPassword(auth,email,pass);}
-  catch(e){
-    const m={"auth/invalid-credential":"Email o contraseña incorrectos.","auth/user-not-found":"No existe esa cuenta.","auth/wrong-password":"Contraseña incorrecta.","auth/too-many-requests":"Demasiados intentos. Esperá unos minutos."};
-    errEl.textContent=m[e.code]||"Error: "+e.message;errEl.style.display="block";
-  }
+// ══════════════════ SCREEN MANAGER ══════════════════
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>{s.classList.remove("active");});
+  document.getElementById(id).classList.add("active");
 }
-window.doLogin=doLogin;
+window.showScreen=showScreen;
 
-async function doRegister(){
-  const name=document.getElementById("reg-name").value.trim();
-  const email=document.getElementById("reg-email").value.trim();
-  const pass=document.getElementById("reg-pass").value;
-  const role=document.getElementById("reg-role").value;
-  const errEl=document.getElementById("reg-err"),okEl=document.getElementById("reg-ok");
-  errEl.style.display="none";okEl.style.display="none";
-  if(!name||!email||!pass){errEl.textContent="Completá todos los campos";errEl.style.display="block";return;}
-  if(pass.length<6){errEl.textContent="La contraseña necesita al menos 6 caracteres";errEl.style.display="block";return;}
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    await set(ref(db,"nomina/"+ROOM+"/users/"+cred.user.uid),{name,email,role,createdAt:Date.now()});
-    okEl.textContent="Cuenta creada para "+name+". Ya puede iniciar sesión.";okEl.style.display="block";
-    document.getElementById("reg-name").value="";document.getElementById("reg-email").value="";document.getElementById("reg-pass").value="";
-  }catch(e){
-    const m={"auth/email-already-in-use":"Ya existe una cuenta con ese email.","auth/weak-password":"Contraseña muy débil.","auth/invalid-email":"Email inválido."};
-    errEl.textContent=m[e.code]||"Error: "+e.message;errEl.style.display="block";
-  }
-}
-window.doRegister=doRegister;
-
-async function doResetPass(){
-  const email=document.getElementById("auth-email").value.trim();
-  const errEl=document.getElementById("setup-err");
-  if(!email){errEl.textContent="Ingresá tu email primero";errEl.style.display="block";return;}
-  try{
-    await sendPasswordResetEmail(auth,email);
-    errEl.style.cssText="display:block;margin-top:10px;padding:10px;background:var(--ok)15;border:1px solid var(--ok)44;border-radius:8px;font-size:12px;color:var(--ok)";
-    errEl.textContent="Te enviamos un email para restablecer tu contraseña.";
-  }catch(e){errEl.style.cssText="display:block;margin-top:10px;padding:10px;background:var(--danger)15;border:1px solid var(--danger)44;border-radius:8px;font-size:12px;color:var(--danger)";errEl.textContent="Error: "+e.message;}
-}
-window.doResetPass=doResetPass;
-
-async function doLogout(){
-  await signOut(auth);
-  currentUser=null;currentRole="viewer";_loaded=false;
-  document.getElementById("app").style.display="none";
-  document.getElementById("setup-screen").style.display="flex";
-  showLogin();
-}
-window.doLogout=doLogout;
-
+// ══════════════════ INIT ══════════════════
 window.addEventListener("load",()=>{
-  const app=initializeApp(FIREBASE_CONFIG,"nad");
-  db=getDatabase(app);auth=getAuth(app);
-  onAuthStateChanged(auth,async(user)=>{
+  const app = initializeApp(FB_CFG,"nominaad");
+  db  = getDatabase(app);
+  auth = getAuth(app);
+
+  // Auth state
+  onAuthStateChanged(auth, async user => {
     if(user){
       currentUser=user;
-      // Leer rol
-      onValue(ref(db,"nomina/"+ROOM+"/users/"+user.uid),(snap)=>{
-        const data=snap.val()||{};
-        currentRole=data.role||"admin";
+      // Load role
+      try{
+        const snap = await get(ref(db,`nomina/${ROOM}/users/${user.uid}`));
+        const data = snap.val()||{};
+        currentRole = data.role||"admin";
         if(!snap.val()){
-          // primer usuario = admin automáticamente
-          set(ref(db,"nomina/"+ROOM+"/users/"+user.uid),{name:user.email,email:user.email,role:"admin",createdAt:Date.now()});
+          // First user → admin
+          await set(ref(db,`nomina/${ROOM}/users/${user.uid}`),{name:user.email,email:user.email,role:"admin",ts:Date.now()});
           currentRole="admin";
         }
-        roomRef=ref(db,"nomina/"+ROOM);
-        iniciarSync();
-      },{onlyOnce:true});
+      }catch(e){ currentRole="admin"; }
+      // Start sync
+      iniciarSync();
+      showScreen("s-app");
     }else{
-      document.getElementById("setup-screen").style.display="flex";
-      document.getElementById("app").style.display="none";
-      _loaded=false;
+      currentUser=null; currentRole="viewer"; _ready=false;
+      document.getElementById("conn").style.display="none";
+      showScreen("s-landing");
     }
   });
 });
 
-window.conectar=()=>{};
-
-function setConn(st,lbl){
-  const dot=document.getElementById("conn-dot"),label=document.getElementById("conn-label");
-  dot.className="conn-dot "+st;label.textContent=lbl;
-  label.style.color=st==="online"?"var(--ok)":st==="offline"?"var(--danger)":"var(--txt1)";
+// ══════════════════ FIREBASE SYNC ══════════════════
+function iniciarSync(){
+  const rRef = ref(db,`nomina/${ROOM}`);
+  setConn("sync");
+  onValue(rRef, snap=>{
+    const data = snap.val()||{};
+    S.companies   = data.companies   ? (Array.isArray(data.companies)?data.companies:Object.values(data.companies)) : [];
+    S.employees   = data.employees   ? (Array.isArray(data.employees)?data.employees:Object.values(data.employees)) : [];
+    S.paid        = data.paid        || {};
+    S.historial   = data.historial   ? (Array.isArray(data.historial)?data.historial:Object.values(data.historial)) : [];
+    S.cronograma  = data.cronograma  ? (Array.isArray(data.cronograma)?data.cronograma:Object.values(data.cronograma)) : [];
+    S.notificaciones = data.notificaciones ? (Array.isArray(data.notificaciones)?data.notificaciones:Object.values(data.notificaciones)).sort((a,b)=>(b.ts||0)-(a.ts||0)) : [];
+    if(!S.companies.length) S.companies=[{id:1,name:"Mi Empresa",cuit:""}];
+    setConn("on");
+    _ready=true;
+    render();
+    // Show conn badge
+    const connEl=document.getElementById("conn");
+    connEl.style.display="flex";
+    const uname=currentUser?.email?.split("@")[0]||"";
+    document.getElementById("conn-lbl").textContent=uname;
+  }, err=>{ setConn("off"); });
 }
 
-function iniciarSync(){
-  document.getElementById("conn-badge").style.display="flex";
-  setConn("syncing","Conectando...");
-  onValue(roomRef,(snap)=>{
-    const data=snap.val();
-    if(!data){
-      set(roomRef,{
-        companies:[{id:1,name:"Mi Empresa",cuit:""}],
-        employees:[
-          {id:1,name:"María González",salary:180000,gender:"F",color:"#c9a84c",hidden:false,position:"Administrativa",horasMes:160,diasTrab:30,vacDias:0,extras:[],adelantos:[],descuentos:[],fechaIngreso:""},
-          {id:2,name:"Carlos Rodríguez",salary:220000,gender:"M",color:"#e8c96d",hidden:false,position:"Técnico",horasMes:160,diasTrab:30,vacDias:0,extras:[],adelantos:[],descuentos:[],fechaIngreso:""},
-        ],
-        paid:{},historial:[],
-      });return;
-    }
-    S.companies=data.companies?Object.values(data.companies):[];
-    S.employees=data.employees?Object.values(data.employees):[];
-    S.paid=data.paid||{};
-    S.historial=data.historial?Object.values(data.historial).sort((a,b)=>b._ts-a._ts):[];
-    if(!_loaded){
-      _loaded=true;
-      document.getElementById("setup-screen").style.display="none";
-      document.getElementById("app").style.display="flex";
-    }
-    setConn("online","● "+ROOM);
-    render();
-  },(err)=>{setConn("offline","Sin conexión");});
+function setConn(st){
+  const dot=document.getElementById("conn-dot");
+  if(!dot)return;
+  dot.className="conn-dot"+(st==="off"?" off":st==="sync"?" sync":"");
 }
 
 async function fbSet(path,val){
-  if(currentRole!=="admin"){toast("⚠ Solo los administradores pueden modificar datos");return;}
-  setConn("syncing","Guardando...");await set(ref(db,`nomina/${ROOM}/${path}`),val);setConn("online","● "+ROOM);
+  setConn("sync");
+  await set(ref(db,`nomina/${ROOM}/${path}`),val);
+  setConn("on");
 }
 
-// ── STATE ──
-const mk=(id,q)=>`${S.viewY}_${S.viewM}_${id}_${q}`;
-const isPaid=(id,q)=>!!S.paid[mk(id,q)];
-
-async function togglePaid(id,q){
-  const was=S.paid[mk(id,q)];
-  const emp=S.employees.find(e=>e.id===id);
-  const c=calc(emp);
-  const lbl=`${q===1?"1ra":"2da"} Quincena — ${MONTHS[S.viewM]} ${S.viewY}`;
-  const newPaid={...S.paid,[mk(id,q)]:!was};
-  let newHist=[...(S.historial||[])];
-  if(!was){
-    newHist.unshift({empId:id,empName:emp.name,empColor:emp.color,concepto:lbl,bruto:c.quincenaBase,adelantos:c.adelantos,descuentos:c.descuentos,neto:c.quincenaFinal,fecha:TODAY.toLocaleDateString("es-AR"),_ts:Date.now()});
-    // Marcar adelantos y descuentos como cobrados
-    const updEmps=S.employees.map(e=>e.id===id?{...e,
-      adelantos:(e.adelantos||[]).map(a=>({...a,cobrado:true})),
-      descuentos:(e.descuentos||[]).map(d=>({...d,cobrado:true})),
-    }:e);
-    await fbSet("employees",updEmps);
-  }else{newHist=newHist.filter(h=>!(h.empId===id&&h.concepto===lbl));}
-  await set(ref(db,`nomina/${ROOM}/paid`),newPaid);
-  await set(ref(db,`nomina/${ROOM}/historial`),newHist.length?newHist:{});
-}
-window.togglePaid=togglePaid;
-
-const actEmps=()=>{
-  let l=(S.employees||[]).filter(e=>!e.hidden);
-  if(S.search){const q=S.search.toLowerCase();l=l.filter(e=>e.name.toLowerCase().includes(q)||(e.position||"").toLowerCase().includes(q));}
-  return l;
+// ══════════════════ AUTH FUNCTIONS ══════════════════
+window.togglePass=()=>{
+  const i=document.getElementById("l-pass"),e=document.getElementById("pass-eye");
+  i.type=i.type==="password"?"text":"password";
+  e.textContent=i.type==="password"?"👁":"🙈";
+};
+window.toggleLF=mode=>{
+  document.getElementById("lf-main").style.display=mode==="main"?"block":"none";
+  document.getElementById("lf-reg").style.display=mode==="reg"?"block":"none";
+};
+window.doLogin=async()=>{
+  const email=document.getElementById("l-email").value.trim();
+  const pass=document.getElementById("l-pass").value;
+  const err=document.getElementById("l-err"); err.style.display="none";
+  if(!email||!pass){err.textContent="Completá email y contraseña";err.style.display="block";return;}
+  try{ await signInWithEmailAndPassword(auth,email,pass); }
+  catch(e){
+    const m={"auth/invalid-credential":"Email o contraseña incorrectos.","auth/user-not-found":"No existe esa cuenta.","auth/wrong-password":"Contraseña incorrecta.","auth/too-many-requests":"Demasiados intentos. Esperá unos minutos."};
+    err.textContent=m[e.code]||"Error: "+e.message; err.style.display="block";
+  }
+};
+window.doRegister=async()=>{
+  const name=document.getElementById("r-name").value.trim();
+  const email=document.getElementById("r-email").value.trim();
+  const pass=document.getElementById("r-pass").value;
+  const role=document.getElementById("r-role").value;
+  const err=document.getElementById("r-err"),ok=document.getElementById("r-ok");
+  err.style.display="none"; ok.style.display="none";
+  if(!name||!email||!pass){err.textContent="Completá todos los campos";err.style.display="block";return;}
+  if(pass.length<6){err.textContent="Contraseña mínimo 6 caracteres";err.style.display="block";return;}
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,pass);
+    await set(ref(db,`nomina/${ROOM}/users/${cred.user.uid}`),{name,email,role,ts:Date.now()});
+    ok.textContent=`✓ Cuenta creada para ${name}`;ok.style.display="block";
+    ["r-name","r-email","r-pass"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  }catch(e){
+    const m={"auth/email-already-in-use":"Ya existe una cuenta con ese email.","auth/weak-password":"Contraseña muy débil."};
+    err.textContent=m[e.code]||"Error: "+e.message; err.style.display="block";
+  }
+};
+window.doReset=async()=>{
+  const email=document.getElementById("l-email").value.trim();
+  const err=document.getElementById("l-err");
+  if(!email){err.textContent="Ingresá tu email primero";err.style.display="block";return;}
+  try{
+    await sendPasswordResetEmail(auth,email);
+    err.style.cssText="display:block;margin-top:10px;padding:10px;background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.3);border-radius:10px;font-size:12px;color:var(--ok)";
+    err.textContent="✓ Email de recuperación enviado";
+  }catch(e){ err.textContent="Error: "+e.message; err.style.display="block"; }
+};
+window.doLogout=async()=>{
+  await signOut(auth);
 };
 
+// ══════════════════ KIOSK ══════════════════
+let _kStep="select", _kEmp=null, _kPin="", _kClockInt=null;
+
+window.abrirKiosk = () => {
+  showScreen("s-kiosk");
+  _kStep="select"; _kEmp=null; _kPin="";
+  iniciarKioskClock();
+  // Load employees from Firebase for kiosk (no auth needed)
+  if(_ready && S.employees.length){
+    renderKiosk();
+  } else {
+    // Fetch directly without auth
+    get(ref(db,`nomina/${ROOM}/employees`)).then(snap=>{
+      const data=snap.val();
+      if(data) S.employees=Array.isArray(data)?data:Object.values(data);
+      renderKiosk();
+    }).catch(()=>{
+      document.getElementById("kiosk-content").innerHTML=`<div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px">Error cargando empleados.<br>Verificá la conexión a internet.</div>`;
+    });
+  }
+};
+
+window.cerrarKiosk = () => {
+  clearInterval(_kClockInt);
+  showScreen(_ready?"s-app":"s-landing");
+};
+
+function iniciarKioskClock(){
+  clearInterval(_kClockInt);
+  const tick=()=>{
+    const n=new Date();
+    const cl=document.getElementById("kiosk-clock");
+    const da=document.getElementById("kiosk-date");
+    if(cl) cl.textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+    if(da) da.textContent=`${DLONG[n.getDay()]} ${n.getDate()} de ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+  };
+  tick(); _kClockInt=setInterval(tick,1000);
+}
+
+function renderKiosk(){
+  const box=document.getElementById("kiosk-content"); if(!box)return;
+  if(_kStep==="select") box.innerHTML=kStep1();
+  else if(_kStep==="pin") box.innerHTML=kStep2();
+  else if(_kStep==="result") box.innerHTML=kStep3();
+}
+
+function kStep1(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  if(!emps.length) return`<div style="text-align:center;padding:20px;color:var(--txt2);font-size:13px">Sin empleados registrados.<br>El administrador debe agregar empleados primero.</div>`;
+  return`
+    <div style="font-size:14px;font-weight:600;text-align:center;margin-bottom:4px">¿Quién sos?</div>
+    <div style="font-size:11px;color:var(--txt2);text-align:center;margin-bottom:14px">Tocá tu nombre</div>
+    <div class="emp-grid">
+      ${emps.map(e=>`
+        <div class="emp-tile ${_kEmp?.id===e.id?"sel":""}" onclick="kSelEmp(${e.id})">
+          <div class="emp-av" style="background:${e.color}22;color:${e.color};border:1px solid ${e.color}44">${e.name.charAt(0)}</div>
+          <div class="emp-nm">${e.name.split(" ")[0]}</div>
+        </div>`).join("")}
+    </div>
+    ${_kEmp
+      ?`<button class="btn-gold" onclick="kContinuar()">Continuar →</button>`
+      :`<div style="text-align:center;font-size:12px;color:var(--txt2)">Seleccioná tu nombre</div>`}
+  `;
+}
+
+function kStep2(){
+  const e=_kEmp;
+  return`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div class="emp-av" style="background:${e.color}22;color:${e.color};border:1px solid ${e.color}44;width:38px;height:38px">${e.name.charAt(0)}</div>
+      <div>
+        <div style="font-size:14px;font-weight:600">${e.name}</div>
+        <div style="font-size:11px;color:var(--txt2)">Ingresá tu PIN de 4 dígitos</div>
+      </div>
+    </div>
+    <div class="pin-dots" id="k-dots">
+      ${[0,1,2,3].map(i=>`<div class="pin-dot${_kPin.length>i?" on":""}" id="kd${i}"></div>`).join("")}
+    </div>
+    <div class="pin-pad">
+      ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" onclick="kKey(${n})">${n}</button>`).join("")}
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="kKey(0)">0</button>
+      <button class="pin-key del" onclick="kDel()">⌫</button>
+    </div>
+    <div class="pin-err" id="k-err"></div>
+    <button class="btn-sec" onclick="kVolver()" style="margin-top:12px;font-size:12px;padding:8px">← Volver</button>
+  `;
+}
+
+async function kStep3Build(){
+  const e=_kEmp;
+  const hoy=todayStr();
+  const asist=[...(e.asistencia||[])];
+  const idx=asist.findIndex(r=>r.fecha===hoy);
+  const now=nowStr();
+  let accion="", icon="", color="", msgSub="";
+
+  if(idx===-1){
+    asist.push({fecha:hoy,entrada:now,salida:null,descanso:30,nota:"",ficherado:true});
+    accion="ENTRADA"; icon="🟢"; color="var(--ok)";
+    msgSub=`¡Hola <strong>${e.name.split(" ")[0]}</strong>! Entrada registrada a las <strong style="color:var(--ok)">${now}</strong>`;
+  } else if(!asist[idx].salida){
+    asist[idx]={...asist[idx],salida:now};
+    const h=diffH(asist[idx].entrada,asist[idx].salida)-((asist[idx].descanso||30)/60);
+    accion="SALIDA"; icon="🔴"; color="var(--danger)";
+    msgSub=`¡Hasta luego <strong>${e.name.split(" ")[0]}</strong>! Salida: <strong style="color:var(--danger)">${now}</strong>${h>0?` · Trabajaste ${fmtH(Math.max(0,h))}`:""}<br><span style="font-size:11px;color:var(--txt2)">El admin revisará si fue hora extra.</span>`;
+  } else {
+    accion="YA REGISTRADO"; icon="✅"; color="var(--gold)";
+    msgSub=`Ya registraste tu jornada de hoy.<br>${asist[idx].entrada?`Entrada: ${asist[idx].entrada}`:""}${asist[idx].salida?` · Salida: ${asist[idx].salida}`:""}`;
+  }
+
+  // Save to Firebase
+  if(accion!=="YA REGISTRADO"){
+    const updEmps=(S.employees||[]).map(emp=>String(emp.id)===String(e.id)?{...emp,asistencia:asist}:emp);
+    if(!updEmps.length){
+      // Employees not loaded yet — create minimal array
+      toast("Error: no se pudieron cargar los empleados. Intentá de nuevo.");
+      return;
+    }
+    try{
+      await fbSet("employees",updEmps);
+      S.employees=updEmps;
+      _kEmp={...e,asistencia:asist};
+      console.log("Fichaje guardado:", accion, "para", e.name, "a las", now);
+    }catch(err){
+      console.error("Error guardando fichaje:",err);
+      toast("Error al guardar. Verificá la conexion.");
+      return;
+    }
+  }
+
+  // Próximo cobro
+  const cK=calc({...e});
+  const kQ1Paid=!!(S.paid&&S.paid[S.viewY+"-"+S.viewM+"-"+e.id+"-1"]);
+  const kQ2Paid=!!(S.paid&&S.paid[S.viewY+"-"+S.viewM+"-"+e.id+"-2"]);
+  const quincena=!kQ1Paid?cK.qFinal1:!kQ2Paid?cK.qFinal2:0;
+  const nextQLbl=!kQ1Paid?"1ra Quincena":!kQ2Paid?"2da Quincena":"Todo cobrado";
+  const p2=getPayDate(S.viewY,S.viewM,2);
+  const d2=dUntil(p2);
+
+  // Notificaciones
+  let notifs=S.notificaciones;
+  if(!notifs.length){
+    try{
+      const ns=await get(ref(db,`nomina/${ROOM}/notificaciones`));
+      const nd=ns.val()||{};
+      notifs=Object.values(nd).sort((a,b)=>(b.ts||0)-(a.ts||0));
+    }catch(e2){notifs=[];}
+  }
+  const top3=notifs.slice(0,3);
+
+  const box=document.getElementById("kiosk-content"); if(!box)return;
+  box.innerHTML=`
+    <div class="kiosk-result">
+      <div class="res-icon">${icon}</div>
+      <div class="res-title" style="color:${color}">${accion}</div>
+      <div class="res-sub">${msgSub}</div>
+      <div class="cobro-mini">
+        <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Proximo cobro</div>
+        ${(()=>{
+          const nextDate=!kQ1Paid?p1:!kQ2Paid?p2:null;
+          const du=nextDate?dUntil(nextDate):null;
+          if(!nextDate) return '<div style="font-size:18px;font-weight:700;color:var(--ok)">Todo cobrado este mes</div>';
+          const lbl=!kQ1Paid?'1ra Quincena':'2da Quincena';
+          const urgencia=du===0?'<span class="chip cwn" style="font-size:12px;padding:4px 10px;margin-top:6px;display:inline-block">HOY es dia de cobro!</span>'
+            :du===1?'<div style="font-size:12px;color:var(--warn);font-weight:600;margin-top:4px">Manana!</div>'
+            :du!==null&&du>0&&du<=7?'<div style="font-size:12px;color:var(--txt1);margin-top:4px">en '+du+' dias</div>'
+            :du!==null?'<div style="font-size:11px;color:var(--txt2);margin-top:4px">en '+du+' dias</div>':'';
+          return '<div style="font-size:24px;font-weight:700;font-family:var(--mono);color:var(--gold2)">'+fmtD(nextDate)+'</div>'
+            +'<div style="font-size:10px;color:var(--txt2);margin-top:2px">'+lbl+' &middot; 4to dia habil</div>'
+            +urgencia;
+        })()}
+      </div>
+      ${top3.length?`
+        <div style="margin-bottom:10px;text-align:left">
+          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">🔔 Avisos del equipo</div>
+          <div class="notif-mini">
+            ${top3.map(n=>`<div class="notif-mini-item"><strong>${n.de||"Admin"}:</strong> ${n.texto}</div>`).join("")}
+          </div>
+        </div>`:""}
+      <button class="btn-gold" onclick="kReset()">✓ Listo</button>
+    </div>
+  `;
+}
+
+function kStep3(){ return`<div class="loader"></div>`; }
+
+window.kSelEmp = id => { _kEmp=(S.employees||[]).find(e=>e.id===id)||null; renderKiosk(); };
+window.kContinuar = () => {
+  if(!_kEmp){toast("Elegí tu nombre primero");return;}
+  if(!_kEmp.pin){ _kStep="result"; renderKiosk(); kStep3Build(); return; }
+  _kStep="pin"; _kPin=""; renderKiosk();
+};
+window.kKey = d => {
+  if(_kPin.length>=4)return;
+  _kPin+=d;
+  [0,1,2,3].forEach(i=>{ const el=document.getElementById("kd"+i); if(el)el.className="pin-dot"+(_kPin.length>i?" on":""); });
+  if(_kPin.length===4) setTimeout(kCheckPin,150);
+};
+window.kDel = () => {
+  _kPin=_kPin.slice(0,-1);
+  [0,1,2,3].forEach(i=>{ const el=document.getElementById("kd"+i); if(el)el.className="pin-dot"+(_kPin.length>i?" on":""); });
+};
+async function kCheckPin(){
+  if(String(_kPin)===String(_kEmp.pin)){
+    _kStep="result"; renderKiosk(); kStep3Build();
+  } else {
+    _kPin="";
+    const dots=document.getElementById("k-dots");
+    const err=document.getElementById("k-err");
+    if(dots){ dots.querySelectorAll(".pin-dot").forEach(d=>{d.className="pin-dot err";}); dots.style.animation="shake .3s ease"; setTimeout(()=>{dots.style.animation="";dots.querySelectorAll(".pin-dot").forEach(d=>{d.className="pin-dot";});},400); }
+    if(err){err.textContent="PIN incorrecto. Intentá de nuevo."; setTimeout(()=>{if(err)err.textContent="";},2000);}
+  }
+}
+window.kVolver = () => { _kStep="select"; _kEmp=null; _kPin=""; renderKiosk(); };
+window.kReset = () => { _kStep="select"; _kEmp=null; _kPin=""; renderKiosk(); };
+
+// ══════════════════ CALC ══════════════════
+function calc(emp){
+  const base=parseFloat(emp.salary)||0;
+  const hm=parseInt(emp.horasMes)||160;
+  const vac=parseInt(emp.vacDias)||0;
+  const diario=base/30;
+  const valorH=base/hm;
+  const horasPactDia=hm/30;
+  const lastDay=new Date(S.viewY,S.viewM+1,0).getDate();
+
+  // Count franco days this month from cronograma — francos no se pagan
+  const francosDias=(S.cronograma||[]).filter(t=>{
+    if(!t.franco||t.empId!==emp.id) return false;
+    const d=new Date(t.fecha+"T00:00:00");
+    return d.getFullYear()===S.viewY&&d.getMonth()===S.viewM;
+  }).length;
+
+  let totalDias=Math.min(parseInt(emp.diasTrab)||30,30);
+  // Subtract franco days from working days
+  totalDias=Math.max(0,totalDias-francosDias);
+
+  let esNuevo=false,diaIngreso=null,diasQ1=0,diasQ2=0;
+  if(emp.fechaIngreso){
+    const fi=new Date(emp.fechaIngreso+"T00:00:00");
+    if(fi.getFullYear()===S.viewY&&fi.getMonth()===S.viewM){
+      diaIngreso=fi.getDate(); esNuevo=true;
+      totalDias=Math.min(lastDay-diaIngreso+1,30);
+      if(diaIngreso<=15){diasQ1=15-diaIngreso+1;diasQ2=lastDay-15;}
+      else{diasQ1=0;diasQ2=lastDay-diaIngreso+1;}
+    }else{diasQ1=15;diasQ2=lastDay-15;}
+  }else{diasQ1=15;diasQ2=lastDay-15;}
+  const diasEf=Math.max(0,totalDias-vac);
+  const prop=diario*diasEf;
+  const extras=(emp.extras||[]).reduce((s,ex)=>s+valorH*(parseFloat(ex.horas)||0),0);
+  const adelantos=(emp.adelantos||[]).filter(a=>!a.cobrado).reduce((s,a)=>s+(parseFloat(a.monto)||0),0);
+  const descuentos=(emp.descuentos||[]).filter(d=>!d.cobrado).reduce((s,d)=>s+(parseFloat(d.monto)||0),0);
+  const bruto=prop+extras;
+  // Q1/Q2 proportional amounts — descontando francos por quincena
+  const francosQ1=(S.cronograma||[]).filter(t=>{
+    if(!t.franco||t.empId!==emp.id) return false;
+    const d=new Date(t.fecha+"T00:00:00");
+    return d.getFullYear()===S.viewY&&d.getMonth()===S.viewM&&d.getDate()<=15;
+  }).length;
+  const francosQ2=(S.cronograma||[]).filter(t=>{
+    if(!t.franco||t.empId!==emp.id) return false;
+    const d=new Date(t.fecha+"T00:00:00");
+    return d.getFullYear()===S.viewY&&d.getMonth()===S.viewM&&d.getDate()>15;
+  }).length;
+
+  let propQ1=0,propQ2=0;
+  if(esNuevo){
+    propQ1=diaIngreso<=15?diario*Math.max(0,diasQ1-francosQ1):0;
+    propQ2=diario*Math.max(0,diasQ2-francosQ2);
+  }else{
+    propQ1=diario*Math.max(0,15-francosQ1);
+    propQ2=diario*Math.max(0,(lastDay-15)-francosQ2);
+  }
+  // If Q1 not yet paid and employee is new mid-Q1, accumulate into Q2
+  const mkK=(q)=>S.viewY+"-"+S.viewM+"-"+emp.id+"-"+q;
+  const q1Paid=!!(S.paid&&S.paid[mkK(1)]);
+  const acumQ1EnQ2=(esNuevo&&diaIngreso>1&&diaIngreso<=15&&!q1Paid)?propQ1:0;
+  const propQ2Total=propQ2+acumQ1EnQ2+extras;
+  const ded=adelantos+descuentos;
+  const qFinal1=Math.max(0,propQ1-ded/2);
+  const qFinal2=Math.max(0,propQ2Total-ded/2);
+  const qFinal=(qFinal1+qFinal2)/2;
+  const qCompleta=base/2;
+  return{base,diario,valorH,horasPactDia,totalDias,diasEf,vac,prop,extras,bruto,
+    propQ1,propQ2,propQ2Total,qFinal1,qFinal2,qFinal,adelantos,descuentos,
+    esNuevo,diaIngreso,diasQ1,diasQ2,acumQ1EnQ2,qCompleta,
+    francosDias,francosQ1,francosQ2};
+}
+// Asistencia del mes actual
+function calcAsist(emp){
+  const Y=S.viewY,M=S.viewM;
+  const regs=(emp.asistencia||[]).filter(r=>{
+    const d=new Date(r.fecha+"T00:00:00");
+    return d.getFullYear()===Y&&d.getMonth()===M;
+  });
+  const hpd=(parseInt(emp.horasMes)||160)/30;
+  let dias=0,totalH=0,extras=0;
+  regs.forEach(r=>{
+    if(r.entrada&&r.salida){
+      dias++;
+      const h=Math.max(0,diffH(r.entrada,r.salida)-((r.descanso||30)/60));
+      totalH+=h; extras+=Math.max(0,h-hpd);
+    }
+  });
+  return{regs,dias,totalH,extras,hpd};
+}
+
+// ══════════════════ TABS / RENDER ══════════════════
 function setTab(t){
   S.tab=t;
-  document.querySelectorAll(".tab-btn").forEach(b=>{b.classList.toggle("active",b.dataset.tab===t);});
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
   render();
 }
 window.setTab=setTab;
 
-function chipD(days,paid){
-  if(paid)return`<span class="chip cok">✓ Cobrado</span>`;
-  if(days===null)return"";
-  if(days<0)return`<span class="chip cdn">Vencido</span>`;
-  if(days===0)return`<span class="chip cwn">¡HOY!</span>`;
-  if(days<=5)return`<span class="chip cwn">${days}d</span>`;
-  return`<span class="chip cinf">${days}d</span>`;
+function prevMonth(){ if(S.viewM===0){S.viewM=11;S.viewY--;}else S.viewM--; render(); }
+function nextMonth(){ if(S.viewM===11){S.viewM=0;S.viewY++;}else S.viewM++; render(); }
+window.prevMonth=prevMonth; window.nextMonth=nextMonth;
+
+function render(){
+  if(!_ready)return;
+  document.getElementById("mlabel").textContent=`${MONTHS[S.viewM].slice(0,3).toUpperCase()} ${S.viewY}`;
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===S.tab));
+  const views={dashboard:vDashboard,calendario:vCalendario,equipo:vEquipo,cronograma:vCronograma,asistencia:vAsistencia,mas:vMas};
+  const fn=views[S.tab]||vDashboard;
+  document.getElementById("content").innerHTML=fn();
+  // Hide add btn for viewers
+  const addBtn=document.getElementById("btn-add");
+  if(addBtn) addBtn.style.display=currentRole==="admin"?"flex":"none";
 }
 
-function renderNotifs(){
-  const p1=getPayDate(S.viewY,S.viewM,1),p2=getPayDate(S.viewY,S.viewM,2);
-  let h="";
-  [{d:dUntil(p1),dt:p1,lb:"1ra Quincena"},{d:dUntil(p2),dt:p2,lb:"2da Quincena"}].forEach(({d,dt,lb})=>{
-    if(d!==null&&d>=0&&d<=2){
-      const k=(dt?toKey(dt):"")+lb;
-      if(!S.dismissedN.has(k)){
-        h+=`<div class="notif"><div style="color:var(--gold);font-size:16px">◈</div>
-          <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--gold)">${d===0?"¡DÍA DE PAGO!":"Pago en "+d+" día"+(d!==1?"s":"")}</div>
-          <div style="font-size:11px;color:var(--txt1)">${lb} — ${fmtD(dt)}</div></div>
-          <button class="nclose" onclick="dimN('${k}')">×</button></div>`;
-      }
-    }
-  });
-  document.getElementById("nwrap").innerHTML=h;
-}
-function dimN(k){S.dismissedN.add(k);renderNotifs();}
-window.dimN=dimN;
+// ══════════════════ VIEWS ══════════════════
 
-// ════════════════════
-// VISTAS
-// ════════════════════
-
+// ─── DASHBOARD ───
 function vDashboard(){
-  const emps=(S.employees||[]).filter(e=>!e.hidden);
-  const p1=getPayDate(S.viewY,S.viewM,1),p2=getPayDate(S.viewY,S.viewM,2);
-  const d1=dUntil(p1),d2=dUntil(p2);
-  const tM=emps.reduce((s,e)=>s+calc(e).totalBruto,0);
-  const tQ=emps.reduce((s,e)=>s+calc(e).quincenaFinal,0);
-  const femC=emps.filter(e=>e.gender==="F").length,mascC=emps.filter(e=>e.gender==="M").length;
-  const pC1=emps.filter(e=>isPaid(e.id,1)).length,pC2=emps.filter(e=>isPaid(e.id,2)).length;
-  const pA1=emps.filter(e=>isPaid(e.id,1)).reduce((s,e)=>s+calc(e).quincenaFinal,0);
-  const pA2=emps.filter(e=>isPaid(e.id,2)).reduce((s,e)=>s+calc(e).quincenaFinal,0);
+  const emps=S.employees.filter(e=>!e.hidden);
+  const p1=getPayDate(S.viewY,S.viewM,1), p2=getPayDate(S.viewY,S.viewM,2);
+  const d1=dUntil(p1), d2=dUntil(p2);
+  const tM=emps.reduce((s,e)=>s+calc(e).bruto,0);
+  const tQ=tM/2;
+  const pc1=emps.filter(e=>S.paid[`${S.viewY}-${S.viewM}-${e.id}-1`]).length;
+  const pc2=emps.filter(e=>S.paid[`${S.viewY}-${S.viewM}-${e.id}-2`]).length;
+  const pa1=emps.filter(e=>S.paid[`${S.viewY}-${S.viewM}-${e.id}-1`]).reduce((s,e)=>s+calc(e).qFinal,0);
+  const pa2=emps.filter(e=>S.paid[`${S.viewY}-${S.viewM}-${e.id}-2`]).reduce((s,e)=>s+calc(e).qFinal,0);
+
+  const getQAmt=(e,q)=>{const cc=calc(e);return q===1?cc.qFinal1:cc.qFinal2;};
+  const tQ1=emps.reduce((s,e)=>s+getQAmt(e,1),0);
+  const tQ2=emps.reduce((s,e)=>s+getQAmt(e,2),0);
+  const payCard=(lbl,date,days,q,pc,pa,tQ)=>{
+    const allP=pc===emps.length&&emps.length>0;
+    const glow=allP?"var(--ok)":days===0?"var(--gold)":days!==null&&days<0?"var(--danger)":"var(--border3)";
+    const pct=emps.length?pc/emps.length*100:0;
+    return`<div class="pay-card" style="border-color:${glow}44">
+      <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${glow};margin-bottom:8px">${lbl}</div>
+      <div style="font-size:20px;font-weight:700;font-family:var(--mono);margin-bottom:2px">${fmtD(date)}</div>
+      <div style="font-size:10px;color:var(--txt2);margin-bottom:12px">4° día hábil · ${days!==null&&days>=0?`en ${days}d`:days!==null&&days<0?"vencido":""}</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+        <div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">A pagar</div>
+          <div style="font-size:18px;font-weight:700;font-family:var(--mono);background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmtM(tQ||0)}</div></div>
+        <div style="text-align:right"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Cobrado</div>
+          <div style="font-size:14px;font-weight:700;font-family:var(--mono);color:var(--ok)">${fmtM(pa)}</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt2);margin-bottom:7px">
+        <span>${pc}/${emps.length} cobrados</span>
+        ${allP?`<span class="chip cok">✓ Completado</span>`:days===0?`<span class="chip cwn">¡HOY!</span>`:days!==null&&days>0&&days<=5?`<span class="chip cwn">${days}d</span>`:""}
+      </div>
+      <div class="pbar"><div class="pfill" style="width:${pct}%;background:${allP?"var(--ok)":"var(--goldgs)"}"></div></div>
+    </div>`;
+  };
 
   return`<div class="page fade-up">
-    <div class="card-grid">
-      <div class="stat-card"><div class="slabel">Nómina Mensual</div><div class="sval" style="background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:16px">${$(tM)}</div><div class="ssub">${emps.length} activos</div></div>
-      <div class="stat-card"><div class="slabel">Composición</div><div class="sval" style="color:var(--gold3);font-size:16px">${femC}♀ ${mascC}♂</div><div class="ssub">F / M</div></div>
+    <div class="grid4" style="margin-bottom:12px">
+      <div class="stat"><div class="stat-lbl">Nómina mes</div><div class="stat-val" style="font-size:15px;background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmtM(tM)}</div></div>
+      <div class="stat"><div class="stat-lbl">Quincena</div><div class="stat-val" style="font-size:15px;color:var(--gold2)">${fmtM(tQ)}</div></div>
+      <div class="stat"><div class="stat-lbl">Empleados</div><div class="stat-val" style="color:var(--acc2)">${emps.length}</div></div>
+      <div class="stat"><div class="stat-lbl">Género</div><div class="stat-val" style="font-size:14px;color:var(--txt1)">${emps.filter(e=>e.gender==="F").length}♀/${emps.filter(e=>e.gender==="M").length}♂</div></div>
     </div>
-    ${[[p1,d1,1,"1ra Quincena","Días 1–15",pC1,pA1],[p2,d2,2,"2da Quincena","Días 16–"+new Date(S.viewY,S.viewM+1,0).getDate(),pC2,pA2]].map(([date,days,q,lbl,sub,pc,pa])=>{
-      const allP=pc===emps.length&&emps.length>0;
-      const glow=allP?"var(--ok)":days===0?"var(--gold)":days!==null&&days<0?"var(--danger)":"var(--gold3)";
-      const pct=emps.length?(pc/emps.length*100):0;
-      return`<div class="pay-card" style="border-color:${glow}33">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-          <div><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${glow}">${lbl}</div>
-            <div style="font-size:18px;font-weight:700;font-family:var(--mono);margin-top:2px">${fmtD(date)}</div>
-            <div style="font-size:10px;color:var(--txt2)">${sub} · 4° día hábil</div>
+    <div class="grid2" style="margin-bottom:12px">
+      ${payCard("1ra Quincena",p1,d1,1,pc1,pa1,tQ1)}
+      ${payCard("2da Quincena",p2,d2,2,pc2,pa2,tQ2)}
+    </div>
+    <div class="card">
+      <div class="stitle">Equipo</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${emps.map(e=>{const c=calc(e);return`<div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg2);border-radius:10px;border:1px solid ${e.color}22">
+          <div class="emp-av" style="background:${e.color}22;color:${e.color};border:1px solid ${e.color}44;width:36px;height:36px;font-size:13px">${e.name.charAt(0)}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</div>
+            <div style="font-size:10px;color:var(--txt2)">${e.position||""}</div>
           </div>
-          ${chipD(days,allP)}
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px">
-          <div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">A pagar</div>
-            <div style="font-size:17px;font-weight:700;font-family:var(--mono);background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${$(tQ)}</div></div>
-          <div style="text-align:right"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Cobrado</div>
-            <div style="font-size:14px;font-weight:700;font-family:var(--mono);color:var(--ok)">${$(pa)}</div></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt2);margin-top:6px"><span>${pc}/${emps.length} cobrados</span></div>
-        <div class="pbar"><div class="pfill" style="width:${pct}%;background:${allP?"var(--ok)":"linear-gradient(90deg,var(--gold3),var(--gold))"}"></div></div>
-      </div>`;
-    }).join("")}
-    <div class="card"><div class="stitle">Equipo</div>
-      ${emps.map(e=>{const c=calc(e);const dd=diasDesdeIngreso(e.fechaIngreso);return`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-        <div class="emp-av" style="background:${e.color}22;color:${e.color};border:1px solid ${e.color}44;width:38px;height:38px;font-size:14px">${e.name.charAt(0)}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.name}</div>
-          <div style="font-size:10px;color:var(--txt2)">${e.gender==="F"?"♀":"♂"} ${e.position||""}${dd!==null?` · ${dd}d ingresado`:""}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:${e.color}">${$(c.quincenaFinal)}</div>
-          <div style="font-size:10px;color:var(--txt2)">quincena neta</div>
-        </div>
-      </div>`;}).join("")}
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:${e.color}">${fmtM(c.bruto)}</div>
+            <div style="font-size:10px;color:var(--txt2);font-family:var(--mono)">${fmtM(c.qFinal)}/quin.</div>
+          </div>
+        </div>`;}).join("")}
+      </div>
     </div>
   </div>`;
 }
 
+// ─── CALENDARIO ───
 function vCalendario(){
-  const emps=actEmps();
-  const p1=getPayDate(S.viewY,S.viewM,1),p2=getPayDate(S.viewY,S.viewM,2);
-  const d1=dUntil(p1),d2=dUntil(p2);
+  const emps=S.employees.filter(e=>!e.hidden).filter(e=>!S.search||(e.name+e.position||"").toLowerCase().includes(S.search.toLowerCase()));
+  const p1=getPayDate(S.viewY,S.viewM,1), p2=getPayDate(S.viewY,S.viewM,2);
   const lastD=new Date(S.viewY,S.viewM+1,0).getDate();
   const fd=new Date(S.viewY,S.viewM,1).getDay();
-  const p1d=p1?.getDate(),p2d=p2?.getDate();
+  const p1d=p1?.getDate(), p2d=p2?.getDate();
   const todD=TODAY.getMonth()===S.viewM&&TODAY.getFullYear()===S.viewY?TODAY.getDate():null;
   let cells="";
   for(let i=0;i<fd;i++)cells+=`<div></div>`;
   for(let d=1;d<=lastD;d++){
     const dt=new Date(S.viewY,S.viewM,d);
     const isPay=d===p1d||d===p2d,isT=d===todD,isH=isHol(dt),isW=dt.getDay()===0||dt.getDay()===6;
-    let cls="cc";
-    if(isPay)cls+=" pay";else if(isT)cls+=" tod";else if(isH)cls+=" hol";else if(isW)cls+=" wkd";else cls+=" wkk";
-    cells+=`<div class="${cls}">${d}${isPay?`<div style="width:3px;height:3px;background:currentColor;border-radius:50%;margin:1px auto 0;opacity:.8"></div>`:""}</div>`;
+    cells+=`<div class="cal-d ${isPay?"pay":isT?"today":isH?"hol":isW?"wkd":"wkk"}">${d}</div>`;
   }
-
-  return`<div class="page fade-up">
-    <div class="card" style="margin-bottom:10px">
-      <div class="stitle">${MONTHS[S.viewM]} ${S.viewY}</div>
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px">
-        ${["D","L","M","X","J","V","S"].map(x=>`<div class="chd">${x}</div>`).join("")}
-      </div>
-      <div class="calg">${cells}</div>
-      <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
-        ${[["var(--gold)","Cobro"],["var(--bg4)","Hoy"],["var(--danger)","Feriado"]].map(([c,l])=>`<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--txt2)"><div style="width:7px;height:7px;background:${c};border-radius:2px"></div>${l}</div>`).join("")}
-      </div>
-    </div>
-    <div class="stitle">Control de cobros</div>
-    ${emps.map(emp=>{
+  const mkKey=(id,q)=>`${S.viewY}-${S.viewM}-${id}-${q}`;
+  const isPaid=(id,q)=>!!S.paid[mkKey(id,q)];
+  async function togglePaid(id,q){
+    const was=S.paid[mkKey(id,q)];
+    const newPaid={...S.paid,[mkKey(id,q)]:!was};
+    if(!was){
+      const emp=S.employees.find(e=>e.id===id);
       const c=calc(emp);
-      return`<div class="card" style="margin-bottom:8px;border-color:${emp.color}22">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="emp-av" style="background:${emp.color}22;color:${emp.color};border:1px solid ${emp.color}44;width:38px;height:38px;font-size:14px">${emp.name.charAt(0)}</div>
-          <div style="flex:1">
-            <div style="font-size:13px;font-weight:600">${emp.name}</div>
-            <div style="font-size:11px;color:var(--gold);font-family:var(--mono)">${$(c.quincenaFinal)} neto</div>
-            ${c.adelantos>0||c.descuentos>0?`<div style="font-size:10px;color:var(--danger)">− ${$(c.adelantos+c.descuentos)} descuentos</div>`:""}
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:10px;color:var(--txt2)">1ra</span>
-              <button class="cbtn ${isPaid(emp.id,1)?"paid":""}" onclick="togglePaid(${emp.id},1)">${isPaid(emp.id,1)?"✓":""}</button>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:10px;color:var(--txt2)">2da</span>
-              <button class="cbtn ${isPaid(emp.id,2)?"paid":""}" onclick="togglePaid(${emp.id},2)">${isPaid(emp.id,2)?"✓":""}</button>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:8px">
-          <button class="ea-btn" style="width:100%" onclick="openWA(${emp.id})">📲 Detalle WhatsApp</button>
-        </div>
-      </div>`;
-    }).join("")}
-  </div>`;
-}
-
-function vEmpleados(){
-  const emps=S.employees||[];
-  return`<div class="page fade-up">
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-      <span class="chip cok">${emps.filter(e=>!e.hidden).length} activos</span>
-      <span class="chip cne">${emps.filter(e=>e.hidden).length} ocultos</span>
-      <span class="chip cfem">${emps.filter(e=>!e.hidden&&e.gender==="F").length} ♀</span>
-      <span class="chip cinf">${emps.filter(e=>!e.hidden&&e.gender==="M").length} ♂</span>
-    </div>
-    ${emps.map(emp=>{
-      const c=calc(emp);
-      const dd=diasDesdeIngreso(emp.fechaIngreso);
-      return`<div class="emp-card" style="border-color:${emp.hidden?"var(--border2)":emp.color+"33"};opacity:${emp.hidden?.55:1}">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="emp-av" style="background:${emp.color}20;color:${emp.color};border:1px solid ${emp.color}44;width:46px;height:46px;font-size:18px;flex-shrink:0">${emp.name.charAt(0)}</div>
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-              <div style="font-size:15px;font-weight:700">${emp.name}</div>
-              <span class="chip ${emp.gender==="F"?"cfem":"cinf"}">${emp.gender==="F"?"♀":"♂"}</span>
-            </div>
-            <div style="font-size:11px;color:var(--txt2);margin-top:2px">${emp.position||"Sin cargo"} · ${emp.horasMes}h/mes</div>
-            ${dd!==null?`<div style="font-size:10px;color:var(--gold3);margin-top:1px">📅 ${dd} días en la empresa</div>`:""}
-          </div>
-          <div style="display:flex;gap:6px;flex-shrink:0">
-            <div class="btn-icon" onclick="toggleHid(${emp.id})" style="color:${emp.hidden?"var(--gold)":"var(--txt2)"}">${emp.hidden?"👁":"🙈"}</div>
-            <div class="btn-icon btn-danger" onclick="removeEmp(${emp.id})">🗑️</div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
-          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Base</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:${emp.color}">${$(emp.salary)}</div></div>
-          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Quincena neta</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--gold)">${$(c.quincenaFinal)}</div></div>
-          <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Diario</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--txt1)">${$(c.diario)}</div></div>
-        </div>
-        ${c.adelantos>0?`<div style="margin-top:6px;font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ Adelantos: −${$(c.adelantos)}</div>`:""}
-        ${c.descuentos>0?`<div style="font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ Descuentos: −${$(c.descuentos)}</div>`:""}
-        <div class="emp-actions">
-          <button class="ea-btn" onclick="openEditEmp(${emp.id})">✏️ Editar</button>
-          <button class="ea-btn" onclick="openAdelantos(${emp.id})">💵 Adelanto</button>
-          <button class="ea-btn" onclick="openDescuentos(${emp.id})">🛒 Descuento</button>
-          <button class="ea-btn" onclick="openWA(${emp.id})">📲 WA</button>
-        </div>
-      </div>`;
-    }).join("")}
-  </div>`;
-}
-
-function vHoras(){
-  const emps=(S.employees||[]).filter(e=>!e.hidden);
-  return`<div class="page fade-up">
-    <div class="card" style="margin-bottom:10px;border-color:var(--gold3)33">
-      <div style="font-size:12px;color:var(--gold2)">◈ Horas extra al mismo valor hora pactado (sueldo ÷ horas/mes), sin recargo.</div>
-    </div>
-    ${emps.map(emp=>{
-      const c=calc(emp);const extras=emp.extras||[];
-      return`<div class="card" style="border-color:${emp.color}22;margin-bottom:8px">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-          <div class="emp-av" style="background:${emp.color}22;color:${emp.color};width:36px;height:36px;font-size:13px">${emp.name.charAt(0)}</div>
-          <div style="flex:1"><div style="font-weight:700;font-size:14px">${emp.name}</div>
-            <div style="font-size:11px;color:var(--txt2);font-family:var(--mono)">${$(c.valorHora)}/h</div>
-          </div>
-          <button class="ea-btn btn-sm" onclick="openExtras(${emp.id})">+ Extra</button>
-        </div>
-        ${extras.length===0?`<div style="font-size:12px;color:var(--txt2)">Sin horas extra.</div>`
-          :extras.map((ex,i)=>`<div class="disc-item">
-              <div style="flex:1"><div style="font-size:12px;font-weight:500">${ex.desc||"Hora extra"}</div>
-                <div style="font-size:11px;color:var(--txt2);font-family:var(--mono)">${ex.horas}h × ${$(c.valorHora)}</div></div>
-              <div style="font-family:var(--mono);font-weight:700;color:var(--gold);margin-right:8px">${$(c.valorHora*ex.horas)}</div>
-              <div class="btn-icon btn-danger" onclick="removeExtra(${emp.id},${i})">×</div>
-            </div>`).join("")}
-        ${extras.length>0?`<div style="display:flex;justify-content:flex-end;padding-top:8px;border-top:1px solid var(--border);margin-top:4px"><span style="font-family:var(--mono);font-weight:700;color:var(--gold)">Total: ${$(c.totalExtras)}</span></div>`:""}
-      </div>`;
-    }).join("")}
-  </div>`;
-}
-
-// ── CALCULADORA ──
-let calcExpr="",calcDisp="0";
-function vCalc(){
-  return`<div class="page fade-up">
-    <div class="card" style="margin-bottom:10px">
-      <div class="stitle">Calculadora</div>
-      <div class="calc-display">
-        <div class="calc-expr" id="calc-expr">${calcExpr||""}</div>
-        <div class="calc-result" id="calc-disp">${calcDisp}</div>
-      </div>
-      <div class="calc-grid">
-        ${[
-          ["C","","","⌫"],
-          ["%","","","÷"],
-          ["7","8","9","×"],
-          ["4","5","6","−"],
-          ["1","2","3","+"],
-          ["+/−","0",".",  "="],
-        ].map(row=>row.map((k,ki)=>{
-          const isOp=["%","÷","×","−","+"].includes(k);
-          const isEq=k==="=";
-          const isClr=k==="C";
-          const isDel=k==="⌫";
-          let cls="calc-btn"+(isOp?" op":isEq?" eq":isClr?" clr":"");
-          return`<button class="${cls}" ${ki===0&&isClr?'style="grid-column:span 1"':""} onclick="calcPress('${k}')">${k}</button>`;
-        }).join("")).join("")}
-      </div>
-    </div>
-    <div class="card">
-      <div class="stitle">Calculadora de sueldo</div>
-      <div class="fg"><label class="fl">Sueldo mensual ($)</label><input class="fi" id="cs-sal" type="number" placeholder="Ej: 200000" oninput="updateSueldoCalc()"></div>
-      <div class="frow">
-        <div class="fg"><label class="fl">Horas/mes pactadas</label><input class="fi" id="cs-hm" type="number" value="160" oninput="updateSueldoCalc()"></div>
-        <div class="fg"><label class="fl">Días trabajados</label><input class="fi" id="cs-dt" type="number" value="30" min="1" max="30" oninput="updateSueldoCalc()"></div>
-      </div>
-      <div class="fg"><label class="fl">Horas extra</label><input class="fi" id="cs-he" type="number" value="0" step="0.5" oninput="updateSueldoCalc()"></div>
-      <div class="fg"><label class="fl">Adelantos / Descuentos ($)</label><input class="fi" id="cs-desc" type="number" value="0" oninput="updateSueldoCalc()"></div>
-      <div id="cs-result" style="margin-top:4px"></div>
-    </div>
-    <div class="card">
-      <div class="stitle">Comparar sueldos / Aumento</div>
-      <div class="frow">
-        <div class="fg"><label class="fl">Sueldo actual</label><input class="fi" id="cmp-a" type="number" placeholder="180000" oninput="updateCmp()"></div>
-        <div class="fg"><label class="fl">Sueldo nuevo</label><input class="fi" id="cmp-b" type="number" placeholder="220000" oninput="updateCmp()"></div>
-      </div>
-      <div id="cmp-result" style="margin-top:4px"></div>
-    </div>
-    <div class="card">
-      <div class="stitle">Conversor Horas ↔ Dinero</div>
-      <div class="fg"><label class="fl">Sueldo mensual ($)</label><input class="fi" id="cv-sal" type="number" placeholder="200000" oninput="updateConversor()"></div>
-      <div class="frow">
-        <div class="fg"><label class="fl">Horas/mes pactadas</label><input class="fi" id="cv-hm" type="number" value="160" oninput="updateConversor()"></div>
-        <div class="fg"><label class="fl">Cantidad de horas</label><input class="fi" id="cv-h" type="number" value="1" step="0.5" oninput="updateConversor()"></div>
-      </div>
-      <div id="cv-result" style="margin-top:4px"></div>
-    </div>
-  </div>`;
-}
-
-function calcPress(k){
-  if(k==="C"){calcExpr="";calcDisp="0";}
-  else if(k==="⌫"){calcExpr=calcExpr.slice(0,-1)||"";calcDisp=calcExpr||"0";}
-  else if(k==="="){
-    try{
-      const expr=calcExpr.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-");
-      const res=Function('"use strict";return ('+expr+")")();
-      calcDisp=isFinite(res)?String(Math.round(res*100)/100):"Error";
-      calcExpr="";
-    }catch{calcDisp="Error";calcExpr="";}
+      const hist=[...S.historial,{empId:id,empName:emp.name,empColor:emp.color,concepto:`${q===1?"1ra":"2da"} Quincena — ${MONTHS[S.viewM]} ${S.viewY}`,monto:c.qFinal,fecha:new Date().toLocaleDateString("es-AR"),_ts:Date.now()}];
+      await fbSet("historial",hist);
+    }
+    await fbSet("paid",newPaid);
   }
-  else if(k==="+/−"){
-    if(calcExpr&&!isNaN(calcExpr))calcExpr=String(-parseFloat(calcExpr));
-    calcDisp=calcExpr||"0";
-  }
-  else if(k==="%"){
-    try{const v=parseFloat(calcExpr)||0;calcExpr=String(v/100);calcDisp=calcExpr;}catch{}
-  }
-  else{
-    if(calcDisp==="Error"){calcExpr="";calcDisp="0";}
-    calcExpr+=k;calcDisp=calcExpr;
-  }
-  const d=document.getElementById("calc-disp"),e=document.getElementById("calc-expr");
-  if(d)d.textContent=calcDisp;
-  if(e)e.textContent=calcExpr;
-}
-window.calcPress=calcPress;
+  const tQ=emps.reduce((s,e)=>s+calc(e).qFinal,0);
+  const tM=emps.reduce((s,e)=>s+calc(e).bruto,0);
 
-function updateSueldoCalc(){
-  const sal=parseFloat(document.getElementById("cs-sal")?.value)||0;
-  const hm=parseInt(document.getElementById("cs-hm")?.value)||160;
-  const dt=parseInt(document.getElementById("cs-dt")?.value)||30;
-  const he=parseFloat(document.getElementById("cs-he")?.value)||0;
-  const desc=parseFloat(document.getElementById("cs-desc")?.value)||0;
-  const el=document.getElementById("cs-result");if(!el||!sal)return;
-  const diario=sal/30,hora=sal/hm,prop=diario*dt,extrasTotal=hora*he,bruto=prop+extrasTotal,qBruta=bruto/2,qNeta=Math.max(0,qBruta-desc);
-  el.innerHTML=`<div class="fhint">
-    Diario: <b style="color:var(--gold)">${$(diario)}</b> · Hora: <b style="color:var(--gold2)">${$(hora)}</b><br>
-    Proporcional (${dt}d): <b style="color:var(--gold)">${$(prop)}</b><br>
-    ${he>0?`Extras (${he}h): <b style="color:var(--gold3)">${$(extrasTotal)}</b><br>`:""}
-    Total bruto: <b style="color:var(--txt0)">${$(bruto)}</b><br>
-    Quincena bruta: <b style="color:var(--gold)">${$(qBruta)}</b><br>
-    ${desc>0?`Descuentos: <b style="color:var(--danger)">−${$(desc)}</b><br>`:""}
-    <span style="font-size:13px">Quincena <b>neta</b>: <b style="color:var(--ok)">${$(qNeta)}</b></span>
-  </div>`;
-}
-window.updateSueldoCalc=updateSueldoCalc;
-
-function updateCmp(){
-  const a=parseFloat(document.getElementById("cmp-a")?.value)||0;
-  const b=parseFloat(document.getElementById("cmp-b")?.value)||0;
-  const el=document.getElementById("cmp-result");if(!el||!a||!b)return;
-  const dif=b-a,pct=(dif/a*100);
-  el.innerHTML=`<div class="fhint">
-    Diferencia: <b style="color:${dif>=0?"var(--ok)":"var(--danger)"}">${dif>=0?"+":""}${$(dif)}</b><br>
-    Variación: <b style="color:${dif>=0?"var(--ok)":"var(--danger)"}">${dif>=0?"+":""}${pct.toFixed(1)}%</b><br>
-    Quincena actual: <b style="color:var(--txt0)">${$(a/2)}</b> → nueva: <b style="color:var(--gold)">${$(b/2)}</b>
-  </div>`;
-}
-window.updateCmp=updateCmp;
-
-function updateConversor(){
-  const sal=parseFloat(document.getElementById("cv-sal")?.value)||0;
-  const hm=parseInt(document.getElementById("cv-hm")?.value)||160;
-  const h=parseFloat(document.getElementById("cv-h")?.value)||0;
-  const el=document.getElementById("cv-result");if(!el||!sal)return;
-  const vh=sal/hm;
-  el.innerHTML=`<div class="fhint">
-    Valor hora: <b style="color:var(--gold)">${$(vh)}</b><br>
-    ${h} hora${h!==1?"s":""}: <b style="color:var(--gold2)">${$(vh*h)}</b>
-  </div>`;
-}
-window.updateConversor=updateConversor;
-
-function vMas(){
-  const hist=S.historial||[];
   return`<div class="page fade-up">
-    <div class="card" style="margin-bottom:10px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div class="stitle" style="margin:0">Mi cuenta</div>
-        <span style="font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700;${currentRole==='admin'?'background:var(--gold)18;color:var(--gold);border:1px solid var(--gold3)33':'background:var(--bg3);color:var(--txt2);border:1px solid var(--border2)'}">${currentRole==='admin'?'👑 Admin':'👁 Solo lectura'}</span>
-      </div>
-      <div style="font-size:12px;color:var(--txt2);margin-bottom:10px;font-family:var(--mono)">${currentUser?.email||''}</div>
-      <button class="btn-sec" onclick="doLogout()" style="color:var(--danger);border-color:var(--danger)44">🚪 Cerrar sesión</button>
-    </div>
-    <div class="card" style="margin-bottom:10px">
-      <div class="stitle">Opciones</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button class="btn-sec" onclick="shareLink()">🔗 Compartir link de acceso</button>
-        <button class="btn-sec" onclick="exportCSV()">📊 Exportar CSV / Excel</button>
-        <button class="btn-sec" onclick="window.print()">🖨️ Imprimir / PDF</button>
-        <button class="btn-sec" onclick="setTab('anual')">📈 Resumen Anual</button>
-        <button class="btn-sec" onclick="setTab('empresas')">🏢 Empresas</button>
-        ${currentRole==='admin'?'<button class="btn-sec" onclick="openCrearCuenta()">👤 Crear usuario nuevo</button>':''}
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div class="stitle" style="margin:0">${hist.length} registros en historial</div>
-        ${hist.length>0?`<button class="ea-btn btn-sm" onclick="limpiarHist()">Limpiar</button>`:""}
-      </div>
-      ${hist.length===0?`<div style="font-size:12px;color:var(--txt2)">Sin registros aún.</div>`
-        :hist.slice(0,10).map(h=>`<div class="disc-item">
-          <div style="width:6px;height:6px;border-radius:50%;background:${h.empColor};flex-shrink:0"></div>
-          <div style="flex:1"><div style="font-size:12px;font-weight:600">${h.empName}</div>
-            <div style="font-size:10px;color:var(--txt2)">${h.concepto}</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-weight:700;color:var(--ok);font-size:12px">${$(h.neto||h.monto)}</div>
-            <div style="font-size:10px;color:var(--txt2)">${h.fecha}</div></div>
-        </div>`).join("")}
-    </div>
-  </div>`;
-}
-
-function vAnual(){
-  const emps=(S.employees||[]).filter(e=>!e.hidden);
-  const tM=emps.reduce((s,e)=>s+calc(e).totalBruto,0);
-  return`<div class="page fade-up">
-    <button class="btn-sec" style="margin-bottom:12px" onclick="setTab('mas')">← Volver</button>
-    <div class="card-grid">
-      <div class="stat-card"><div class="slabel">Mensual</div><div class="sval" style="background:var(--goldg);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:16px">${$(tM)}</div></div>
-      <div class="stat-card"><div class="slabel">Anual ×12</div><div class="sval" style="color:var(--gold2);font-size:16px">${$(tM*12)}</div></div>
-      <div class="stat-card"><div class="slabel">Quincena</div><div class="sval" style="color:var(--gold);font-size:16px">${$(tM/2)}</div></div>
-      <div class="stat-card"><div class="slabel">Promedio</div><div class="sval" style="color:var(--gold3);font-size:16px">${$(emps.length?tM/emps.length:0)}</div></div>
-    </div>
-    <div class="card">
-      <div class="stitle">Fechas de cobro ${S.viewY}</div>
-      ${MONTHS.map((m,i)=>{
-        const p1=getPayDate(S.viewY,i,1),p2=getPayDate(S.viewY,i,2);
-        const cur=i===S.viewM&&S.viewY===TODAY.getFullYear();
-        return`<div style="display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">
-          <div style="font-size:12px;font-weight:${cur?700:400};color:${cur?"var(--gold)":"var(--txt1)"};min-width:90px">${m}</div>
-          <div style="font-size:11px;color:var(--txt2)">1ra: <span style="color:var(--txt0);font-family:var(--mono)">${fmtD(p1)}</span></div>
-          <div style="font-size:11px;color:var(--txt2)">2da: <span style="color:var(--txt0);font-family:var(--mono)">${fmtD(p2)}</span></div>
+    <div class="grid2" style="margin-bottom:12px">
+      ${[{lbl:"1ra Quincena",sub:"Días 1–15",date:p1,days:dUntil(p1),q:1},{lbl:"2da Quincena",sub:`Días 16–${lastD}`,date:p2,days:dUntil(p2),q:2}].map(({lbl,sub,date,days,q})=>{
+        const allP=emps.length>0&&emps.every(e=>isPaid(e.id,q));
+        const glow=allP?"var(--ok)":days===0?"var(--gold)":"var(--border3)";
+        return`<div class="pay-card" style="border-color:${glow}44">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${glow};margin-bottom:6px">${lbl}</div>
+          <div style="font-size:18px;font-weight:700;font-family:var(--mono);margin-bottom:2px">${fmtD(date)}</div>
+          <div style="font-size:10px;color:var(--txt2);margin-bottom:8px">${sub}</div>
+          ${allP?`<span class="chip cok">✓ Todos cobrados</span>`:days===0?`<span class="chip cwn">¡HOY!</span>`:days!==null&&days>0?`<span class="chip cinf">${days} días</span>`:`<span class="chip cdn">Vencido</span>`}
         </div>`;
       }).join("")}
     </div>
-  </div>`;
-}
-
-function vEmpresas(){
-  const cos=S.companies||[];
-  return`<div class="page fade-up">
-    <button class="btn-sec" style="margin-bottom:12px" onclick="setTab('mas')">← Volver</button>
-    <div class="stitle">Sala: <span style="color:var(--gold);font-family:var(--mono)">${ROOM}</span></div>
-    ${cos.map(co=>`<div class="card" style="margin-bottom:8px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div style="font-size:24px">🏢</div>
-        <div style="flex:1"><div style="font-size:15px;font-weight:700">${co.name}</div>
-          <div style="font-size:11px;color:var(--txt2)">CUIT: ${co.cuit||"No registrado"}</div></div>
-        <span class="chip cok">Activa</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;align-items:start">
+      <div class="card" style="margin-bottom:0">
+        <div class="stitle">${MONTHS[S.viewM].toUpperCase()} ${S.viewY}</div>
+        <div class="cal-hdr">${["D","L","M","X","J","V","S"].map(x=>`<div class="cal-dh">${x}</div>`).join("")}</div>
+        <div class="cal-grid">${cells}</div>
       </div>
-    </div>`).join("")}
-    <button class="btn-gold" style="margin-top:4px" onclick="openAddCo()">+ Nueva Empresa</button>
+      <div class="card" style="margin-bottom:0">
+        <div class="stitle">Cobros</div>
+        ${emps.map(emp=>{const c=calc(emp);return`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div class="emp-av" style="background:${emp.color}22;color:${emp.color};width:28px;height:28px;font-size:11px;flex-shrink:0">${emp.name.charAt(0)}</div>
+          <div style="flex:1;min-width:0;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${emp.name}</div>
+          <button class="pay-btn ${isPaid(emp.id,1)?"paid":""}" onclick="togglePaidUI(${emp.id},1)">${isPaid(emp.id,1)?"✓":""}</button>
+          <button class="pay-btn ${isPaid(emp.id,2)?"paid":""}" onclick="togglePaidUI(${emp.id},2)">${isPaid(emp.id,2)?"✓":""}</button>
+          <div style="font-size:11px;font-family:var(--mono);color:var(--gold);white-space:nowrap">${fmtM(c.qFinal)}</div>
+        </div>`;}).join("")}
+        <div style="display:flex;justify-content:space-between;font-size:12px;padding-top:8px;font-weight:700">
+          <span>Total quincena</span><span style="font-family:var(--mono);color:var(--gold)">${fmtM(tQ)}</span>
+        </div>
+      </div>
+    </div>
   </div>`;
 }
 
-// ════════════════════
-// BOTTOM SHEETS (modales)
-// ════════════════════
-function openBS(html){
-  document.getElementById("bsheet-content").innerHTML=html;
-  document.getElementById("bsheet-overlay").style.display="flex";
-  document.getElementById("bsheet-box").scrollTop=0;
+// ─── TOGGLE PAID (module-level) ───
+window.togglePaidUI=async(id,q)=>{
+  const mkKey=(id,q)=>`${S.viewY}-${S.viewM}-${id}-${q}`;
+  const was=S.paid[mkKey(id,q)];
+  const newPaid={...S.paid,[mkKey(id,q)]:!was};
+  if(!was){
+    const emp=S.employees.find(e=>e.id===id);
+    if(emp){
+      const c=calc(emp);
+      const hist=[...S.historial,{empId:id,empName:emp.name,empColor:emp.color,
+        concepto:`${q===1?"1ra":"2da"} Quincena — ${MONTHS[S.viewM]} ${S.viewY}`,
+        monto:q===1?c.qFinal1:c.qFinal2,fecha:new Date().toLocaleDateString("es-AR"),_ts:Date.now()}];
+      await fbSet("historial",hist);
+    }
+  }
+  await fbSet("paid",newPaid);
+};
+
+// ─── EQUIPO ───
+function vEquipo(){
+  const emps=S.employees;
+  const cpicker=(cur,p)=>`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${COLORS.map(c=>`<button type="button" onclick="pickC_${p}('${c}')" id="cp_${p}_${c.replace('#','')}" style="width:22px;height:22px;border-radius:50%;background:${c};border:2px solid ${c===cur?"#fff":"transparent"};cursor:pointer"></button>`).join("")}</div>`;
+
+  return`<div class="page fade-up">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="chip cok">${emps.filter(e=>!e.hidden).length} activos</span>
+        <span class="chip cgold">${emps.filter(e=>!e.hidden&&e.gender==="F").length}♀</span>
+        <span class="chip cinf">${emps.filter(e=>!e.hidden&&e.gender==="M").length}♂</span>
+      </div>
+      ${currentRole==="admin"?`<button class="ea-btn" onclick="openAddEmp()">+ Agregar</button>`:""}
+    </div>
+    ${emps.map(emp=>{const c=calc(emp);return`
+      <div class="ecard" style="border-color:${emp.hidden?"var(--border3)":emp.color+"33"};opacity:${emp.hidden?.55:1}">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="emp-av" style="background:${emp.color}22;color:${emp.color};border:1px solid ${emp.color}44;width:46px;height:46px;font-size:18px;flex-shrink:0">${emp.name.charAt(0)}</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+              <div style="font-size:15px;font-weight:700">${emp.name}</div>
+              <span class="chip ${emp.gender==="F"?"cgold":"cinf"}">${emp.gender==="F"?"♀":"♂"}</span>
+              ${emp.hidden?`<span class="chip cne">Oculto</span>`:""}
+              ${emp.pin?`<span class="chip cok" style="font-size:9px">PIN ****</span>`:""}
+            </div>
+            <div style="font-size:11px;color:var(--txt2);margin-bottom:8px">${emp.position||"Sin cargo"} · ${emp.horasMes||160}h/mes · ${emp.diasTrab||30}/30 días${emp.fechaIngreso?` · Ingreso: ${emp.fechaIngreso}`:""}</div>
+            <div style="display:flex;gap:14px;flex-wrap:wrap">
+              <div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Base</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:${emp.color}">${fmtM(emp.salary)}</div></div>
+              <div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Mensual</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--gold2)">${fmtM(c.bruto)}</div></div>
+              <div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Q1</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--gold)">${fmtM(c.qFinal1)}</div></div><div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Q2</div><div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--gold2)">${fmtM(c.qFinal2)}</div></div>
+              <div><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Diario</div><div style="font-size:13px;font-weight:600;font-family:var(--mono);color:var(--txt1)">${fmtM(c.diario)}</div></div>
+            </div>
+            ${c.esNuevo?`<div style="margin-top:8px;padding:8px 12px;background:rgba(91,138,247,.1);border:1px solid rgba(91,138,247,.25);border-radius:8px;font-size:11px;color:var(--acc2)"><strong>Ingreso el dia ${c.diaIngreso}</strong> &mdash; ${c.totalDias} dias en el mes<br>${c.diasQ1>0?`Q1 (dias ${c.diaIngreso}&ndash;15): <strong>${fmtM(c.qFinal1)}</strong>`:'Q1: No aplica (ingreso despues del 15)'} &middot; Q2 (dias 16&ndash;fin): <strong>${fmtM(c.qFinal2)}</strong>${c.acumQ1EnQ2>0?` <span style="color:var(--warn)">(+${fmtM(c.acumQ1EnQ2)} acumulado de Q1)</span>`:''}</div>`:""}
+            ${c.francosDias>0?`<div style="margin-top:5px;font-size:11px;color:var(--danger);font-family:var(--mono)">Franco: -${c.francosDias} dia${c.francosDias!==1?"s":""} (Q1:-${c.francosQ1} Q2:-${c.francosQ2}) = -${fmtM(c.diario*c.francosDias)}</div>`:""}
+            ${c.adelantos>0||c.descuentos>0?`<div style="margin-top:6px;font-size:11px;color:var(--danger);font-family:var(--mono)">⚠ ${c.adelantos>0?`Adelantos: −${fmtM(c.adelantos)} `:""}${c.descuentos>0?`Descuentos: −${fmtM(c.descuentos)}`:""}  </div>`:""}
+          </div>
+          ${currentRole==="admin"?`<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
+            <button class="btn-icon" onclick="openEditEmp(${emp.id})" title="Editar">✏️</button>
+            <button class="btn-icon" onclick="openExtras(${emp.id})" title="Horas extra">⏱️</button>
+            <button class="btn-icon" onclick="toggleHid(${emp.id})" title="${emp.hidden?"Mostrar":"Ocultar"}">${emp.hidden?"👁":"🙈"}</button>
+            <button class="btn-icon danger" onclick="removeEmp(${emp.id})" title="Eliminar">🗑️</button>
+          </div>`:""}
+        </div>
+      </div>`}).join("")}
+  </div>`;
 }
-function closeBS(){document.getElementById("bsheet-overlay").style.display="none";}
-function closeBSOutside(e){if(e.target===document.getElementById("bsheet-overlay"))closeBS();}
-window.closeBS=closeBS;window.closeBSOutside=closeBSOutside;
 
+// ─── CRONOGRAMA ───
+function vCronograma(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  const cronos=S.cronograma||[];
+  const hoy=new Date();
+  const semana=[];
+  for(let i=0;i<7;i++){const d=new Date(hoy);d.setDate(hoy.getDate()-hoy.getDay()+i);semana.push(d);}
+
+  return`<div class="page fade-up">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="stitle" style="margin:0">Semana actual</div>
+      ${currentRole==="admin"?`<button class="ea-btn" onclick="openNuevoTurno()">+ Turno</button>`:""}
+    </div>
+
+    <!-- Grid semanal -->
+    <div class="card" style="overflow-x:auto;margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:70px repeat(7,1fr);gap:4px;min-width:480px">
+        <div></div>
+        ${semana.map(d=>`<div style="text-align:center;padding:5px 2px;border-radius:8px;background:${d.toDateString()===hoy.toDateString()?"rgba(212,168,67,.12)":"var(--bg2)"};border:1px solid ${d.toDateString()===hoy.toDateString()?"rgba(212,168,67,.3)":"var(--border3)"}">
+          <div style="font-size:9px;color:var(--txt2)">${DSHORT[d.getDay()]}</div>
+          <div style="font-size:14px;font-weight:700;color:${d.toDateString()===hoy.toDateString()?"var(--gold)":"var(--txt0)"}">${d.getDate()}</div>
+        </div>`).join("")}
+        ${emps.map(emp=>{
+          const ds0=toKey(semana[0]);
+          return`
+          <div style="display:flex;align-items:center;gap:5px;padding:3px 0">
+            <div class="emp-av" style="background:${emp.color}22;color:${emp.color};width:22px;height:22px;font-size:9px;flex-shrink:0">${emp.name.charAt(0)}</div>
+            <div style="font-size:9px;color:var(--txt1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${emp.name.split(" ")[0]}</div>
+          </div>
+          ${semana.map(d=>{
+            const ds=toKey(d);
+            const t=cronos.find(t=>t.empId===emp.id&&t.fecha===ds);
+            const asist=(emp.asistencia||[]).find(a=>a.fecha===ds);
+            return`<div class="crono-cell">
+              ${t?`<div class="turno-chip" onclick="${currentRole==="admin"?`openNuevoTurnoFor(${emp.id},'${ds}')`:""}" title="${t.tarea||""}">${t.franco?"FRANCO":`${t.horaInicio}->${t.horaFin}`}</div>`
+              :currentRole==="admin"?`<div style="color:var(--txt2);font-size:10px;cursor:pointer" onclick="openNuevoTurnoFor(${emp.id},'${ds}')">—</div>`:"<div style='color:var(--txt2);font-size:10px'>—</div>"}
+              ${asist?.entrada?`<div style="font-size:8px;color:var(--ok);margin-top:1px">✓${asist.entrada}</div>`:""}
+            </div>`;
+          }).join("")}`;
+        }).join("")}
+      </div>
+    </div>
+
+    <!-- Hoy -->
+    <div class="stitle">Hoy — ${DLONG[hoy.getDay()]} ${hoy.getDate()} de ${MONTHS[hoy.getMonth()]}</div>
+    ${(()=>{
+      const ds=toKey(hoy);
+      const turnosHoy=cronos.filter(t=>t.fecha===ds);
+      if(!turnosHoy.length) return`<div class="card" style="text-align:center;padding:24px;color:var(--txt2);font-size:13px">Sin turnos para hoy${currentRole==="admin"?`<br><button class="ea-btn" onclick="openNuevoTurno()" style="margin-top:10px">+ Asignar turno</button>`:""}.</div>`;
+      return turnosHoy.map(t=>{
+        const emp=emps.find(e=>e.id===t.empId); if(!emp)return "";
+        const asist=(emp.asistencia||[]).find(a=>a.fecha===ds);
+        return`<div class="card" style="border-color:${emp.color}33;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="emp-av" style="background:${emp.color}22;color:${emp.color};border:1px solid ${emp.color}44;width:40px;height:40px;font-size:15px">${emp.name.charAt(0)}</div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:600">${emp.name}</div>
+              <div style="font-size:12px;color:var(--txt2)">Turno: <strong style="color:${emp.color}">${t.horaInicio} → ${t.horaFin}</strong>${t.tarea?` · ${t.tarea}`:""}</div>
+            </div>
+            <div style="text-align:right">
+              ${asist?.entrada?`<span class="chip cok">✓ ${asist.entrada}</span>`:`<span class="chip cne">Sin fichar</span>`}
+              ${asist?.salida?`<div style="font-size:10px;color:var(--txt2);margin-top:3px">↓${asist.salida}</div>`:""}
+            </div>
+            ${currentRole==="admin"?`<button class="btn-icon danger" onclick="eliminarTurno('${t.id}')" style="font-size:12px;width:28px;height:28px;margin-left:4px">×</button>`:""}
+          </div>
+          ${t.tarea?`<div style="margin-top:8px;padding:7px 10px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--txt1)">📋 ${t.tarea}</div>`:""}
+        </div>`;
+      }).join("");
+    })()}
+
+    ${currentRole==="admin"?`
+    <div class="card" style="margin-top:4px">
+      <div class="stitle">📢 Enviar aviso al equipo</div>
+      <div class="fg"><textarea class="fi" id="notif-txt" placeholder="Ej: Reunión a las 18hs · Revisar góndola 3 · Turno de mañana empieza a las 7am..." style="height:75px;resize:none"></textarea></div>
+      <button class="btn-gold" onclick="enviarNotif()">Enviar aviso a todos</button>
+    </div>`:""}
+  </div>`;
+}
+
+// ─── ASISTENCIA ───
+function vAsistencia(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  const hoy=todayStr();
+  return`<div class="page fade-up">
+    <div class="card" style="margin-bottom:10px;padding:12px 14px;border-color:rgba(212,168,67,.2)">
+      <div style="font-size:12px;color:var(--gold2);line-height:1.6">🕐 <strong>Fichaje</strong> — registrá entradas y salidas. La <strong>salida es informativa</strong>: el admin decide si aplica como hora extra.</div>
+    </div>
+    ${emps.map(emp=>{
+      const a=calcAsist(emp);
+      const rHoy=(emp.asistencia||[]).find(r=>r.fecha===hoy);
+      const enTrab=rHoy?.entrada&&!rHoy?.salida;
+      const yaFicho=rHoy?.entrada&&rHoy?.salida;
+      const hHoy=yaFicho?Math.max(0,diffH(rHoy.entrada,rHoy.salida)-((rHoy.descanso||30)/60)):0;
+      const extraHoy=Math.max(0,hHoy-a.hpd);
+      return`<div class="card" style="border-color:${emp.color}22;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="emp-av" style="background:${emp.color}22;color:${emp.color};border:1px solid ${emp.color}44;width:40px;height:40px;flex-shrink:0">${emp.name.charAt(0)}</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700">${emp.name}</div><div style="font-size:11px;color:var(--txt2)">${a.hpd.toFixed(1)}h/día pactadas</div></div>
+          <div style="text-align:right">
+            ${enTrab?`<div style="font-size:11px;font-weight:700;color:var(--ok)">● En trabajo</div><div style="font-size:10px;color:var(--txt2)">desde ${rHoy.entrada}</div>`
+            :yaFicho?`<div style="font-size:11px;font-weight:700;color:var(--gold)">✓ ${fmtH(hHoy)}</div>${extraHoy>0.1?`<div style="font-size:10px;color:var(--warn)">+${fmtH(extraHoy)} extra</div>`:""}`
+            :`<div style="font-size:11px;color:var(--txt2)">Sin fichar hoy</div>`}
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">
+          <div class="csm" style="text-align:center"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Días</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--gold)">${a.dias}</div></div>
+          <div class="csm" style="text-align:center"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Horas</div><div style="font-size:14px;font-weight:700;font-family:var(--mono)">${fmtH(a.totalH)}</div></div>
+          <div class="csm" style="text-align:center"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Extras</div><div style="font-size:14px;font-weight:700;font-family:var(--mono);color:${a.extras>0?"var(--warn)":"var(--txt2)"}">${fmtH(a.extras)}</div></div>
+          <div class="csm" style="text-align:center"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px">Prom.</div><div style="font-size:14px;font-weight:700;font-family:var(--mono);color:var(--txt1)">${a.dias>0?fmtH(a.totalH/a.dias):"—"}</div></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="ea-btn" onclick="ficharAsist(${emp.id})" style="background:${enTrab?"rgba(62,207,142,.12)":"rgba(212,168,67,.08)"};border-color:${enTrab?"rgba(62,207,142,.4)":"rgba(212,168,67,.3)"};color:${enTrab?"var(--ok)":"var(--gold)"}">
+            ${enTrab?"🏁 Registrar Salida":"🟢 Registrar Entrada"}
+          </button>
+          <button class="ea-btn" onclick="openEditReg(${emp.id},'${hoy}')">✏️ Editar hoy</button>
+          <button class="ea-btn" onclick="verRegHistorial(${emp.id})">📋 Ver mes</button>
+          ${currentRole==="admin"?`<button class="ea-btn" onclick="aplicarAsist(${emp.id})" style="color:var(--acc2);border-color:rgba(91,138,247,.3)">⚡ Aplicar al sueldo</button>`:""}
+        </div>
+        ${a.regs.length?`<div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Últimos registros</div>
+        ${[...a.regs].reverse().slice(0,4).map(r=>{
+          const h=r.entrada&&r.salida?Math.max(0,diffH(r.entrada,r.salida)-((r.descanso||30)/60)):null;
+          const ex=h!==null?Math.max(0,h-a.hpd):0;
+          return`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px">
+            <span style="font-family:var(--mono);color:var(--gold);width:42px;flex-shrink:0">${r.fecha.slice(5)}</span>
+            <span style="flex:1;color:var(--txt1)">${r.entrada?`↑${r.entrada}`:"—"}${r.salida?` ↓${r.salida}`:r.entrada?" ⏳":""}</span>
+            ${h!==null?`<span style="font-family:var(--mono);font-weight:600">${fmtH(h)}</span>`:""}
+            ${currentRole==="admin"?`
+              <button class="btn-icon" onclick="toggleExtra(${emp.id},'${r.fecha}')" 
+                style="width:28px;height:28px;font-size:10px;font-weight:700;
+                  ${r.esExtra?"background:rgba(240,168,50,.15);border-color:rgba(240,168,50,.4);color:var(--warn)":"color:var(--txt2)"}"
+                title="${r.esExtra?"Quitar extra":"Marcar como extra"}">
+                ${r.esExtra?"EX":"?"}
+              </button>`:
+              r.esExtra?`<span class="chip cwn" style="font-size:9px">EXTRA</span>`:""}
+            <button class="btn-icon" onclick="openEditReg(${emp.id},'${r.fecha}')" style="width:24px;height:24px;font-size:11px">✏️</button>
+          </div>`;
+        }).join("")}`:""}
+      </div>`;
+    }).join("")}
+  </div>`;
+}
+
+// ─── MAS ───
+function vMas(){
+  const notifs=S.notificaciones||[];
+  return`<div class="page fade-up">
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="stitle" style="margin:0">Mi cuenta</div>
+        <span class="chip ${currentRole==="admin"?"cgold":"cne"}">${currentRole==="admin"?"👑 Admin":"👁 Solo lectura"}</span>
+      </div>
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:10px;font-family:var(--mono)">${currentUser?.email||""}</div>
+      <button class="btn-sec" onclick="doLogout()" style="color:var(--danger);border-color:rgba(240,82,82,.3)">🚪 Cerrar sesión</button>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="stitle">Acciones</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn-sec" onclick="abrirKiosk()">🕐 Modo Empleado (fichaje PIN)</button>
+        ${currentRole==="admin"?`<button class="btn-sec" onclick="openCrearCuenta()">👤 Crear usuario nuevo</button>`:""}
+        <button class="btn-sec" onclick="exportCSV()">📊 Exportar CSV</button>
+        <button class="btn-sec" onclick="window.print()">🖨️ Imprimir / PDF</button>
+        <button class="btn-sec" onclick="setTab('cronograma')">📋 Cronograma de turnos</button>
+        <button class="btn-sec" onclick="setTab('asistencia')">🕐 Asistencia</button>
+      </div>
+    </div>
+    ${notifs.length?`<div class="card">
+      <div class="stitle">Últimos avisos enviados</div>
+      ${notifs.slice(0,5).map(n=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+        <div style="color:var(--txt0);line-height:1.5">${n.texto}</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:2px">De: ${n.de||"Admin"} · ${n.fecha} ${n.hora||""}</div>
+      </div>`).join("")}
+    </div>`:""}
+  </div>`;
+}
+
+// ══════════════════ EMPLOYEE FORM ══════════════════
 let _clr=COLORS[0];
-function cpicker(cur){_clr=cur;return`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${COLORS.map(c=>`<button type="button" onclick="pickC('${c}')" id="cp${c.replace('#','')}" style="width:26px;height:26px;border-radius:50%;background:${c};border:2px solid ${c===cur?"#fff":"transparent"};cursor:pointer;flex-shrink:0"></button>`).join("")}</div>`;}
-function pickC(c){_clr=c;COLORS.forEach(x=>{const el=document.getElementById("cp"+x.replace('#',''));if(el)el.style.borderColor=x===c?"#fff":"transparent";});}
-window.pickC=pickC;
+function cpicker(cur,p){
+  _clr=cur;
+  return`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${COLORS.map(c=>`<button type="button" onclick="pickC('${c}','${p}')" id="cp_${p}_${c.replace('#','')}" style="width:24px;height:24px;border-radius:50%;background:${c};border:3px solid ${c===cur?"#fff":"transparent"};cursor:pointer;flex-shrink:0"></button>`).join("")}</div>`;
+}
+window.pickC=(c,p)=>{
+  _clr=c;
+  COLORS.forEach(x=>{const el=document.getElementById(`cp_${p}_${x.replace('#','')}`);if(el)el.style.borderColor=x===c?"#fff":"transparent";});
+};
 
-function liveCalc(salId,hmId,dtId,vdId,outId){
-  const sal=parseFloat(document.getElementById(salId)?.value)||0;
-  const hm=parseInt(document.getElementById(hmId)?.value)||160;
-  const dt=parseInt(document.getElementById(dtId)?.value)||30;
-  const vd=parseInt(document.getElementById(vdId)?.value)||0;
-  const el=document.getElementById(outId);if(!el)return;
-  if(!sal){el.textContent="Ingresá el sueldo";return;}
-  const diario=sal/30,hora=sal/hm,diasEf=Math.min(dt,30)-vd,prop=diario*diasEf,q=prop/2;
-  el.innerHTML=`Diario: <b style="color:var(--gold)">${$(diario)}</b> · Hora: <b style="color:var(--gold2)">${$(hora)}</b><br>Proporcional: <b style="color:var(--gold3)">${$(prop)}</b> · Quincena: <b style="color:var(--ok)">${$(q)}</b>`;
+function liveCalc(p){
+  const sal=parseFloat(document.getElementById(`${p}sal`)?.value)||0;
+  const hm=parseInt(document.getElementById(`${p}hm`)?.value)||160;
+  const dt=parseInt(document.getElementById(`${p}dt`)?.value)||30;
+  const vd=parseInt(document.getElementById(`${p}vd`)?.value)||0;
+  const el=document.getElementById(`${p}prev`); if(!el)return;
+  if(!sal){el.textContent="Ingresá el sueldo para ver el cálculo";return;}
+  const d=sal/30,h=sal/hm,ef=Math.min(dt,30)-vd,prop=d*Math.max(0,ef),q=prop/2;
+  el.innerHTML=`Diario: <strong style="color:var(--gold)">${fmtM(d)}</strong>  ·  Hora: <strong style="color:var(--gold2)">${fmtM(h)}</strong>  ·  Quincena: <strong style="color:var(--gold)">${fmtM(q)}</strong>`;
 }
 window.liveCalc=liveCalc;
 
-const empFormHtml=(v,p)=>`
-  <div class="fg"><label class="fl">Nombre completo</label><input class="fi" id="${p}name" value="${v.name||""}" placeholder="Ej: Juan Pérez"></div>
+function empFormHtml(v,p){
+  return`
   <div class="frow">
-    <div class="fg"><label class="fl">Cargo</label><input class="fi" id="${p}pos" value="${v.position||""}" placeholder="Ej: Operario"></div>
+    <div class="fg"><label class="fl">Nombre</label><input class="fi" id="${p}name" value="${v.name||""}" placeholder="Juan Pérez" autofocus></div>
+    <div class="fg"><label class="fl">Cargo</label><input class="fi" id="${p}pos" value="${v.position||""}" placeholder="Operario"></div>
+  </div>
+  <div class="frow">
     <div class="fg"><label class="fl">Género</label>
       <select class="fi" id="${p}gen" style="appearance:none">
-        <option value="M" ${v.gender==="M"?"selected":""}>♂ Masculino</option>
+        <option value="M" ${(v.gender||"M")==="M"?"selected":""}>♂ Masculino</option>
         <option value="F" ${v.gender==="F"?"selected":""}>♀ Femenino</option>
       </select>
     </div>
+    <div class="fg"><label class="fl">Fecha ingreso</label><input class="fi" id="${p}ing" type="date" value="${v.fechaIngreso||""}"></div>
   </div>
-  <div class="fg"><label class="fl">Fecha de ingreso</label><input class="fi" id="${p}ing" type="date" value="${v.fechaIngreso||""}"></div>
-  <div class="fg"><label class="fl">Color</label>${cpicker(v.color||_clr)}</div>
+  <div class="fg"><label class="fl">Color</label>${cpicker(v.color||_clr,p)}</div>
   <div class="frow">
-    <div class="fg"><label class="fl">Sueldo mensual ($)</label><input class="fi" id="${p}sal" type="number" value="${v.salary||""}" placeholder="200000" oninput="liveCalc('${p}sal','${p}hm','${p}dt','${p}vd','${p}prev')"></div>
-    <div class="fg"><label class="fl">Horas/mes pactadas</label><input class="fi" id="${p}hm" type="number" value="${v.horasMes||160}" oninput="liveCalc('${p}sal','${p}hm','${p}dt','${p}vd','${p}prev')"></div>
+    <div class="fg"><label class="fl">Sueldo mensual ($)</label><input class="fi" id="${p}sal" type="number" value="${v.salary||""}" placeholder="200000" oninput="liveCalc('${p}')"></div>
+    <div class="fg"><label class="fl">Horas/mes</label><input class="fi" id="${p}hm" type="number" value="${v.horasMes||160}" oninput="liveCalc('${p}')"></div>
   </div>
   <div class="frow">
-    <div class="fg"><label class="fl">Días trabajados</label><input class="fi" id="${p}dt" type="number" value="${v.diasTrab||30}" min="1" max="30" oninput="liveCalc('${p}sal','${p}hm','${p}dt','${p}vd','${p}prev')"></div>
-    <div class="fg"><label class="fl">Días vac. no pagas</label><input class="fi" id="${p}vd" type="number" value="${v.vacDias||0}" min="0" oninput="liveCalc('${p}sal','${p}hm','${p}dt','${p}vd','${p}prev')"></div>
+    <div class="fg"><label class="fl">Días trabajados</label><input class="fi" id="${p}dt" type="number" value="${v.diasTrab||30}" min="1" max="30" oninput="liveCalc('${p}')"></div>
+    <div class="fg"><label class="fl">Días vac. no pagas</label><input class="fi" id="${p}vd" type="number" value="${v.vacDias||0}" min="0" oninput="liveCalc('${p}')"></div>
   </div>
+  <div class="fg"><label class="fl">PIN empleado (4 dígitos)</label><input class="fi" id="${p}pin" type="number" value="${v.pin||""}" placeholder="Ej: 1234" style="font-family:var(--mono);font-size:20px;letter-spacing:8px" maxlength="4"><div style="font-size:11px;color:var(--txt2);margin-top:3px">El empleado usa este PIN para fichar desde Modo Empleado</div></div>
   <div class="fhint" id="${p}prev">Ingresá el sueldo para ver el cálculo</div>`;
+}
 
-function openAddEmp(){
-  _clr=COLORS[(S.employees||[]).length%COLORS.length];
+function getV(p){
+  return{
+    name:document.getElementById(`${p}name`)?.value?.trim()||"",
+    position:document.getElementById(`${p}pos`)?.value||"",
+    gender:document.getElementById(`${p}gen`)?.value||"M",
+    fechaIngreso:document.getElementById(`${p}ing`)?.value||"",
+    salary:parseFloat(document.getElementById(`${p}sal`)?.value)||0,
+    horasMes:parseInt(document.getElementById(`${p}hm`)?.value)||160,
+    diasTrab:parseInt(document.getElementById(`${p}dt`)?.value)||30,
+    vacDias:parseInt(document.getElementById(`${p}vd`)?.value)||0,
+    pin:String(document.getElementById(`${p}pin`)?.value||"").slice(0,4),
+    color:_clr,
+  };
+}
+
+window.openAddEmp=()=>{
+  if(currentRole!=="admin"){toast("Solo los admins pueden agregar empleados");return;}
+  _clr=COLORS[S.employees.length%COLORS.length];
   openBS(`
     <div class="bsheet-hdr"><h3>Nuevo Empleado</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
     <div class="bsheet-body">${empFormHtml({},"na_")}</div>
-    <div class="bsheet-foot">
-      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
-      <button class="btn-gold" style="flex:2" onclick="saveNewEmp()">Guardar</button>
-    </div>
+    <div class="bsheet-foot"><button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button><button class="btn-gold" style="flex:2" onclick="saveNewEmp()">Guardar</button></div>
   `);
-  setTimeout(()=>liveCalc("na_sal","na_hm","na_dt","na_vd","na_prev"),50);
-}
-window.openAddEmp=openAddEmp;
+  setTimeout(()=>liveCalc("na_"),50);
+};
 
-async function saveNewEmp(){
-  const name=document.getElementById("na_name")?.value?.trim();
-  const sal=parseFloat(document.getElementById("na_sal")?.value)||0;
-  if(!name||!sal){alert("Completá nombre y sueldo");return;}
-  const id=Date.now();
-  const newEmp={id,name,salary:sal,
-    position:document.getElementById("na_pos")?.value||"",
-    gender:document.getElementById("na_gen")?.value||"M",
-    fechaIngreso:document.getElementById("na_ing")?.value||"",
-    color:_clr,
-    horasMes:parseInt(document.getElementById("na_hm")?.value)||160,
-    diasTrab:parseInt(document.getElementById("na_dt")?.value)||30,
-    vacDias:parseInt(document.getElementById("na_vd")?.value)||0,
-    hidden:false,extras:[],adelantos:[],descuentos:[]};
-  await fbSet("employees",[...(S.employees||[]),newEmp]);
-  closeBS();toast(`✓ ${name} agregado`);
-}
-window.saveNewEmp=saveNewEmp;
+window.saveNewEmp=async()=>{
+  const v=getV("na_");
+  if(!v.name||!v.salary){toast("Completá nombre y sueldo");return;}
+  const emps=[...S.employees,{id:Date.now(),...v,hidden:false,extras:[],adelantos:[],descuentos:[]}];
+  await fbSet("employees",emps);
+  closeBS(); toast(`✓ ${v.name} agregado`);
+};
 
-function openEditEmp(id){
-  const e=(S.employees||[]).find(x=>x.id===id);if(!e)return;
-  _clr=e.color;
+window.openEditEmp=id=>{
+  const e=S.employees.find(x=>x.id===id);if(!e)return;
+  _clr=e.color||COLORS[0];
   openBS(`
     <div class="bsheet-hdr"><h3>Editar — ${e.name}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
     <div class="bsheet-body">${empFormHtml(e,"ed_")}</div>
-    <div class="bsheet-foot">
-      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
-      <button class="btn-gold" style="flex:2" onclick="saveEditEmp(${id})">Guardar</button>
-    </div>
+    <div class="bsheet-foot"><button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button><button class="btn-gold" style="flex:2" onclick="saveEditEmp(${id})">Guardar</button></div>
   `);
-  setTimeout(()=>liveCalc("ed_sal","ed_hm","ed_dt","ed_vd","ed_prev"),50);
-}
-window.openEditEmp=openEditEmp;
+  setTimeout(()=>liveCalc("ed_"),50);
+};
 
-async function saveEditEmp(id){
-  const updated=(S.employees||[]).map(e=>e.id===id?{...e,
-    name:document.getElementById("ed_name")?.value||e.name,
-    position:document.getElementById("ed_pos")?.value||"",
-    gender:document.getElementById("ed_gen")?.value||e.gender,
-    fechaIngreso:document.getElementById("ed_ing")?.value||e.fechaIngreso||"",
-    salary:parseFloat(document.getElementById("ed_sal")?.value)||e.salary,
-    horasMes:parseInt(document.getElementById("ed_hm")?.value)||e.horasMes,
-    diasTrab:parseInt(document.getElementById("ed_dt")?.value)||e.diasTrab,
-    vacDias:parseInt(document.getElementById("ed_vd")?.value)||0,
-    color:_clr,
-  }:e);
-  await fbSet("employees",updated);closeBS();toast("✓ Cambios guardados");
-}
-window.saveEditEmp=saveEditEmp;
+window.saveEditEmp=async id=>{
+  const v=getV("ed_");
+  if(!v.name){toast("El nombre no puede estar vacío");return;}
+  const emps=S.employees.map(e=>e.id===id?{...e,...v}:e);
+  await fbSet("employees",emps);
+  closeBS(); toast("✓ Cambios guardados");
+};
 
-function openExtras(id){
-  const e=(S.employees||[]).find(x=>x.id===id);if(!e)return;
+window.toggleHid=async id=>{
+  const emps=S.employees.map(e=>e.id===id?{...e,hidden:!e.hidden}:e);
+  await fbSet("employees",emps);
+};
+
+window.removeEmp=async id=>{
+  if(!confirm("¿Eliminar este empleado?"))return;
+  const emps=S.employees.filter(e=>e.id!==id);
+  await fbSet("employees",emps);
+  toast("✓ Empleado eliminado");
+};
+
+// Extras
+window.openExtras=id=>{
+  const e=S.employees.find(x=>x.id===id);if(!e)return;
   const c=calc(e);
   openBS(`
     <div class="bsheet-hdr"><h3>Horas Extra — ${e.name}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
     <div class="bsheet-body">
-      <div style="padding:10px;background:var(--bg2);border-radius:8px;margin-bottom:12px;font-family:var(--mono);font-size:12px">
-        ${$(e.salary)} ÷ ${e.horasMes}h = <strong style="color:var(--gold)">${$(c.valorHora)}/h</strong>
-      </div>
+      <div style="padding:8px 12px;background:var(--bg2);border:1px solid rgba(212,168,67,.2);border-radius:8px;margin-bottom:12px;font-size:12px;font-family:var(--mono);color:var(--txt1)">${fmtM(e.salary)} ÷ ${e.horasMes}h = <strong style="color:var(--gold)">${fmtM(c.valorH)}/h</strong></div>
       <div class="frow">
-        <div class="fg"><label class="fl">Horas</label><input class="fi" id="ex_h" type="number" value="1" min="0.5" step="0.5" oninput="updExPrev(${c.valorHora})"></div>
-        <div class="fg"><label class="fl">Descripción</label><input class="fi" id="ex_d" placeholder="Ej: Sábado tarde"></div>
+        <div class="fg"><label class="fl">Horas</label><input class="fi" id="ex_h" type="number" value="1" min="0.5" step="0.5" oninput="updExPrev(${c.valorH})"></div>
+        <div class="fg"><label class="fl">Descripción</label><input class="fi" id="ex_d" placeholder="Sábado tarde"></div>
       </div>
-      <div class="fhint" id="ex_prev">Total: ${$(c.valorHora)}</div>
+      <div class="fhint" id="ex_prev">Total: ${fmtM(c.valorH)}</div>
+      ${(e.extras||[]).length?`<div style="margin-top:12px">
+        <div class="stitle">Registradas</div>
+        ${(e.extras||[]).map((ex,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+          <span style="flex:1;color:var(--txt1)">${ex.desc||"Hora extra"}</span>
+          <span style="font-family:var(--mono)">${ex.horas}h</span>
+          <span style="font-family:var(--mono);color:var(--gold)">${fmtM(c.valorH*ex.horas)}</span>
+          <button class="btn-icon danger" onclick="removeExtra(${id},${i})" style="width:24px;height:24px;font-size:11px">×</button>
+        </div>`).join("")}
+      </div>`:""}
     </div>
-    <div class="bsheet-foot">
-      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
-      <button class="btn-gold" style="flex:2" onclick="saveExtra(${id})">Agregar</button>
-    </div>
+    <div class="bsheet-foot"><button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button><button class="btn-gold" style="flex:2" onclick="saveExtra(${id})">Agregar</button></div>
   `);
-}
-window.openExtras=openExtras;
-
-function updExPrev(vh){
-  const h=parseFloat(document.getElementById("ex_h")?.value)||0;
-  const el=document.getElementById("ex_prev");
-  if(el)el.innerHTML=`Total: <b style="color:var(--gold)">${$(vh*h)}</b> (${$(vh)} × ${h}h)`;
-}
-window.updExPrev=updExPrev;
-
-async function saveExtra(id){
+};
+window.updExPrev=vh=>{const h=parseFloat(document.getElementById("ex_h")?.value)||0;const el=document.getElementById("ex_prev");if(el)el.innerHTML=`Total: <strong style="color:var(--gold)">${fmtM(vh*h)}</strong>`;};
+window.saveExtra=async id=>{
   const h=parseFloat(document.getElementById("ex_h")?.value)||0;
   const d=document.getElementById("ex_d")?.value||"Hora extra";
-  if(!h||h<=0){alert("Horas inválidas");return;}
-  const updated=(S.employees||[]).map(e=>e.id===id?{...e,extras:[...(e.extras||[]),{horas:h,desc:d}]}:e);
-  await fbSet("employees",updated);closeBS();toast(`✓ ${h}h registradas`);
-}
-window.saveExtra=saveExtra;
+  if(!h){toast("Ingresá las horas");return;}
+  const emps=S.employees.map(e=>e.id===id?{...e,extras:[...(e.extras||[]),{horas:h,desc:d}]}:e);
+  await fbSet("employees",emps); closeBS(); toast(`✓ ${h}h extra registradas`);
+};
+window.removeExtra=async(eid,idx)=>{
+  const emps=S.employees.map(e=>e.id===eid?{...e,extras:(e.extras||[]).filter((_,i)=>i!==idx)}:e);
+  await fbSet("employees",emps); render();
+};
 
-async function removeExtra(eid,idx){
-  const updated=(S.employees||[]).map(e=>e.id===eid?{...e,extras:(e.extras||[]).filter((_,i)=>i!==idx)}:e);
-  await fbSet("employees",updated);
-}
-window.removeExtra=removeExtra;
+// ══════════════════ ASISTENCIA ACTIONS ══════════════════
+window.ficharAsist=async id=>{
+  const emp=S.employees.find(e=>e.id===id);if(!emp)return;
+  const hoy=todayStr(); const now=nowStr();
+  const asist=[...(emp.asistencia||[])];
+  const idx=asist.findIndex(r=>r.fecha===hoy);
+  if(idx===-1){asist.push({fecha:hoy,entrada:now,salida:null,descanso:30,nota:""});toast("✅ Entrada registrada — "+now);}
+  else if(!asist[idx].salida){asist[idx]={...asist[idx],salida:now};toast("✅ Salida registrada — "+now);}
+  else{toast("Ya registraste entrada y salida hoy");return;}
+  const emps=S.employees.map(e=>e.id===id?{...e,asistencia:asist}:e);
+  await fbSet("employees",emps);
+};
 
-// ── ADELANTOS ──
-function openAdelantos(id){
-  const e=(S.employees||[]).find(x=>x.id===id);if(!e)return;
-  const pendientes=(e.adelantos||[]).filter(a=>!a.cobrado);
+window.openEditReg=(id,fecha)=>{
+  const emp=S.employees.find(e=>e.id===id);if(!emp)return;
+  const reg=(emp.asistencia||[]).find(r=>r.fecha===fecha)||{fecha,entrada:"08:00",salida:"17:00",descanso:30,nota:""};
   openBS(`
-    <div class="bsheet-hdr"><h3>Adelantos — ${e.name}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
+    <div class="bsheet-hdr"><h3>Editar registro — ${fecha}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
     <div class="bsheet-body">
-      <div style="font-size:12px;color:var(--txt2);margin-bottom:10px">Los adelantos se descuentan automáticamente de la próxima quincena.</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">${emp.name}</div>
       <div class="frow">
-        <div class="fg"><label class="fl">Monto ($)</label><input class="fi" id="adv_m" type="number" placeholder="Ej: 10000"></div>
-        <div class="fg"><label class="fl">Descripción</label><input class="fi" id="adv_d" placeholder="Ej: Adelanto 15/5"></div>
+        <div class="fg"><label class="fl">Entrada</label><input class="fi" id="ar_e" type="time" value="${reg.entrada||"08:00"}"></div>
+        <div class="fg"><label class="fl">Salida</label><input class="fi" id="ar_s" type="time" value="${reg.salida||"17:00"}"></div>
       </div>
-      <button class="btn-gold" style="margin-bottom:14px" onclick="saveAdelanto(${id})">Registrar adelanto</button>
-      <div class="stitle">Pendientes de descontar</div>
-      ${pendientes.length===0?`<div style="font-size:12px;color:var(--txt2)">Sin adelantos pendientes.</div>`
-        :pendientes.map((a,i)=>`<div class="disc-item">
-          <div style="flex:1"><div style="font-size:13px;font-weight:600">${a.desc||"Adelanto"}</div>
-            <div style="font-size:11px;color:var(--txt2)">Fecha: ${a.fecha}</div></div>
-          <div style="font-family:var(--mono);font-weight:700;color:var(--danger);margin-right:8px">−${$(a.monto)}</div>
-          <div class="btn-icon btn-danger" onclick="removeAdelanto(${id},${(e.adelantos||[]).indexOf(a)})">×</div>
-        </div>`).join("")}
-    </div>
-  `);
-}
-window.openAdelantos=openAdelantos;
-
-async function saveAdelanto(id){
-  const m=parseFloat(document.getElementById("adv_m")?.value)||0;
-  const d=document.getElementById("adv_d")?.value||"Adelanto";
-  if(!m||m<=0){alert("Monto inválido");return;}
-  const updated=(S.employees||[]).map(e=>e.id===id?{...e,
-    adelantos:[...(e.adelantos||[]),{monto:m,desc:d,fecha:TODAY.toLocaleDateString("es-AR"),cobrado:false}]
-  }:e);
-  await fbSet("employees",updated);closeBS();toast(`✓ Adelanto de ${$(m)} registrado`);
-}
-window.saveAdelanto=saveAdelanto;
-
-async function removeAdelanto(empId,idx){
-  const updated=(S.employees||[]).map(e=>e.id===empId?{...e,adelantos:(e.adelantos||[]).filter((_,i)=>i!==idx)}:e);
-  await fbSet("employees",updated);closeBS();openAdelantos(empId);
-}
-window.removeAdelanto=removeAdelanto;
-
-// ── DESCUENTOS (mercadería/merma) ──
-function openDescuentos(id){
-  const e=(S.employees||[]).find(x=>x.id===id);if(!e)return;
-  const pendientes=(e.descuentos||[]).filter(d=>!d.cobrado);
-  openBS(`
-    <div class="bsheet-hdr"><h3>Descuentos — ${e.name}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
-    <div class="bsheet-body">
-      <div style="font-size:12px;color:var(--txt2);margin-bottom:10px">Mercadería, merma u otros descuentos. Se descuentan de la próxima quincena.</div>
-      <div class="fg"><label class="fl">Tipo</label>
-        <select class="fi" id="desc_tipo" style="appearance:none">
-          <option value="Mercadería">🛒 Mercadería</option>
-          <option value="Merma reponsable">📦 Merma responsable</option>
-          <option value="Faltante de caja">💰 Faltante de caja</option>
-          <option value="Otro">📝 Otro</option>
-        </select>
-      </div>
-      <div class="frow">
-        <div class="fg"><label class="fl">Monto ($)</label><input class="fi" id="desc_m" type="number" placeholder="Ej: 5000"></div>
-        <div class="fg"><label class="fl">Detalle</label><input class="fi" id="desc_d" placeholder="Ej: Gaseosas 6u."></div>
-      </div>
-      <button class="btn-gold" style="margin-bottom:14px" onclick="saveDescuento(${id})">Registrar descuento</button>
-      <div class="stitle">Pendientes de descontar</div>
-      ${pendientes.length===0?`<div style="font-size:12px;color:var(--txt2)">Sin descuentos pendientes.</div>`
-        :pendientes.map((d,i)=>`<div class="disc-item">
-          <div style="flex:1"><div style="font-size:13px;font-weight:600">${d.tipo}: ${d.desc||""}</div>
-            <div style="font-size:11px;color:var(--txt2)">${d.fecha}</div></div>
-          <div style="font-family:var(--mono);font-weight:700;color:var(--danger);margin-right:8px">−${$(d.monto)}</div>
-          <div class="btn-icon btn-danger" onclick="removeDescuento(${id},${(e.descuentos||[]).indexOf(d)})">×</div>
-        </div>`).join("")}
-    </div>
-  `);
-}
-window.openDescuentos=openDescuentos;
-
-async function saveDescuento(id){
-  const m=parseFloat(document.getElementById("desc_m")?.value)||0;
-  const d=document.getElementById("desc_d")?.value||"";
-  const tipo=document.getElementById("desc_tipo")?.value||"Mercadería";
-  if(!m||m<=0){alert("Monto inválido");return;}
-  const updated=(S.employees||[]).map(e=>e.id===id?{...e,
-    descuentos:[...(e.descuentos||[]),{monto:m,desc:d,tipo,fecha:TODAY.toLocaleDateString("es-AR"),cobrado:false}]
-  }:e);
-  await fbSet("employees",updated);closeBS();toast(`✓ Descuento de ${$(m)} registrado`);
-}
-window.saveDescuento=saveDescuento;
-
-async function removeDescuento(empId,idx){
-  const updated=(S.employees||[]).map(e=>e.id===empId?{...e,descuentos:(e.descuentos||[]).filter((_,i)=>i!==idx)}:e);
-  await fbSet("employees",updated);closeBS();openDescuentos(empId);
-}
-window.removeDescuento=removeDescuento;
-
-// ── DETALLE WHATSAPP ──
-function buildWATexts(id){
-  const e=(S.employees||[]).find(x=>x.id===id);if(!e)return{emoji:"",plain:""};
-  const c=calc(e);
-  const p1=getPayDate(S.viewY,S.viewM,1),p2=getPayDate(S.viewY,S.viewM,2);
-  const adelantosList=(e.adelantos||[]).filter(a=>!a.cobrado);
-  const descuentosList=(e.descuentos||[]).filter(d=>!d.cobrado);
-  const dd=diasDesdeIngreso(e.fechaIngreso);
-  const mes=`${MONTHS[S.viewM]} ${S.viewY}`;
-
-  // ── FORMATO EMOJI ──
-  let emoji=`*NOMINA AD* 💼\n`;
-  emoji+=`━━━━━━━━━━━━━━━\n`;
-  emoji+=`👤 *${e.name}*\n`;
-  if(e.position) emoji+=`📋 ${e.position}\n`;
-  if(dd!==null)  emoji+=`📅 ${dd} días en la empresa\n`;
-  emoji+=`━━━━━━━━━━━━━━━\n`;
-  emoji+=`📆 *${mes}*\n\n`;
-  emoji+=`💵 Sueldo base: *${$(e.salary)}*\n`;
-  emoji+=`📊 Días trabajados: *${c.dias}/30*\n`;
-  emoji+=`💰 Proporcional: *${$(c.proporcional)}*\n`;
-  if(c.totalExtras>0){
-    emoji+=`\n⏱️ *Horas extra:*\n`;
-    (e.extras||[]).forEach(ex=>{ emoji+=`   • ${ex.desc||"Extra"} (${ex.horas}h): ${$(c.valorHora*ex.horas)}\n`; });
-    emoji+=`   Total: *${$(c.totalExtras)}*\n`;
-  }
-  emoji+=`\n💼 *Total bruto: ${$(c.totalBruto)}*\n`;
-  emoji+=`🏦 Quincena bruta: *${$(c.quincenaBase)}*\n`;
-  if(adelantosList.length>0){
-    emoji+=`\n⚠️ *Adelantos:*\n`;
-    adelantosList.forEach(a=>{ emoji+=`   • ${a.desc||"Adelanto"} (${a.fecha}): −${$(a.monto)}\n`; });
-  }
-  if(descuentosList.length>0){
-    emoji+=`\n🛒 *Descuentos:*\n`;
-    descuentosList.forEach(d=>{ emoji+=`   • ${d.tipo}${d.desc?": "+d.desc:""} (${d.fecha}): −${$(d.monto)}\n`; });
-  }
-  if(c.adelantos+c.descuentos>0) emoji+=`📉 Total descuentos: *−${$(c.adelantos+c.descuentos)}*\n`;
-  emoji+=`━━━━━━━━━━━━━━━\n`;
-  emoji+=`✅ *QUINCENA NETA: ${$(c.quincenaFinal)}*\n`;
-  emoji+=`━━━━━━━━━━━━━━━\n`;
-  emoji+=`🗓️ 1ra quincena: ${fmtD(p1)}\n`;
-  emoji+=`🗓️ 2da quincena: ${fmtD(p2)}\n`;
-  emoji+=`━━━━━━━━━━━━━━━`;
-
-  // ── FORMATO TEXTO PLANO ──
-  const sep=`---------------`;
-  let plain=`NOMINA AD\n${sep}\n`;
-  plain+=`Empleado: ${e.name}\n`;
-  if(e.position) plain+=`Cargo: ${e.position}\n`;
-  if(dd!==null)  plain+=`Antiguedad: ${dd} dias\n`;
-  plain+=`${sep}\n`;
-  plain+=`Periodo: ${mes}\n\n`;
-  plain+=`Sueldo base: ${$(e.salary)}\n`;
-  plain+=`Dias trabajados: ${c.dias}/30\n`;
-  plain+=`Proporcional: ${$(c.proporcional)}\n`;
-  if(c.totalExtras>0){
-    plain+=`\nHoras extra:\n`;
-    (e.extras||[]).forEach(ex=>{ plain+=`  ${ex.desc||"Extra"} (${ex.horas}h): ${$(c.valorHora*ex.horas)}\n`; });
-    plain+=`  Total: ${$(c.totalExtras)}\n`;
-  }
-  plain+=`\nTotal bruto: ${$(c.totalBruto)}\n`;
-  plain+=`Quincena bruta: ${$(c.quincenaBase)}\n`;
-  if(adelantosList.length>0){
-    plain+=`\nAdelantos a descontar:\n`;
-    adelantosList.forEach(a=>{ plain+=`  ${a.desc||"Adelanto"} (${a.fecha}): -${$(a.monto)}\n`; });
-  }
-  if(descuentosList.length>0){
-    plain+=`\nDescuentos:\n`;
-    descuentosList.forEach(d=>{ plain+=`  ${d.tipo}${d.desc?": "+d.desc:""} (${d.fecha}): -${$(d.monto)}\n`; });
-  }
-  if(c.adelantos+c.descuentos>0) plain+=`Total descuentos: -${$(c.adelantos+c.descuentos)}\n`;
-  plain+=`${sep}\n`;
-  plain+=`QUINCENA NETA: ${$(c.quincenaFinal)}\n`;
-  plain+=`${sep}\n`;
-  plain+=`1ra quincena: ${fmtD(p1)}\n`;
-  plain+=`2da quincena: ${fmtD(p2)}\n`;
-  plain+=sep;
-
-  return{emoji,plain};
-}
-
-let _waMode="emoji"; // "emoji" | "plain"
-let _waTexts={emoji:"",plain:""};
-let _waEmpId=null;
-
-function openWA(id){
-  _waEmpId=id;
-  _waTexts=buildWATexts(id);
-  _waMode="emoji";
-  renderWASheet();
-}
-window.openWA=openWA;
-
-function renderWASheet(){
-  const txt=_waTexts[_waMode];
-  // preview HTML: negrita para *texto*, saltos de línea
-  const preview=txt
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-    .replace(/\*(.*?)\*/g,"<strong>$1</strong>")
-    .replace(/\n/g,"<br>");
-
-  openBS(`
-    <div class="bsheet-hdr"><h3>📲 Detalle WhatsApp</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
-    <div class="bsheet-body">
-
-      <!-- Selector de formato -->
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <button onclick="switchWAMode('emoji')" id="wa-tab-emoji" style="
-          flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;
-          font-family:var(--font);transition:all .15s;
-          background:${_waMode==="emoji"?"var(--goldgs)":"var(--bg2)"};
-          color:${_waMode==="emoji"?"#000":"var(--txt1)"};
-          border:1px solid ${_waMode==="emoji"?"var(--gold3)":"var(--border2)"};
-        ">✨ Con emojis</button>
-        <button onclick="switchWAMode('plain')" id="wa-tab-plain" style="
-          flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;
-          font-family:var(--font);transition:all .15s;
-          background:${_waMode==="plain"?"var(--goldgs)":"var(--bg2)"};
-          color:${_waMode==="plain"?"#000":"var(--txt1)"};
-          border:1px solid ${_waMode==="plain"?"var(--gold3)":"var(--border2)"};
-        ">📄 Texto plano</button>
-      </div>
-
-      <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">
-        ${_waMode==="emoji"
-          ?"Formato con emojis y negritas — ideal para enviar directo por WhatsApp."
-          :"Texto plano sin emojis — compatible con cualquier app de mensajería."}
-      </div>
-
-      <!-- Preview -->
-      <div class="wa-preview">${preview}</div>
-
-    </div>
-    <div class="bsheet-foot" style="flex-direction:column;gap:8px">
-      <button class="btn-gold" onclick="copyWA()">📋 Copiar texto</button>
-      <button class="btn-sec" onclick="sendWA()">💬 Abrir en WhatsApp</button>
-    </div>
-  `);
-}
-
-function switchWAMode(mode){
-  _waMode=mode;
-  renderWASheet();
-}
-window.switchWAMode=switchWAMode;
-
-function copyWA(){
-  const txt=_waTexts[_waMode];
-  if(!txt)return;
-  navigator.clipboard.writeText(txt).then(()=>toast("✓ Copiado al portapapeles"));
-}
-window.copyWA=copyWA;
-
-function sendWA(){
-  const txt=_waTexts[_waMode];
-  if(!txt)return;
-  window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,"_blank");
-}
-window.sendWA=sendWA;
-
-// ── OTRAS ──
-function openAddCo(){
-  openBS(`
-    <div class="bsheet-hdr"><h3>Nueva Empresa</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
-    <div class="bsheet-body">
-      <div class="fg"><label class="fl">Nombre</label><input class="fi" id="co_n" placeholder="Comercio San Martín SRL"></div>
-      <div class="fg"><label class="fl">CUIT (opcional)</label><input class="fi" id="co_c" placeholder="20-12345678-9"></div>
+      <div class="fg"><label class="fl">Descanso (min)</label><input class="fi" id="ar_d" type="number" value="${reg.descanso||30}" min="0"></div>
+      <div class="fg"><label class="fl">Nota</label><input class="fi" id="ar_n" value="${reg.nota||""}" placeholder="Ej: Llegó tarde"></div>
     </div>
     <div class="bsheet-foot">
       <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
-      <button class="btn-gold" style="flex:2" onclick="saveCo()">Crear</button>
+      <button class="btn-gold" style="flex:2" onclick="guardarReg(${id},'${fecha}')">Guardar</button>
     </div>
   `);
+};
+
+window.guardarReg=async(id,fecha)=>{
+  const entrada=document.getElementById("ar_e")?.value;
+  const salida=document.getElementById("ar_s")?.value;
+  const descanso=parseFloat(document.getElementById("ar_d")?.value)||30;
+  const nota=document.getElementById("ar_n")?.value||"";
+  const emp=S.employees.find(e=>e.id===id);if(!emp)return;
+  const asist=[...(emp.asistencia||[])];
+  const idx=asist.findIndex(r=>r.fecha===fecha);
+  if(idx===-1)asist.push({fecha,entrada,salida,descanso,nota});
+  else asist[idx]={...asist[idx],entrada,salida,descanso,nota};
+  const emps=S.employees.map(e=>e.id===id?{...e,asistencia:asist}:e);
+  await fbSet("employees",emps); closeBS(); toast("✓ Registro guardado");
+};
+
+window.verRegHistorial=id=>{
+  const emp=S.employees.find(e=>e.id===id);if(!emp)return;
+  const a=calcAsist(emp);
+  const vh=(parseFloat(emp.salary)||0)/(parseInt(emp.horasMes)||160);
+  openBS(`
+    <div class="bsheet-hdr"><h3>Asistencia — ${emp.name}</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
+    <div class="bsheet-body">
+      <div class="grid2" style="margin-bottom:14px">
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Días presentes</div><div style="font-size:22px;font-weight:700;font-family:var(--mono);color:var(--gold)">${a.dias}<span style="font-size:12px;color:var(--txt2)">/30</span></div></div>
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Horas extra</div><div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--warn)">${fmtH(a.extras)}</div></div>
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Total horas</div><div style="font-size:18px;font-weight:700;font-family:var(--mono)">${fmtH(a.totalH)}</div></div>
+        <div class="csm"><div style="font-size:9px;color:var(--txt2);text-transform:uppercase">Valor extras</div><div style="font-size:16px;font-weight:700;font-family:var(--mono);color:var(--gold)">${fmtM(Math.round(a.extras*vh))}</div></div>
+      </div>
+      ${[...a.regs].reverse().map(r=>{
+        const h=r.entrada&&r.salida?Math.max(0,diffH(r.entrada,r.salida)-((r.descanso||30)/60)):null;
+        const ex=h!==null?Math.max(0,h-a.hpd):0;
+        return`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px">
+          <span style="font-family:var(--mono);color:var(--gold);width:48px;flex-shrink:0">${r.fecha.slice(5)}</span>
+          <span style="flex:1;color:var(--txt1)">${r.entrada||"—"}→${r.salida||"⏳"}</span>
+          ${h!==null?`<span style="font-family:var(--mono);font-weight:600">${fmtH(h)}</span>`:"<span style='color:var(--txt2)'>—</span>"}
+          ${ex>0.1?`<span style="font-size:10px;color:var(--warn)">+${fmtH(ex)}</span>`:""}
+          <button class="btn-icon danger" onclick="eliminarReg(${emp.id},'${r.fecha}')" style="width:24px;height:24px;font-size:11px">×</button>
+        </div>`;
+      }).join("")||`<div style="color:var(--txt2);font-size:13px;padding:20px 0;text-align:center">Sin registros este mes.</div>`}
+    </div>
+  `);
+};
+
+window.toggleExtra=async(id,fecha)=>{
+  const emp=S.employees.find(e=>e.id===id);if(!emp)return;
+  const asist=(emp.asistencia||[]).map(r=>r.fecha===fecha?{...r,esExtra:!r.esExtra}:r);
+  const emps=S.employees.map(e=>e.id===id?{...e,asistencia:asist}:e);
+  await fbSet("employees",emps);
+  toast("Actualizado");
+};
+window.eliminarReg=async(id,fecha)=>{
+  if(!confirm("¿Eliminar registro del "+fecha+"?"))return;
+  const emps=S.employees.map(e=>e.id===id?{...e,asistencia:(e.asistencia||[]).filter(r=>r.fecha!==fecha)}:e);
+  await fbSet("employees",emps); render();
+};
+
+window.aplicarAsist=async id=>{
+  const emp=S.employees.find(e=>e.id===id);if(!emp)return;
+  const a=calcAsist(emp);
+  const vh=(parseFloat(emp.salary)||0)/(parseInt(emp.horasMes)||160);
+  let extras=[...(emp.extras||[]).filter(ex=>!ex.auto)];
+  if(a.extras>0.1) extras.push({horas:Math.round(a.extras*10)/10,desc:`Extras ${MONTHS[S.viewM]} ${S.viewY}`,auto:true});
+  const emps=S.employees.map(e=>e.id===id?{...e,diasTrab:Math.min(30,a.dias),extras}:e);
+  await fbSet("employees",emps);
+  toast(`✓ Aplicado: ${a.dias} días · ${fmtH(a.extras)} extras`);
+};
+
+// ══════════════════ CRONOGRAMA ACTIONS ══════════════════
+window.openNuevoTurno=()=>{
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  const hoy=toKey(new Date());
+  openNuevoTurnoFor(emps[0]?.id||0,hoy);
+};
+window.openNuevoTurnoFor=(empId,fecha)=>{
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  _repeat="dia";
+  const hoy=new Date();
+  const lastDayOfMonth=new Date(hoy.getFullYear(),hoy.getMonth()+1,0).getDate();
+  const fechaFinMes=`${hoy.getFullYear()}-${pad(hoy.getMonth()+1)}-${String(lastDayOfMonth).padStart(2,"0")}`;
+  openBS(`
+    <div class="bsheet-hdr"><h3>Asignar turno</h3><button class="btn-icon" onclick="closeBS()">x</button></div>
+    <div class="bsheet-body">
+      <div class="fg"><label class="fl">Empleado</label>
+        <select class="fi" id="t_emp" style="appearance:none">
+          ${emps.map(e=>`<option value="${e.id}" ${e.id===empId?"selected":""}>${e.name}</option>`).join("")}
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Tipo de turno</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+          <button class="ea-btn" onclick="setTP('08:00','16:00')" style="flex-direction:column;align-items:flex-start;padding:10px 12px;height:auto;gap:2px">
+            <div style="font-weight:700;font-size:12px;color:var(--gold2)">1er Turno - Manana</div>
+            <div style="font-size:10px;color:var(--txt2)">08:00 hasta 16:00</div>
+          </button>
+          <button class="ea-btn" onclick="setTP('16:00','00:00')" style="flex-direction:column;align-items:flex-start;padding:10px 12px;height:auto;gap:2px">
+            <div style="font-weight:700;font-size:12px;color:var(--acc2)">2do Turno - Tarde</div>
+            <div style="font-size:10px;color:var(--txt2)">16:00 hasta 00:00</div>
+          </button>
+          <button class="ea-btn" onclick="setTP('00:00','08:00')" style="flex-direction:column;align-items:flex-start;padding:10px 12px;height:auto;gap:2px">
+            <div style="font-weight:700;font-size:12px;color:var(--txt1)">3er Turno - Noche</div>
+            <div style="font-size:10px;color:var(--txt2)">00:00 hasta 08:00</div>
+          </button>
+          <button class="ea-btn" onclick="setTP('franco','franco')" style="flex-direction:column;align-items:flex-start;padding:10px 12px;height:auto;gap:2px;border-color:rgba(240,82,82,.4)">
+            <div style="font-weight:700;font-size:12px;color:var(--danger)">Franco / Descanso</div>
+            <div style="font-size:10px;color:var(--txt2)">Dia libre sin turno</div>
+          </button>
+        </div>
+      </div>
+      <div class="frow" id="t_custom_row">
+        <div class="fg"><label class="fl">Hora inicio</label><input class="fi" id="t_ini" type="time" value="08:00"></div>
+        <div class="fg"><label class="fl">Hora fin</label><input class="fi" id="t_fin" type="time" value="16:00"></div>
+      </div>
+      <input type="hidden" id="t_is_franco" value="0">
+      <div class="fg">
+        <label class="fl">Repetir en</label>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="ea-btn on" id="rb_dia" onclick="setRep('dia')" style="flex:1;font-size:11px">Solo hoy</button>
+          <button class="ea-btn" id="rb_semana" onclick="setRep('semana')" style="flex:1;font-size:11px">Esta semana</button>
+          <button class="ea-btn" id="rb_mes" onclick="setRep('mes')" style="flex:1;font-size:11px">Todo el mes</button>
+          <button class="ea-btn" id="rb_rango" onclick="setRep('rango')" style="flex:1;font-size:11px">Rango</button>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Fecha inicio</label><input class="fi" id="t_fecha" type="date" value="${fecha}"></div>
+      <div class="fg" id="t_fecha_fin_row" style="display:none"><label class="fl">Fecha fin</label><input class="fi" id="t_fecha_fin" type="date" value="${fechaFinMes}"></div>
+      <div class="fg"><label class="fl">Tarea / descripcion</label><input class="fi" id="t_tarea" placeholder="Ej: Atencion al cliente..."></div>
+    </div>
+    <div class="bsheet-foot">
+      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
+      <button class="btn-gold" style="flex:2" onclick="guardarTurno()">Guardar</button>
+    </div>
+  `);
+};
+
+window.setTP=(ini,fin)=>{
+  const isFranco=ini==="franco";
+  document.getElementById("t_is_franco").value=isFranco?"1":"0";
+  if(!isFranco){document.getElementById("t_ini").value=ini;document.getElementById("t_fin").value=fin;}
+  document.getElementById("t_custom_row").style.opacity=isFranco?"0.4":"1";
+};
+let _repeat="dia";
+window.setRep=(mode)=>{
+  _repeat=mode;
+  ["dia","semana","mes","rango"].forEach(m=>{const el=document.getElementById("rb_"+m);if(el)el.classList.toggle("on",m===mode);});
+  document.getElementById("t_fecha_fin_row").style.display=(mode==="dia"||mode==="semana"||mode==="mes")?"none":"block";
+};
+window.guardarTurno=async()=>{
+  const empId=parseInt(document.getElementById("t_emp")?.value)||0;
+  const fechaInicio=document.getElementById("t_fecha")?.value;
+  const horaInicio=document.getElementById("t_ini")?.value||"08:00";
+  const horaFin=document.getElementById("t_fin")?.value||"16:00";
+  const tarea=document.getElementById("t_tarea")?.value||"";
+  const isFranco=document.getElementById("t_is_franco")?.value==="1";
+  if(!empId||!fechaInicio){toast("Selecciona empleado y fecha");return;}
+
+  // Build date range
+  const fechas=[];
+  const fStart=new Date(fechaInicio+"T00:00:00");
+  let fEnd=new Date(fStart);
+  if(_repeat==="semana"){
+    // rest of this week (Mon-Sun)
+    const dow=fStart.getDay();
+    fEnd=new Date(fStart);fEnd.setDate(fStart.getDate()+(6-dow));
+  } else if(_repeat==="mes"){
+    fEnd=new Date(fStart.getFullYear(),fStart.getMonth()+1,0);
+  } else if(_repeat==="rango"){
+    const ff=document.getElementById("t_fecha_fin")?.value;
+    if(ff) fEnd=new Date(ff+"T00:00:00");
+  }
+
+  for(let d=new Date(fStart);d<=fEnd;d.setDate(d.getDate()+1)){
+    fechas.push(toKey(new Date(d)));
+  }
+
+  // Remove existing, add new
+  let cronos=[...(S.cronograma||[]).filter(t=>!(t.empId===empId&&fechas.includes(t.fecha)))];
+  fechas.forEach(f=>{
+    cronos.push({
+      id:"t"+Date.now()+Math.random().toString(36).slice(2,7),
+      empId,fecha:f,horaInicio:isFranco?"FRANCO":horaInicio,
+      horaFin:isFranco?"FRANCO":horaFin,tarea,franco:isFranco
+    });
+  });
+  await fbSet("cronograma",cronos);
+  closeBS();
+  toast(`${fechas.length} dia${fechas.length!==1?"s":""} asignados${isFranco?" (franco)":""}`);
+  _repeat="dia";
+};
+window.eliminarTurno=async id=>{
+  if(!confirm("¿Eliminar este turno?"))return;
+  const cronos=(S.cronograma||[]).filter(t=>t.id!==id);
+  await fbSet("cronograma",cronos); toast("✓ Turno eliminado");
+};
+window.enviarNotif=async()=>{
+  const txt=document.getElementById("notif-txt")?.value?.trim();
+  if(!txt){toast("Escribí un mensaje");return;}
+  const notifs=[{texto:txt,fecha:new Date().toLocaleDateString("es-AR"),hora:nowStr(),de:currentUser?.email?.split("@")[0]||"Admin",ts:Date.now()},...(S.notificaciones||[])].slice(0,50);
+  await fbSet("notificaciones",notifs);
+  document.getElementById("notif-txt").value="";
+  toast("✅ Aviso enviado");
+};
+
+// ══════════════════ CREATE ACCOUNT ══════════════════
+window.openCrearCuenta=()=>{
+  if(currentRole!=="admin"){toast("Solo admins pueden crear cuentas");return;}
+  openBS(`
+    <div class="bsheet-hdr"><h3>Crear usuario nuevo</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
+    <div class="bsheet-body">
+      <div class="fg"><label class="fl">Nombre</label><input class="fi" id="cc_name" placeholder="Juan Pérez"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="cc_email" type="email" placeholder="empleado@email.com"></div>
+      <div class="fg"><label class="fl">Contraseña</label><input class="fi" id="cc_pass" type="password" placeholder="Mín. 6 caracteres"></div>
+      <div class="fg"><label class="fl">Rol</label>
+        <select class="fi" id="cc_role" style="appearance:none">
+          <option value="admin">👑 Administrador</option>
+          <option value="viewer">👁 Solo lectura</option>
+        </select>
+      </div>
+    </div>
+    <div class="bsheet-foot">
+      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
+      <button class="btn-gold" style="flex:2" onclick="guardarCuenta()">Crear cuenta</button>
+    </div>
+    <div id="cc_err" style="display:none;margin:0 18px 8px;padding:8px 12px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.3);border-radius:8px;font-size:12px;color:var(--danger)"></div>
+    <div id="cc_ok" style="display:none;margin:0 18px 8px;padding:8px 12px;background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.3);border-radius:8px;font-size:12px;color:var(--ok)"></div>
+  `);
+};
+window.guardarCuenta=async()=>{
+  const name=document.getElementById("cc_name")?.value?.trim();
+  const email=document.getElementById("cc_email")?.value?.trim();
+  const pass=document.getElementById("cc_pass")?.value;
+  const role=document.getElementById("cc_role")?.value;
+  const err=document.getElementById("cc_err"),ok=document.getElementById("cc_ok");
+  err.style.display="none"; ok.style.display="none";
+  if(!name||!email||!pass){err.textContent="Completá todos los campos";err.style.display="block";return;}
+  if(pass.length<6){err.textContent="Contraseña mínimo 6 caracteres";err.style.display="block";return;}
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,email,pass);
+    await set(ref(db,`nomina/${ROOM}/users/${cred.user.uid}`),{name,email,role,ts:Date.now()});
+    ok.textContent=`✓ Cuenta creada para ${name}`;ok.style.display="block";
+    ["cc_name","cc_email","cc_pass"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  }catch(e){
+    const m={"auth/email-already-in-use":"Ya existe una cuenta con ese email.","auth/weak-password":"Contraseña muy débil."};
+    err.textContent=m[e.code]||"Error: "+e.message; err.style.display="block";
+  }
+};
+
+// ══════════════════ BSHEET ══════════════════
+function openBS(html){
+  document.getElementById("bsheet-content").innerHTML=html;
+  document.getElementById("bsheet-overlay").classList.add("open");
 }
-window.openAddCo=openAddCo;
+function closeBS(){ document.getElementById("bsheet-overlay").classList.remove("open"); }
+function bsClickOut(e){ if(e.target===document.getElementById("bsheet-overlay")) closeBS(); }
+window.openBS=openBS; window.closeBS=closeBS; window.bsClickOut=bsClickOut;
 
-async function saveCo(){
-  const n=document.getElementById("co_n")?.value?.trim();
-  if(!n){alert("Ingresá el nombre");return;}
-  const id=Date.now();
-  await fbSet("companies",[...(S.companies||[]),{id,name:n,cuit:document.getElementById("co_c")?.value||""}]);
-  closeBS();toast("✓ Empresa creada");
-}
-window.saveCo=saveCo;
-
-async function toggleHid(id){const u=(S.employees||[]).map(e=>e.id===id?{...e,hidden:!e.hidden}:e);await fbSet("employees",u);}
-async function removeEmp(id){if(!confirm("¿Eliminar?"))return;await fbSet("employees",(S.employees||[]).filter(e=>e.id!==id));}
-function prevMonth(){if(S.viewM===0){S.viewM=11;S.viewY--;}else S.viewM--;document.getElementById("mlabel").textContent=`${MONTHS[S.viewM].slice(0,3).toUpperCase()} ${S.viewY}`;render();}
-function nextMonth(){if(S.viewM===11){S.viewM=0;S.viewY++;}else S.viewM++;document.getElementById("mlabel").textContent=`${MONTHS[S.viewM].slice(0,3).toUpperCase()} ${S.viewY}`;render();}
-window.toggleHid=toggleHid;window.removeEmp=removeEmp;window.prevMonth=prevMonth;window.nextMonth=nextMonth;
-
-async function limpiarHist(){if(!confirm("¿Limpiar historial?"))return;await fbSet("historial",{});}
-window.limpiarHist=limpiarHist;
-
-function openCrearCuenta(){
-  if(currentRole!=="admin"){toast("⚠ Solo los administradores pueden crear cuentas");return;}
-  document.getElementById("app").style.display="none";
-  document.getElementById("setup-screen").style.display="flex";
-  showRegister();
-}
-window.openCrearCuenta=openCrearCuenta;
-
-function shareLink(){
-  const url=new URL(location.href);url.searchParams.set("room",ROOM);
-  navigator.clipboard.writeText(url.toString()).then(()=>toast("✓ Link copiado"));
-}
-window.shareLink=shareLink;
-
-function openSearch(){
+// ══════════════════ SEARCH ══════════════════
+window.openSearch=()=>{
   openBS(`
     <div class="bsheet-hdr"><h3>Buscar empleado</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
     <div class="bsheet-body">
-      <input class="fi" id="search-inp" placeholder="Nombre o cargo..." oninput="doSearch(this.value)" style="font-size:16px">
-      <div id="search-results" style="margin-top:12px"></div>
+      <input class="fi" id="search-inp" placeholder="Nombre o cargo..." oninput="S.search=this.value;render()" autofocus>
     </div>
   `);
-  setTimeout(()=>document.getElementById("search-inp")?.focus(),100);
-}
-window.openSearch=openSearch;
+};
 
-function doSearch(v){
-  S.search=v;
-  const emps=actEmps();
-  const el=document.getElementById("search-results");
-  if(!el)return;
-  el.innerHTML=emps.map(e=>{const c=calc(e);return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)" onclick="closeBS();setTab('empleados')">
-    <div class="emp-av" style="background:${e.color}22;color:${e.color};width:36px;height:36px;font-size:13px">${e.name.charAt(0)}</div>
-    <div style="flex:1"><div style="font-size:13px;font-weight:600">${e.name}</div><div style="font-size:11px;color:var(--txt2)">${e.position||""}</div></div>
-    <div style="font-family:var(--mono);font-size:12px;color:var(--gold)">${$(c.totalBruto)}</div>
-  </div>`;}).join("")||`<div style="color:var(--txt2);font-size:13px">Sin resultados</div>`;
-}
-window.doSearch=doSearch;
-
-function exportCSV(){
-  const emps=(S.employees||[]).filter(e=>!e.hidden);
-  const rows=[["Nombre","Género","Cargo","Fecha Ingreso","Sueldo","Días","Diario","Hora","Extras","Adelantos","Descuentos","Bruto","Quincena Neta","Anual"]];
-  emps.forEach(e=>{const c=calc(e);rows.push([e.name,e.gender==="F"?"Femenino":"Masculino",e.position||"",e.fechaIngreso||"",e.salary,e.diasTrab,Math.round(c.diario),Math.round(c.valorHora),Math.round(c.totalExtras),Math.round(c.adelantos),Math.round(c.descuentos),Math.round(c.totalBruto),Math.round(c.quincenaFinal),e.salary*12]);});
+// ══════════════════ EXPORT ══════════════════
+window.exportCSV=()=>{
+  const emps=S.employees.filter(e=>!e.hidden);
+  const rows=[["Nombre","Género","Cargo","Sueldo Base","Días","Diario","Hora","Quincena","Mensual","Anual"]];
+  emps.forEach(e=>{const c=calc(e);rows.push([e.name,e.gender==="F"?"F":"M",e.position||"",e.salary,e.diasTrab||30,Math.round(c.diario),Math.round(c.valorH),Math.round(c.qFinal),Math.round(c.bruto),e.salary*12]);});
   const csv=rows.map(r=>r.join(";")).join("\n");
-  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}));a.download=`NOMINA_AD_${MONTHS[S.viewM]}_${S.viewY}.csv`;a.click();toast("✓ CSV exportado");
-}
-window.exportCSV=exportCSV;
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}));
+  a.download=`NOMINAAD_${MONTHS[S.viewM]}_${S.viewY}.csv`;
+  a.click(); toast("✓ CSV exportado");
+};
 
+// ══════════════════ TOAST ══════════════════
 function toast(msg){
+  document.querySelectorAll(".toast").forEach(t=>t.remove());
   const t=document.createElement("div");
-  t.style.cssText="position:fixed;bottom:calc(var(--tab-h) + var(--safe-bot) + 10px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--gold3)55;border-radius:20px;padding:10px 18px;font-size:12px;z-index:500;animation:fadeUp .2s ease;font-family:var(--font);color:var(--gold);box-shadow:0 4px 20px #000a;font-weight:600;white-space:nowrap";
-  t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);
+  t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
 }
+window.toast=toast;
 
-// ── RENDER ──
-function render(){
-  renderNotifs();
-  const views={
-    dashboard:vDashboard,calendario:vCalendario,empleados:vEmpleados,
-    horas:vHoras,calc:vCalc,mas:vMas,anual:vAnual,empresas:vEmpresas,
-  };
-  const fn=views[S.tab];
-  document.getElementById("content-area").innerHTML=fn?fn():"";
-  document.getElementById("mlabel").textContent=`${MONTHS[S.viewM].slice(0,3).toUpperCase()} ${S.viewY}`;
-}
+// Initial Firebase connection for kiosk (without auth)
+// Kiosk can use the main db once initialized
+
 </script>
 </body>
 </html>
