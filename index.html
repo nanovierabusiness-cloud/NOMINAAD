@@ -285,20 +285,26 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
     order:-1;flex-shrink:0;
     background:rgba(10,10,20,.98);
     backdrop-filter:blur(20px);
+    overflow-y:auto;overflow-x:hidden;
   }
   #tabs::before{display:none}
   #tabs::after{content:'';position:absolute;top:0;right:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold)40,transparent)}
-  .tab-btn{flex-direction:column;gap:5px;padding:16px 4px;font-size:9px;border-right:none;border-left:3px solid transparent;border-bottom:none;transition:all .2s}
+  .tab-btn{flex-direction:column;gap:4px;padding:14px 4px;font-size:9px;border-right:none;border-left:3px solid transparent;border-bottom:none;transition:all .2s;min-height:70px}
   .tab-btn.active{border-left-color:var(--gold);background:linear-gradient(90deg,var(--gold)10,transparent)}
   .tab-btn.active .ti{transform:none}
-  .tab-btn .ti{font-size:24px}
-  #topbar{padding:12px 22px}
-  #content-area{flex:1;min-width:0}
+  .tab-btn .ti{font-size:22px}
+  #topbar{padding:12px 20px}
+  #content-area{flex:1;min-width:0;overflow-x:hidden}
   #conn-badge{left:90px}
 }
 @media(min-width:1024px){
-  #tabs{width:96px}
-  .tab-btn{font-size:10px;padding:18px 4px}
+  #tabs{width:90px}
+  .tab-btn{font-size:10px;padding:16px 4px}
+}
+@media(min-width:1280px){
+  #tabs{width:110px}
+  .tab-btn{font-size:11px;padding:18px 8px}
+  .tab-btn .ti{font-size:24px}
 }
 </style>
 </head>
@@ -309,7 +315,35 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
   <div class="setup-box">
     <div class="setup-title">NOMINA AD</div>
     <div class="setup-sub">Gestión de Sueldos</div>
-    <div id="login-form">
+    <!-- Landing: choose role -->
+    <div id="landing-form">
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+        <button onclick="showLoginForm('admin')" style="
+          display:flex;align-items:center;gap:14px;padding:16px 18px;
+          background:var(--bg2);border:1px solid var(--gold)44;border-radius:14px;
+          cursor:pointer;text-align:left;font-family:var(--font);transition:all .15s;width:100%">
+          <div style="font-size:28px;flex-shrink:0">👑</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--gold2)">Administrador</div>
+            <div style="font-size:11px;color:var(--txt2);margin-top:2px">Gestión completa de sueldos y equipo</div>
+          </div>
+        </button>
+        <button onclick="showKioskDirect()" style="
+          display:flex;align-items:center;gap:14px;padding:16px 18px;
+          background:var(--bg2);border:1px solid var(--ok)44;border-radius:14px;
+          cursor:pointer;text-align:left;font-family:var(--font);transition:all .15s;width:100%">
+          <div style="font-size:28px;flex-shrink:0">🕐</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--ok)">Empleado — Fichar</div>
+            <div style="font-size:11px;color:var(--txt2);margin-top:2px">Registrar entrada y salida con PIN</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin login form -->
+    <div id="login-form" style="display:none">
+      <button onclick="showLanding()" style="background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;padding:0;font-family:var(--font);margin-bottom:16px;display:flex;align-items:center;gap:4px">← Volver</button>
       <div class="fg"><label class="fl">Email</label><input class="fi" id="auth-email" type="email" placeholder="tumail@email.com" autocomplete="email" style="font-size:15px"></div>
       <div class="fg"><label class="fl">Contraseña</label>
         <div style="position:relative">
@@ -336,7 +370,7 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
         </select>
       </div>
       <div style="margin-top:14px;display:flex;gap:8px">
-        <button class="btn-sec" style="flex:1" onclick="showLogin()">← Volver</button>
+        <button class="btn-sec" style="flex:1" onclick="showLanding()">← Volver</button>
         <button class="btn-gold" style="flex:2" onclick="doRegister()">Crear cuenta</button>
       </div>
       <div id="reg-err" style="display:none;margin-top:8px;padding:8px;background:var(--danger)15;border:1px solid var(--danger)44;border-radius:8px;font-size:12px;color:var(--danger)"></div>
@@ -373,8 +407,8 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
     <button class="tab-btn active" data-tab="dashboard" onclick="setTab('dashboard')"><div class="ti">📊</div><div>Inicio</div></button>
     <button class="tab-btn" data-tab="calendario" onclick="setTab('calendario')"><div class="ti">📅</div><div>Pagos</div></button>
     <button class="tab-btn" data-tab="empleados" onclick="setTab('empleados')"><div class="ti">👥</div><div>Equipo</div></button>
+    <button class="tab-btn" data-tab="cronograma" onclick="setTab('cronograma')"><div class="ti">📋</div><div>Turnos</div></button>
     <button class="tab-btn" data-tab="asistencia" onclick="setTab('asistencia')"><div class="ti">🕐</div><div>Asist.</div></button>
-    <button class="tab-btn" data-tab="calc" onclick="setTab('calc')"><div class="ti">🧮</div><div>Calc</div></button>
     <button class="tab-btn" data-tab="mas" onclick="setTab('mas')"><div class="ti">☰</div><div>Más</div></button>
   </div>
 </div>
@@ -397,12 +431,14 @@ body{background:var(--bg0);font-family:var(--font);color:var(--txt0);overscroll-
     <div id="kiosk-date" class="kiosk-date"></div>
     <div id="kiosk-step-content"></div>
   </div>
-  <button onclick="closeKiosk()" style="margin-top:20px;background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;font-family:var(--font)">← Volver al admin</button>
+  <div id="kiosk-back-btn" style="margin-top:20px">
+    <button onclick="closeKioskToLogin()" style="background:none;border:none;color:var(--txt2);font-size:12px;cursor:pointer;font-family:var(--font)">← Volver al inicio</button>
+  </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // ── CONSTANTES ──
@@ -490,15 +526,35 @@ let currentUser=null,currentRole="viewer";
 let S={
   tab:"dashboard",viewY:TODAY.getFullYear(),viewM:TODAY.getMonth(),
   search:"",dismissedN:new Set(),
-  employees:[],paid:{},historial:[],companies:[],
+  employees:[],paid:{},historial:[],companies:[],cronograma:[],notificaciones:[],
 };
 let _loaded=false;
 
 // ── AUTH UI ──
-function showLogin(){document.getElementById("login-form").style.display="block";document.getElementById("register-form").style.display="none";}
-function showRegister(){document.getElementById("login-form").style.display="none";document.getElementById("register-form").style.display="block";}
+function showLanding(){
+  document.getElementById("landing-form").style.display="block";
+  document.getElementById("login-form").style.display="none";
+  document.getElementById("register-form").style.display="none";
+}
+function showLoginForm(role){
+  document.getElementById("landing-form").style.display="none";
+  document.getElementById("login-form").style.display="block";
+  document.getElementById("register-form").style.display="none";
+}
+function showKioskDirect(){
+  document.getElementById("setup-screen").style.display="none";
+  openKiosk(false);
+}
+function showLogin(){
+  showLanding();
+}
+function showRegister(){
+  document.getElementById("login-form").style.display="none";
+  document.getElementById("landing-form").style.display="none";
+  document.getElementById("register-form").style.display="block";
+}
 function togglePassVis(){const i=document.getElementById("auth-pass"),e=document.getElementById("pass-eye");if(i.type==="password"){i.type="text";e.textContent="🙈";}else{i.type="password";e.textContent="👁";}}
-window.showLogin=showLogin;window.showRegister=showRegister;window.togglePassVis=togglePassVis;
+window.showLogin=showLogin;window.showRegister=showRegister;window.togglePassVis=togglePassVis;window.showLanding=showLanding;window.showLoginForm=showLoginForm;window.showKioskDirect=showKioskDirect;
 
 async function doLogin(){
   const email=document.getElementById("auth-email").value.trim();
@@ -525,7 +581,14 @@ async function doRegister(){
   try{
     const cred=await createUserWithEmailAndPassword(auth,email,pass);
     await set(ref(db,"nomina/"+ROOM+"/users/"+cred.user.uid),{name,email,role,createdAt:Date.now()});
-    okEl.textContent="Cuenta creada para "+name+". Ya puede iniciar sesión.";okEl.style.display="block";
+    okEl.textContent="✓ Cuenta creada para "+name+". Ya puede iniciar sesión desde la pantalla de inicio.";okEl.style.display="block";
+    // Auto-return to app after 2 seconds
+    setTimeout(()=>{
+      if(currentUser&&_loaded){
+        document.getElementById("setup-screen").style.display="none";
+        document.getElementById("app").style.display="flex";
+      }else{showLanding();}
+    },2500);
     document.getElementById("reg-name").value="";document.getElementById("reg-email").value="";document.getElementById("reg-pass").value="";
   }catch(e){
     const m={"auth/email-already-in-use":"Ya existe una cuenta con ese email.","auth/weak-password":"Contraseña muy débil.","auth/invalid-email":"Email inválido."};
@@ -550,8 +613,9 @@ async function doLogout(){
   await signOut(auth);
   currentUser=null;currentRole="viewer";_loaded=false;
   document.getElementById("app").style.display="none";
+  document.getElementById("kiosk-screen").style.display="none";
   document.getElementById("setup-screen").style.display="flex";
-  showLogin();
+  showLanding();
 }
 window.doLogout=doLogout;
 
@@ -575,8 +639,10 @@ window.addEventListener("load",()=>{
       },{onlyOnce:true});
     }else{
       document.getElementById("setup-screen").style.display="flex";
+      document.getElementById("kiosk-screen").style.display="none";
       document.getElementById("app").style.display="none";
       _loaded=false;
+      showLanding();
     }
   });
 });
@@ -611,6 +677,8 @@ function iniciarSync(){
     S.employees=data.employees?Object.values(data.employees):[];
     S.paid=data.paid||{};
     S.historial=data.historial?Object.values(data.historial).sort((a,b)=>b._ts-a._ts):[];
+    S.cronograma=data.cronograma?Object.values(data.cronograma):[];
+    S.notificaciones=data.notificaciones?Object.values(data.notificaciones).sort((a,b)=>(b.ts||0)-(a.ts||0)):[];
     if(!_loaded){
       _loaded=true;
       document.getElementById("setup-screen").style.display="none";
@@ -622,8 +690,14 @@ function iniciarSync(){
 }
 
 async function fbSet(path,val){
-  if(currentRole!=="admin"){toast("⚠ Solo los administradores pueden modificar datos");return;}
-  setConn("syncing","Guardando...");await set(ref(db,`nomina/${ROOM}/${path}`),val);setConn("online","");
+  // Viewers can only write to employees (for attendance) and notifications
+  const allowedForViewer=path.startsWith("employees")||path.startsWith("notificaciones");
+  if(currentRole!=="admin"&&!allowedForViewer){
+    toast("⚠ Solo los administradores pueden modificar datos");return;
+  }
+  setConn("syncing","Guardando...");
+  await set(ref(db,`nomina/${ROOM}/${path}`),val);
+  setConn("online","");
 }
 
 // ── STATE ──
@@ -1040,6 +1114,7 @@ function vMas(){
         <button class="btn-sec" onclick="shareLink()">🔗 Compartir link de acceso</button>
         <button class="btn-sec" onclick="exportCSV()">📊 Exportar CSV / Excel</button>
         <button class="btn-sec" onclick="window.print()">🖨️ Imprimir / PDF</button>
+        <button class="btn-sec" onclick="setTab('cronograma')">📋 Cronograma de turnos</button>
         <button class="btn-sec" onclick="setTab('asistencia')">🕐 Asistencia</button>
         <button class="btn-sec" onclick="setTab('anual')">📈 Resumen Anual</button>
         <button class="btn-sec" onclick="setTab('empresas')">🏢 Empresas</button>
@@ -1573,8 +1648,12 @@ window.limpiarHist=limpiarHist;
 function openCrearCuenta(){
   if(currentRole!=="admin"){toast("⚠ Solo los administradores pueden crear cuentas");return;}
   document.getElementById("app").style.display="none";
+  document.getElementById("kiosk-screen").style.display="none";
   document.getElementById("setup-screen").style.display="flex";
-  showRegister();
+  // Show register form, with back going to app
+  document.getElementById("landing-form").style.display="none";
+  document.getElementById("login-form").style.display="none";
+  document.getElementById("register-form").style.display="block";
 }
 window.openCrearCuenta=openCrearCuenta;
 
@@ -1895,7 +1974,8 @@ let _kioskPin="";        // pin ingresado
 let _kioskStep="select"; // select | pin | result
 let _kioskClockInt=null;
 
-function openKiosk(){
+function openKiosk(fromAdmin=true){
+  document.getElementById("app").style.display="none";
   document.getElementById("kiosk-screen").style.display="flex";
   _kioskStep="select";_kioskEmp=null;_kioskPin="";
   startKioskClock();
@@ -1906,8 +1986,23 @@ window.openKiosk=openKiosk;
 function closeKiosk(){
   document.getElementById("kiosk-screen").style.display="none";
   clearInterval(_kioskClockInt);
+  // If admin is logged in, show app, else show login landing
+  if(currentUser&&_loaded){
+    document.getElementById("app").style.display="flex";
+  }
+}
+function closeKioskToLogin(){
+  document.getElementById("kiosk-screen").style.display="none";
+  clearInterval(_kioskClockInt);
+  if(currentUser&&_loaded){
+    document.getElementById("app").style.display="flex";
+  }else{
+    document.getElementById("setup-screen").style.display="flex";
+    showLanding();
+  }
 }
 window.closeKiosk=closeKiosk;
+window.closeKioskToLogin=closeKioskToLogin;
 
 function startKioskClock(){
   clearInterval(_kioskClockInt);
@@ -2012,7 +2107,7 @@ function kioskPinDel(){
 }
 window.kioskPinDel=kioskPinDel;
 
-async function kioskCheckPin(){
+window.kioskCheckPin=async function kioskCheckPin(){
   if(!_kioskEmp)return;
   if(String(_kioskPin)===String(_kioskEmp.pin)){
     _kioskStep="result";
@@ -2046,13 +2141,16 @@ async function kioskFichar(){
   let accion="",icon="",color="";
 
   if(idx===-1){
+    // Primera vez hoy → registrar entrada
     asist.push({fecha:hoy,entrada:now,salida:null,descanso:30,nota:"",ficherado:true});
     accion="ENTRADA";icon="🟢";color="var(--ok)";
   }else if(!asist[idx].salida){
+    // Tiene entrada pero no salida → registrar salida (informativa, no afecta sueldo)
     asist[idx]={...asist[idx],salida:now};
     accion="SALIDA";icon="🔴";color="var(--danger)";
   }else{
-    accion="YA FICHADO";icon="✅";color="var(--gold)";
+    // Ya tiene ambas → mostrar confirmación del día
+    accion="YA REGISTRADO";icon="✅";color="var(--gold)";
   }
 
   // Save to Firebase
@@ -2071,32 +2169,26 @@ async function kioskFichar(){
   const p2=getPayDate(S.viewY,S.viewM,2);
   const d2=dUntil(p2);
 
-  // Notificaciones
-  const notifsSnap=await new Promise(resolve=>{
-    const {ref:fbref,get:fbget}=window._fbFns||{};
-    try{
-      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then(({ref:r,get:g})=>{
-        g(r(db,`nomina/${ROOM}/notificaciones`)).then(s=>{
-          const data=s.val()||{};
-          const list=Object.values(data).sort((a,b)=>b.ts-a.ts).slice(0,3);
-          resolve(list);
-        }).catch(()=>resolve([]));
-      });
-    }catch(e){resolve([]);}
-  });
+  // Notificaciones — usar get directo con el db ya inicializado
+  let notifsSnap=[];
+  try{
+    const nSnap=await get(ref(db,"nomina/"+ROOM+"/notificaciones"));
+    const nData=nSnap.val()||{};
+    notifsSnap=Object.values(nData).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,3);
+  }catch(e){notifsSnap=[];}
 
   box.innerHTML=`
     <div class="kiosk-result">
       <div class="kiosk-result-icon">${icon}</div>
       <div class="kiosk-result-title" style="color:${color}">${accion} REGISTRADA</div>
       <div class="kiosk-result-sub">
-        ${accion==="ENTRADA"?`Bienvenido, ${emp.name.split(" ")[0]}! Entrada: <strong>${now}</strong>`
-          :accion==="SALIDA"?`Hasta luego, ${emp.name.split(" ")[0]}! Salida: <strong>${now}</strong>${regHoy?.entrada?` · Entrada fue: ${regHoy.entrada}`:""}`
-          :`Ya registraste tu jornada de hoy`}
+        ${accion==="ENTRADA"?`¡Hola ${emp.name.split(" ")[0]}! Entrada: <strong style="color:var(--ok)">${now}</strong>`
+          :accion==="SALIDA"?`¡Hasta luego ${emp.name.split(" ")[0]}! Salida: <strong style="color:var(--danger)">${now}</strong>${regHoy?.entrada?` · Trabajaste desde ${regHoy.entrada}`:""}`
+          :`Jornada ya registrada hoy`}
       </div>
-      ${accion!=="YA FICHADO"?`
+      ${accion==="SALIDA"?`
         <div style="font-size:12px;color:var(--txt2);margin-bottom:14px;padding:8px 12px;background:var(--bg2);border-radius:8px;border-left:2px solid var(--gold3)">
-          📋 El admin del equipo revisará si corresponde hora extra según tus tareas.
+          📋 El admin revisará si fue hora extra según tus tareas completadas.
         </div>`:""}
       <!-- Próximo cobro -->
       <div class="kiosk-result-cobro">
@@ -2138,12 +2230,168 @@ function calcKiosk(emp){
   return{quincenaFinal,quincenaBase};
 }
 
+
+// ══════════════════════════════════════════
+// CRONOGRAMA / SCHEDULE
+// ══════════════════════════════════════════
+function vCronograma(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  const cronos=S.cronograma||[];
+  const hoy=new Date();
+  const semana=[];
+  for(let i=0;i<7;i++){
+    const d=new Date(hoy);
+    d.setDate(hoy.getDate()-hoy.getDay()+i);
+    semana.push(d);
+  }
+  const dias=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+
+  return`<div class="page fade-up">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="stitle" style="margin:0">Cronograma de la semana</div>
+      <button class="ea-btn btn-sm" onclick="openNuevoTurno()">+ Turno</button>
+    </div>
+
+    <!-- Weekly grid -->
+    <div class="card" style="padding:12px;margin-bottom:12px;overflow-x:auto">
+      <div style="display:grid;grid-template-columns:80px repeat(7,1fr);gap:4px;min-width:500px">
+        <div></div>
+        ${semana.map((d,i)=>`
+          <div style="text-align:center;padding:6px 2px;border-radius:8px;background:${d.toDateString()===hoy.toDateString()?"var(--gold)22":"var(--bg2)"};border:1px solid ${d.toDateString()===hoy.toDateString()?"var(--gold)44":"var(--border3)"}">
+            <div style="font-size:10px;color:var(--txt2)">${dias[d.getDay()]}</div>
+            <div style="font-size:14px;font-weight:700;color:${d.toDateString()===hoy.toDateString()?"var(--gold)":"var(--txt0)"}">${d.getDate()}</div>
+          </div>`).join("")}
+        ${emps.map(emp=>`
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 2px">
+            <div style="width:22px;height:22px;border-radius:50%;background:${emp.color}22;color:${emp.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${emp.name.charAt(0)}</div>
+            <div style="font-size:10px;color:var(--txt1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${emp.name.split(" ")[0]}</div>
+          </div>
+          ${semana.map(d=>{
+            const ds=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+            const turno=cronos.find(t=>t.empId===emp.id&&t.fecha===ds);
+            const asist=(emp.asistencia||[]).find(a=>a.fecha===ds);
+            return`<div style="padding:3px;text-align:center">
+              ${turno?`<div style="background:${emp.color}22;border:1px solid ${emp.color}44;border-radius:6px;padding:3px 2px;font-size:9px;color:${emp.color};cursor:pointer" onclick="verTurno(${emp.id},'${ds}')">${turno.horaInicio}→${turno.horaFin}</div>`
+              :`<div style="color:var(--txt2);font-size:10px;cursor:pointer" onclick="openNuevoTurnoFor(${emp.id},'${ds}')">—</div>`}
+              ${asist?.entrada?`<div style="font-size:8px;color:var(--ok);margin-top:1px">✓${asist.entrada}</div>`:""}
+            </div>`;
+          }).join("")}
+        `).join("")}
+      </div>
+    </div>
+
+    <!-- Turnos del día de hoy -->
+    <div class="stitle">Hoy — ${dias[hoy.getDay()]} ${hoy.getDate()} de ${MONTHS[hoy.getMonth()]}</div>
+    ${(()=>{
+      const ds=`${hoy.getFullYear()}-${pad(hoy.getMonth()+1)}-${pad(hoy.getDate())}`;
+      const turnosHoy=cronos.filter(t=>t.fecha===ds);
+      if(turnosHoy.length===0) return`<div class="card" style="text-align:center;padding:24px;color:var(--txt2);font-size:13px">Sin turnos asignados para hoy.<br><button class="ea-btn btn-sm" onclick="openNuevoTurno()" style="margin-top:10px">+ Asignar turno</button></div>`;
+      return turnosHoy.map(t=>{
+        const emp=emps.find(e=>e.id===t.empId);
+        if(!emp) return "";
+        const asist=(emp.asistencia||[]).find(a=>a.fecha===ds);
+        return`<div class="card" style="border-color:${emp.color}33;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="emp-av" style="background:${emp.color}22;color:${emp.color};width:38px;height:38px;font-size:14px">${emp.name.charAt(0)}</div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:600">${emp.name}</div>
+              <div style="font-size:12px;color:var(--txt2)">Turno: <strong style="color:${emp.color}">${t.horaInicio} → ${t.horaFin}</strong>${t.tarea?` · ${t.tarea}`:""}</div>
+            </div>
+            <div style="text-align:right">
+              ${asist?.entrada?`<div class="chip cok" style="font-size:11px">✓ Entró ${asist.entrada}</div>`:`<div class="chip cne">Sin fichar</div>`}
+              ${asist?.salida?`<div style="font-size:10px;color:var(--txt2);margin-top:3px">Salida: ${asist.salida}</div>`:""}
+            </div>
+            <button class="btn-icon btn-danger" onclick="eliminarTurno('${t.id}')" style="width:28px;height:28px;font-size:12px;margin-left:4px">×</button>
+          </div>
+          ${t.tarea?`<div style="margin-top:8px;padding:8px 10px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--txt1)">📋 Tarea: ${t.tarea}</div>`:""}
+        </div>`;
+      }).join("");
+    })()}
+
+    <!-- Admin: send notification -->
+    <div class="card" style="margin-top:4px">
+      <div class="stitle">📢 Enviar aviso al equipo</div>
+      <div class="fg"><textarea class="fi" id="notif-text" placeholder="Ej: Hay reunión a las 18hs · Revisar stock de góndola 3 · El turno de mañana arranca a las 7am..." style="height:80px;resize:none;font-size:14px"></textarea></div>
+      <button class="btn-gold" onclick="enviarNotifAdmin()">Enviar aviso a todos</button>
+    </div>
+  </div>`;
+}
+
+function openNuevoTurno(){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  const hoy=new Date();
+  const ds=`${hoy.getFullYear()}-${pad(hoy.getMonth()+1)}-${pad(hoy.getDate())}`;
+  openNuevoTurnoFor(emps[0]?.id||0,ds);
+}
+window.openNuevoTurno=openNuevoTurno;
+
+function openNuevoTurnoFor(empId,fecha){
+  const emps=(S.employees||[]).filter(e=>!e.hidden);
+  openBS(`
+    <div class="bsheet-hdr"><h3>Asignar turno</h3><button class="btn-icon" onclick="closeBS()">×</button></div>
+    <div class="bsheet-body">
+      <div class="fg"><label class="fl">Empleado</label>
+        <select class="fi" id="t-emp" style="appearance:none">
+          ${emps.map(e=>`<option value="${e.id}" ${e.id===empId?"selected":""}>${e.name}</option>`).join("")}
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Fecha</label><input class="fi" id="t-fecha" type="date" value="${fecha}"></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Hora inicio</label><input class="fi" id="t-ini" type="time" value="08:00"></div>
+        <div class="fg"><label class="fl">Hora fin</label><input class="fi" id="t-fin" type="time" value="17:00"></div>
+      </div>
+      <div class="fg"><label class="fl">Tarea / descripción (opcional)</label><input class="fi" id="t-tarea" placeholder="Ej: Atención al cliente, reposición..."></div>
+    </div>
+    <div class="bsheet-foot">
+      <button class="btn-sec" style="flex:1" onclick="closeBS()">Cancelar</button>
+      <button class="btn-gold" style="flex:2" onclick="guardarTurno()">Guardar turno</button>
+    </div>
+  `);
+}
+window.openNuevoTurnoFor=openNuevoTurnoFor;
+
+async function guardarTurno(){
+  const empId=parseInt(document.getElementById("t-emp")?.value)||0;
+  const fecha=document.getElementById("t-fecha")?.value;
+  const horaInicio=document.getElementById("t-ini")?.value;
+  const horaFin=document.getElementById("t-fin")?.value;
+  const tarea=document.getElementById("t-tarea")?.value||"";
+  if(!empId||!fecha||!horaInicio||!horaFin){toast("Completá todos los campos");return;}
+  const id="turno_"+Date.now();
+  const cronos=[...(S.cronograma||[]).filter(t=>!(t.empId===empId&&t.fecha===fecha)),{id,empId,fecha,horaInicio,horaFin,tarea}];
+  await fbSet("cronograma",cronos);
+  closeBS();toast("✓ Turno asignado");
+}
+window.guardarTurno=guardarTurno;
+
+async function eliminarTurno(id){
+  if(!confirm("¿Eliminar este turno?"))return;
+  const cronos=(S.cronograma||[]).filter(t=>t.id!==id);
+  await fbSet("cronograma",cronos);
+  toast("✓ Turno eliminado");
+}
+window.eliminarTurno=eliminarTurno;
+
+function verTurno(empId,fecha){openNuevoTurnoFor(empId,fecha);}
+window.verTurno=verTurno;
+
+async function enviarNotifAdmin(){
+  const txt=document.getElementById("notif-text")?.value?.trim();
+  if(!txt){toast("Escribí un mensaje");return;}
+  const notifs=S.notificaciones||[];
+  notifs.unshift({texto:txt,fecha:new Date().toLocaleDateString("es-AR"),hora:nowStr(),de:currentUser?.email?.split("@")[0]||"Admin",ts:Date.now()});
+  await fbSet("notificaciones",notifs.slice(0,50)); // keep last 50
+  document.getElementById("notif-text").value="";
+  toast("✅ Aviso enviado a todos los empleados");
+}
+window.enviarNotifAdmin=enviarNotifAdmin;
+
 // ── RENDER ──
 function render(){
   renderNotifs();
   const views={
     dashboard:vDashboard,calendario:vCalendario,empleados:vEmpleados,
-    horas:vHoras,asistencia:vAsistencia,calc:vCalc,mas:vMas,anual:vAnual,empresas:vEmpresas,
+    horas:vHoras,asistencia:vAsistencia,cronograma:vCronograma,calc:vCalc,mas:vMas,anual:vAnual,empresas:vEmpresas,
   };
   const fn=views[S.tab];
   document.getElementById("content-area").innerHTML=fn?fn():"";
